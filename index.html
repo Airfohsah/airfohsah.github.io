@@ -443,6 +443,16 @@ html,body{
 .htp-card p{font-size:13px;color:var(--muted);line-height:1.5;}
 .htp-card strong{color:var(--accent);}
 
+.exit-game-btn{
+  position:absolute;bottom:10px;right:10px;
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--muted);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:10;
+}
+.exit-game-btn:active{background:rgba(255,82,82,0.2);color:var(--accent2);}
+
 /* ---- TIMER FLASH ---- */
 @keyframes timerPulse{0%,100%{color:var(--accent);}50%{color:var(--accent2);}}
 .timer-urgent{animation:timerPulse .5s infinite;}
@@ -684,6 +694,7 @@ html,body{
         <div class="game-cat-label" id="gameCatLabel">—</div>
         <div class="game-score" id="gameScore">0 / 0</div>
       </div>
+      <div class="exit-game-btn" onclick="exitGame()">✕</div>
       <div id="timerDisplay" style="display:none;font-size:28px;font-weight:900;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:8px;" id="timerDisplay">60</div>
       <div class="word-display" id="wordDisplay">
         <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;opacity:0.7;">Watin Be This?</div>
@@ -888,20 +899,8 @@ function showScreen(id){
 
 // ===================== MOTION =====================
 function checkMotionPermission(){
-  if(typeof DeviceOrientationEvent === 'undefined'){
-    tiltEnabled = false;
-    showScreen('homeScreen');
-    return;
-  }
-  if(typeof DeviceOrientationEvent.requestPermission === 'function'){
-    // iOS 13+ — needs explicit permission
-    showScreen('permScreen');
-  } else {
-    // Android / desktop — just attach listener directly
-    tiltEnabled = true;
-    window.addEventListener('deviceorientation', handleOrientation, true);
-    showScreen('homeScreen');
-  }
+  // Tilt disabled — using tap zones only
+  showScreen('homeScreen');
 }
 
 function requestMotion(){
@@ -925,8 +924,7 @@ let tiltCooldown = false;
 let tiltBaseline = null;
 
 function calibrateTilt(e){
-  // Record beta when game starts as neutral (usually ~90 when held upright in landscape)
-  tiltBaseline = e.beta || 90;
+  tiltBaseline = e.gamma || 0;
   window.removeEventListener('deviceorientation', calibrateTilt, true);
   window.addEventListener('deviceorientation', handleOrientation, true);
 }
@@ -935,19 +933,16 @@ function handleOrientation(e){
   if(document.getElementById('gameScreen').classList.contains('hidden')) return;
   if(tiltCooldown) return;
 
-  const beta = e.beta || 0;
-  const delta = beta - (tiltBaseline || 90);
+  const gamma = e.gamma || 0;
+  const delta = gamma - (tiltBaseline || 0);
 
-  // In landscape, held upright = beta ~90 (baseline)
-  // Tip FORWARD (screen faces down) = beta increases = GOT IT
-  // Tip BACKWARD (screen faces up) = beta decreases = SKIP
-  // Need 35 degree deliberate tilt from baseline
-
-  if(delta > 35){
+  // Tilt LEFT from baseline = GOT IT
+  // Tilt RIGHT from baseline = SKIP
+  if(delta < -35){
     tiltCooldown = true;
     markGot();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
-  } else if(delta < -35){
+  } else if(delta > 35){
     tiltCooldown = true;
     markSkip();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
@@ -1029,6 +1024,7 @@ function startGame(){
 
   showScreen('gameScreen');
   renderCurrentWord();
+  requestWakeLock();
 
   // Calibrate tilt baseline from current phone position
   tiltBaseline = null;
@@ -1100,6 +1096,7 @@ function flashWord(type){
 function endGame(){
   stopTimer();
   unlockOrientation();
+  releaseWakeLock();
   const game = currentGame;
 
   // Save score to current player
@@ -1540,7 +1537,46 @@ function beginTurn(){
   startGame();
 }
 
-// ===================== TIMER =====================
+function exitGame(){
+  if(confirm('Exit game? Current progress will be lost.')){
+    stopTimer();
+    unlockOrientation();
+    releaseWakeLock();
+    showScreen('homeScreen');
+  }
+}
+
+
+let wakeLock = null;
+
+async function requestWakeLock(){
+  try{
+    if('wakeLock' in navigator){
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch(e){}
+}
+
+function releaseWakeLock(){
+  try{
+    if(wakeLock){
+      wakeLock.release();
+      wakeLock = null;
+    }
+  } catch(e){}
+}
+
+// Re-acquire wake lock if page becomes visible again
+document.addEventListener('visibilitychange', async ()=>{
+  if(document.visibilityState === 'visible' && wakeLock === null){
+    const gameScreen = document.getElementById('gameScreen');
+    if(gameScreen && !gameScreen.classList.contains('hidden')){
+      await requestWakeLock();
+    }
+  }
+});
+
+
 function startTimer(){
   timerRemaining = timerSeconds;
   const display = document.getElementById('timerDisplay');
