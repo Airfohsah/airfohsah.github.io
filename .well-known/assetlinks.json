@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.watinbethis.charades",
+    "sha256_cert_fingerprints": [
+      "57:55:45:9E:B9:40:78:07:A1:ED:97:62:EE:FE:42:72:21:0A:E7:36:59:A8:65:B0:F2:FF:06:43:CB:BC:2C:E6"
+    ]
+  }
+}]
