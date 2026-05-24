@@ -922,23 +922,30 @@ function skipMotion(){
 }
 
 let tiltCooldown = false;
+let tiltBaseline = null;
+
+function calibrateTilt(e){
+  // Record the gamma when game starts as neutral position
+  tiltBaseline = e.gamma || 0;
+  window.removeEventListener('deviceorientation', calibrateTilt, true);
+  window.addEventListener('deviceorientation', handleOrientation, true);
+}
 
 function handleOrientation(e){
   if(document.getElementById('gameScreen').classList.contains('hidden')) return;
   if(tiltCooldown) return;
 
-  const gamma = e.gamma || 0; // left-right tilt: negative = left, positive = right
+  const gamma = e.gamma || 0;
+  const delta = gamma - (tiltBaseline || 0);
 
-  // In landscape holding phone up facing crowd:
-  // Tilt LEFT (gamma < -40) = GOT IT
-  // Tilt RIGHT (gamma > 40) = SKIP
-  // Needs a big deliberate tilt — threshold is 40 degrees
-
-  if(gamma < -40){
+  // Need a deliberate 40 degree tilt FROM the baseline
+  // Tilt LEFT from baseline = GOT IT
+  // Tilt RIGHT from baseline = SKIP
+  if(delta < -40){
     tiltCooldown = true;
     markGot();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
-  } else if(gamma > 40){
+  } else if(delta > 40){
     tiltCooldown = true;
     markSkip();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
@@ -1020,6 +1027,13 @@ function startGame(){
 
   showScreen('gameScreen');
   renderCurrentWord();
+
+  // Calibrate tilt baseline from current phone position
+  tiltBaseline = null;
+  if(tiltEnabled){
+    window.removeEventListener('deviceorientation', handleOrientation, true);
+    window.addEventListener('deviceorientation', calibrateTilt, true);
+  }
 
   if(gameMode === 'timer') startTimer();
   else document.getElementById('timerDisplay').style.display = 'none';
