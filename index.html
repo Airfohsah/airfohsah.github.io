@@ -925,8 +925,8 @@ let tiltCooldown = false;
 let tiltBaseline = null;
 
 function calibrateTilt(e){
-  // Record the gamma when game starts as neutral position
-  tiltBaseline = e.gamma || 0;
+  // Record beta when game starts as neutral (usually ~90 when held upright in landscape)
+  tiltBaseline = e.beta || 90;
   window.removeEventListener('deviceorientation', calibrateTilt, true);
   window.addEventListener('deviceorientation', handleOrientation, true);
 }
@@ -935,17 +935,19 @@ function handleOrientation(e){
   if(document.getElementById('gameScreen').classList.contains('hidden')) return;
   if(tiltCooldown) return;
 
-  const gamma = e.gamma || 0;
-  const delta = gamma - (tiltBaseline || 0);
+  const beta = e.beta || 0;
+  const delta = beta - (tiltBaseline || 90);
 
-  // Need a deliberate 40 degree tilt FROM the baseline
-  // Tilt LEFT from baseline = GOT IT
-  // Tilt RIGHT from baseline = SKIP
-  if(delta < -40){
+  // In landscape, held upright = beta ~90 (baseline)
+  // Tip FORWARD (screen faces down) = beta increases = GOT IT
+  // Tip BACKWARD (screen faces up) = beta decreases = SKIP
+  // Need 35 degree deliberate tilt from baseline
+
+  if(delta > 35){
     tiltCooldown = true;
     markGot();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
-  } else if(delta > 40){
+  } else if(delta < -35){
     tiltCooldown = true;
     markSkip();
     setTimeout(()=>{ tiltCooldown = false; }, 1200);
