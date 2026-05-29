@@ -18,7 +18,7 @@
 html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow:hidden;touch-action:manipulation;}
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;transition:opacity .3s,transform .3s;}
 .screen.hidden{opacity:0;pointer-events:none;transform:translateY(20px);}
-#homeScreen{background:radial-gradient(ellipse at 20% 50%,#1a2540 0%,var(--bg) 60%);align-items:center;justify-content:center;padding:32px 24px;gap:32px;}
+#homeScreen{background:radial-gradient(ellipse at 20% 50%,#1a2540 0%,var(--bg) 60%);align-items:center;justify-content:space-between;padding:0;gap:0;}
 .logo{text-align:center;}
 .logo h1{font-size:clamp(42px,12vw,72px);font-weight:900;letter-spacing:-2px;line-height:1;background:linear-gradient(135deg,var(--accent),#ff9c27);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .logo p{color:var(--muted);font-size:14px;margin-top:6px;font-family:'DM Mono',monospace;}
@@ -42,12 +42,10 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .cat-count{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
 .all-card{grid-column:1/-1;flex-direction:row;align-items:center;padding:16px 18px;}
 .all-card .cat-icon{font-size:24px;}
-/* LOCKED CARD */
 .cat-card.locked{cursor:pointer;opacity:0.55;border-color:var(--border);background:var(--card);overflow:hidden;}
 .cat-card.locked::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(255,255,255,0.03) 6px,rgba(255,255,255,0.03) 12px);border-radius:16px;pointer-events:none;}
 .cat-card.locked .cat-name{color:var(--muted);}
 .locked-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,197,24,0.12);border:1px solid rgba(245,197,24,0.3);border-radius:6px;padding:2px 7px;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);font-weight:700;letter-spacing:0.5px;width:fit-content;margin-top:2px;}
-/* BOTTOM SHEET */
 .bottom-sheet-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.65);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s;}
 .bottom-sheet-overlay.open{opacity:1;pointer-events:all;}
 .bottom-sheet{width:100%;background:var(--card2);border-top:1.5px solid var(--border);border-radius:20px 20px 0 0;padding:24px 24px 40px;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,0,.15,1);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}
@@ -74,7 +72,6 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .tap-got .tap-label{color:var(--accent3);}.tap-skip .tap-label{color:var(--accent2);}
 .word-stage{flex:2.5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 12px;position:relative;background:var(--bg);border-left:1.5px solid var(--border);border-right:1.5px solid var(--border);order:2;}
 .game-meta{position:absolute;top:12px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;}
-.game-actions{display:none;}
 .word-display{text-align:center;transition:opacity .25s,transform .25s;}
 .word-display.flash{opacity:0;transform:scale(0.92);}
 .word-text{font-size:clamp(32px,10vw,56px);font-weight:900;line-height:1.1;letter-spacing:-1px;color:var(--text);}
@@ -95,7 +92,6 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .word-log-item:last-child{border-bottom:none;}
 .wli-got{color:var(--accent3);}.wli-skip{color:var(--accent2);}
 .results-btns{display:flex;flex-direction:column;gap:12px;}
-
 #permScreen{align-items:center;justify-content:center;padding:32px 24px;gap:24px;text-align:center;background:radial-gradient(ellipse at 50% 50%,#1a1500 0%,var(--bg) 70%);}
 #permScreen .icon{font-size:64px;}#permScreen h2{font-size:24px;font-weight:800;}
 #permScreen p{color:var(--muted);font-size:14px;line-height:1.7;max-width:300px;}
@@ -127,10 +123,9 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .timer-urgent{animation:timerPulse .5s infinite;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1.5px solid var(--border);color:var(--text);padding:12px 20px;border-radius:12px;font-size:13px;font-family:'DM Mono',monospace;opacity:0;transition:opacity .3s,transform .3s;z-index:200;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-/* ---- ADS ---- */
 .ad-slot{width:100%;display:flex;align-items:center;justify-content:center;background:transparent;min-height:50px;overflow:hidden;flex-shrink:0;}
 .ad-slot-top{border-bottom:1px solid var(--border);}
-.ad-slot-bottom{border-top:1px solid var(--border);margin-top:auto;padding-bottom:env(safe-area-inset-bottom,0px);}
+.ad-slot-bottom{border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0px);}
 </style>
 </head>
 <body>
@@ -148,23 +143,23 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- HOME SCREEN -->
 <div class="screen" id="homeScreen">
-  <!-- AD TOP -->
   <div class="ad-slot ad-slot-top">
     <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
-  <div class="logo">
-    <h1>Watin Be This?</h1>
-    <p>// naija charades, next level //</p>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:32px;width:100%;">
+    <div class="logo">
+      <h1>Watin Be This?</h1>
+      <p>// naija charades, next level //</p>
+    </div>
+    <div class="home-btns">
+      <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">&#9654; &nbsp;Play</button>
+      <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">&#10067; &nbsp;How to Play</button>
+      <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">&#127942; &nbsp;Leaderboard</button>
+    </div>
+    <div style="text-align:center;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;">
+      Landscape mode &middot; tap right = got it &middot; tap left = skip<br><strong style="color:var(--text);font-size:12px;">Rules: Describe the words without saying the word</strong>
+    </div>
   </div>
-  <div class="home-btns">
-    <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">&#9654; &nbsp;Play</button>
-    <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">&#10067; &nbsp;How to Play</button>
-    <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">&#127942; &nbsp;Leaderboard</button>
-  </div>
-  <div style="text-align:center;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;padding-bottom:8px;">
-    Landscape mode &middot; tap right = got it &middot; tap left = skip<br><strong style="color:var(--text);font-size:12px;">Rules: Describe the words without saying the word</strong>
-  </div>
-  <!-- AD BOTTOM -->
   <div class="ad-slot ad-slot-bottom">
     <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
@@ -172,11 +167,11 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- MODE SELECT SCREEN -->
 <div class="screen hidden" id="modeSelectScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>How are you playing?</h2>
   </div>
-  <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:16px;">
     <div class="mode-select-card" onclick="pickMode('solo')">
       <div style="font-size:36px">&#128100;</div>
       <div><h3>Solo</h3><p>One person holds the phone. Everyone else gives clues. Race against words or the clock.</p></div>
@@ -193,7 +188,7 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- HOW TO PLAY SCREEN -->
 <div class="screen hidden" id="howToPlayScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>How to Play</h2>
   </div>
@@ -210,19 +205,19 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- CATEGORY SELECT -->
 <div class="screen hidden" id="categoryScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="categoryGoBack()">&#8592;</div>
     <h2>Pick Categories</h2>
   </div>
-  <div class="cat-grid" id="catGrid"></div>
-  <div class="start-section">
+  <div class="cat-grid" id="catGrid" style="padding:0 20px;"></div>
+  <div class="start-section" style="padding:0 20px 40px;">
     <button class="btn btn-primary" onclick="goToPlayers()">Next &#8594;</button>
   </div>
 </div>
 
 <!-- PLAYERS SETUP SCREEN -->
 <div class="screen hidden" id="playersScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="showScreen('modeSelectScreen')">&#8592;</div>
   </div>
   <div style="padding:20px 20px 0;">
@@ -242,13 +237,13 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<!-- GAME MODE SCREEN -->
+<!-- GAME MODE / ROUND SETUP SCREEN -->
 <div class="screen hidden" id="gameModeScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="showScreen('playersScreen')">&#8592;</div>
     <h2>Round Setup</h2>
   </div>
-  <div style="padding:20px;display:flex;flex-direction:column;gap:20px;">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:20px;">
     <p style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;">Choose how the round is timed:</p>
     <div class="mode-toggle">
       <div class="mode-btn active" id="modeWordsBtn" onclick="selectMode('words')">&#128221; Words</div>
@@ -284,8 +279,6 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
         </div>
       </div>
     </div>
-  </div>
-  <div style="padding:0 20px 20px;margin-top:auto;">
     <button class="btn btn-primary" style="width:100%" onclick="startFromMode()">&#9654; &nbsp;Start Game</button>
   </div>
   <div class="ad-slot ad-slot-bottom">
@@ -295,7 +288,6 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- TURN TRANSITION SCREEN -->
 <div class="screen hidden" id="turnScreen">
-  <!-- AD TOP -->
   <div class="ad-slot ad-slot-top">
     <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
@@ -304,13 +296,10 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
     <h2 id="turnTitle" style="font-size:28px;">Player 1</h2>
     <p id="turnSubtitle" style="color:var(--muted);font-size:15px;">Your turn! Hold the phone and get ready.</p>
     <div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 20px;font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);" id="turnMeta">Round 1</div>
-    <!-- Rule -->
     <div style="background:#1a1800;border:1.5px solid rgba(245,197,24,0.3);border-radius:14px;padding:14px 20px;max-width:300px;">
       <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">The Rule</div>
       <div style="font-size:16px;font-weight:900;color:var(--accent);line-height:1.4;">Describe the word without saying the word!</div>
     </div>
-    <!-- Countdown -->
-
     <div id="countdownDisplay" style="display:none;font-size:96px;font-weight:900;line-height:1;color:var(--accent3);transition:transform .2s,opacity .2s;">3</div>
   </div>
   <div style="padding:24px;" id="readyBtnWrap">
@@ -368,7 +357,7 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- HISTORY SCREEN -->
 <div class="screen hidden" id="historyScreen">
-  <div class="screen-header">
+  <div class="screen-header" style="padding:8px 20px 0;">
     <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>Leaderboard</h2>
   </div>
@@ -377,10 +366,6 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
     <button class="btn btn-danger btn-sm" onclick="clearHistory()">Clear History</button>
   </div>
 </div>
-
-
-
-
 
 <!-- Feedback overlay -->
 <div class="feedback-overlay" id="feedbackOverlay"></div>
@@ -394,14 +379,13 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
     <div class="bs-handle"></div>
     <div class="bs-icon">&#128274;</div>
     <div class="bs-title">Premium Pack</div>
-    <div class="bs-subtitle" id="bsSubtitle">This category is part of a Premium Pack. Unlock it to play with these words.</div>
+    <div class="bs-subtitle" id="bsSubtitle">This category is part of a Premium Pack.</div>
     <div class="bs-tag">&#10024; &nbsp;COMING SOON</div>
     <button class="bs-close" id="bsCloseBtn">Got It</button>
   </div>
 </div>
 
 <script>
-// ===================== WORD DATA =====================
 const DEFAULT_WORDS = {
   food:{name:"Food & Drinks",icon:"🍲",difficulty:"EASY",paid:false,enabled:true,words:["Jollof rice","Eguisi Soup","Pounded yam","Amala","Suya","Pepper soup","Banga soup","Afang soup","Edikaikong","Oha soup","Egusi soup","Okra soup","Ogbono soup","Bitterleaf soup","Nsala soup","Ofada rice","Abacha","Nkwobi","Isi ewu","Ugba","Moi moi","Akara","Puff puff","Chin chin","Bole and fish","Roasted corn","Fried plantain","Dodo","Yam porridge","Asun","Kilishi","Ogi","Akamu","Kunu","Zobo","Fura da nono","Tuwo shinkafa","Masa","Dan wake","Tuwon masara","Garri and groundnut","Soaked garri","Eba","Fufu","Semovita","Agege bread","Egg roll","Buns","Sausage roll","Scotch egg","Small chops","Gizdodo","Peppered snail","Cow leg","Tripe","Stockfish stew","Smoked fish","Catfish pepper soup","Goat meat pepper soup","Assorted pepper soup","Ofe onugbu","Abula","Efo riro","Buka stew","Ayamase","Coconut rice","Fried rice","Agidi jollof","Tiger nut drink","Agbalumo","Ube","Bush pear","Udala","Coconut water","Palmwine","Ogogoro","Burukutu","Pito","Orijin","Alomo bitters","Hero beer","Star beer","Gulder","Malta Guinness","Hollandia yoghurt","Peak milk","Indomie","Noodles","Bread and akara","Yam and egg","Fried yam","Plantain chips","Kelewele","Basmati rice"]},
   emotions:{name:"Emotions & Feelings",icon:"😂",difficulty:"MEDIUM",paid:false,enabled:true,words:["Sapa","suffer","Heartbreak","Joy","Fear","Jealousy","Shame","Vex","Shock","Love","Anger","Excitement","Sadness","Anxiety","Confused","Regret","Guilty","Embarrassment","Betrayal","Loneliness","Depression","Overthinking","Gratitude","Peace of mind","Contentment","Motivation","Determination","Hopelessness","Relief","Pride","Humility","Bitterness","Resentment","Forgiveness","Envy","Obsession","Panic","Numbness","Emptiness","Crush","Butterflies in my stomach","Trust issues","Disappointment","Frustration","Overwhelmed","Stress","Burnout","Healing","Growth","Nostalgia","Homesick","Culture shock","Identity crisis","Imposter syndrome","Low self esteem","Confidence","Courage","Fear of rejection","Abandonment issues","Attachment","Mood swing","Emotional instability","Crying","Laughing out loud","Fake life","Letting go","Starting over","Second chances","New beginnings","Closure","Unfinished business","Mixed emotions","Already decided","Point of no return","Rock bottom","Bounce back","Glow up","Character development","Lessons learned"]},
@@ -415,14 +399,26 @@ const DEFAULT_WORDS = {
   sports:{name:"Sports & Games",icon:"🏆",difficulty:"EASY",paid:false,enabled:true,words:["Super Eagles","Super Falcons","NPFL","Enyimba FC","Kano Pillars","Heartland FC","Rangers International","Shooting Stars","Sunshine Stars","Wrestling","Table tennis","Lawn tennis","Basketball","Volleyball","Handball","Athletics","Boxing","Taekwondo","Swimming","CAF Champions League","AFCON","World Cup qualifier","Penalty shootout","Hat trick","Offside","Corner kick","Free kick","Yellow card","Red card","VAR check","Own goal","Goalkeeper","Striker","Midfielder","Defender","Coach","Referee","Linesman","Betting slip","Bet9ja","NairaBet","SportyBet","Suwe","Ten ten","Boju boju","Who is in the garden","Police and thief","Rotten egg","Ludo","Ayo olopon","Whot","Draft","Monopoly","Chess","Ayo game","Boxing","Argungu fishing festival","Gidigbo (Traditional wrestling)","Scrabble","Draught","Table football","Sack race","Egg and spoon race","Tug of war","Relay race","High jump","Long jump","Shot put","Javelin","100 metres","Marathon","Cycling","Swimming relay","Water polo","CODM","FIFA game","NBA 2K","PUBG","Free Fire","Call of Duty","Pro evolution soccer","Streetball","Road tennis","Arm wrestling","Pillow fight","Musical chairs","Penalty kick","Free throw","Slam dunk","Corner flag","Offside trap","Goal celebration","Bicycle kick","Peter Odemwingie","Nwankwo Kanu","Jay-Jay Okocha","Rashidi Yekini","Sunday Oliseh","Segun Odegbami","John Mikel Obi","Victor Enyeama","Stephen Keshi","Victor Osimhen","Ademola Lookman"]}
 };
 
-// ===================== STATE =====================
 let words={};
 let currentGame={queue:[],index:0,got:0,log:[]};
 let wordCount=20;
 let selectedCats=[];
 let tiltEnabled=false;
+let currentPlayMode='versus';
+let totalRounds=1;
+let currentRound=1;
+let playerCount=2;
+let playerNames=['Player 1','Player 2'];
+let gameMode='words';
+let timerSeconds=60;
+let timerInterval=null;
+let timerRemaining=0;
+let versusPlayers=[];
+let versusCurrentIdx=0;
+let versusRound=1;
+let wakeLock=null;
+let audioCtx=null;
 
-// ===================== INIT =====================
 function init(){
   mergeWords();
   renderCatGrid();
@@ -447,7 +443,6 @@ function mergeWords(){
   }
 }
 
-// ===================== SCREENS =====================
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
   const target=document.getElementById(id);
@@ -455,7 +450,6 @@ function showScreen(id){
   if(id==='categoryScreen') renderCatGrid();
 }
 
-// ===================== MOTION =====================
 function checkMotionPermission(){showScreen('homeScreen');}
 function requestMotion(){
   DeviceOrientationEvent.requestPermission().then(state=>{
@@ -478,13 +472,11 @@ function handleOrientation(e){
   else if(delta>35){tiltCooldown=true;markSkip();setTimeout(()=>{tiltCooldown=false;},1200);}
 }
 
-// ===================== CATEGORY GRID =====================
 function renderCatGrid(){
   const grid=document.getElementById('catGrid');
   grid.innerHTML='';
   const freeKeys=Object.keys(words).filter(k=>!DEFAULT_WORDS[k].paid);
   const allFreeSelected=freeKeys.length>0&&freeKeys.every(k=>selectedCats.includes(k));
-  // All card
   const allCard=document.createElement('div');
   allCard.className='cat-card all-card'+(allFreeSelected?' selected':'');
   allCard.innerHTML='<div class="cat-icon">🌍</div><div style="flex:1"><div class="cat-name">All Categories</div><div class="cat-count">Mix everything free</div></div>';
@@ -524,7 +516,6 @@ function toggleAllCats(){
   renderCatGrid();
 }
 
-// ===================== LOCKED SHEET =====================
 function showLockedSheet(catName){
   document.getElementById('bsSubtitle').textContent='"'+catName+'" is part of a Premium Pack. Unlock it to play with these words.';
   document.getElementById('lockedSheet').classList.add('open');
@@ -536,7 +527,6 @@ function changeWords(delta){
   if(el) el.textContent=wordCount;
 }
 
-// ===================== GAME =====================
 function startGame(){
   if(selectedCats.length===0){showToast('Pick at least one category');return;}
   lockLandscape();
@@ -645,9 +635,6 @@ function playAgain(){
   versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 
-// ===================== GAME MODE SELECTION =====================
-let currentPlayMode='versus';let totalRounds=1;let currentRound=1;
-
 function pickMode(mode){
   currentPlayMode=mode;
   if(mode==='solo'){showScreen('categoryScreen');}
@@ -667,9 +654,7 @@ function goToPlayers(){
 }
 
 function changeRounds(delta){totalRounds=Math.max(1,Math.min(10,totalRounds+delta));document.getElementById('roundCountVal').textContent=totalRounds;}
-
 function startFromMode(){if(currentPlayMode==='solo'){startSolo();}else{startVersus();}}
-
 function startSolo(){
   versusPlayers=[{name:'Solo',totalScore:0,rounds:[]}];
   versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
@@ -701,10 +686,6 @@ function setupBackButton(){
     history.pushState({screen:dest||currentId},'');
   });
 }
-
-let playerCount=2;let playerNames=['Player 1','Player 2'];
-let gameMode='words';let timerSeconds=60;let timerInterval=null;let timerRemaining=0;
-let versusPlayers=[];let versusCurrentIdx=0;let versusRound=1;
 
 function changePlayers(delta){
   playerCount=Math.max(2,Math.min(10,playerCount+delta));
@@ -740,7 +721,6 @@ function startVersus(){
   versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 function showTurnScreen(){
-  // Reset state
   document.getElementById('readyBtnWrap').style.display='block';
   document.getElementById('countdownDisplay').style.display='none';
   const player=versusPlayers[versusCurrentIdx];
@@ -754,7 +734,6 @@ function showTurnScreen(){
   showScreen('turnScreen');
 }
 function beginTurn(){
-  // Hide button, show countdown
   document.getElementById('readyBtnWrap').style.display='none';
   const display=document.getElementById('countdownDisplay');
   display.style.display='block';
@@ -762,12 +741,9 @@ function beginTurn(){
   display.textContent=count;
   display.style.color='var(--accent)';
   soundCountdownTick(count);
-
   const tick=setInterval(()=>{
-    // Pulse animation
     display.style.transform='scale(1.3)';display.style.opacity='0.6';
     setTimeout(()=>{display.style.transform='scale(1)';display.style.opacity='1';},150);
-
     count--;
     if(count>0){
       display.textContent=count;
@@ -791,13 +767,10 @@ function exitGame(){
   if(confirm('Exit game? Current progress will be lost.')){stopTimer();unlockOrientation();releaseWakeLock();showScreen('homeScreen');}
 }
 
-// ===================== SOUND ENGINE =====================
-let audioCtx=null;
 function getAudioCtx(){
   if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
   return audioCtx;
 }
-
 function playTone(freq,type,duration,volume,fadeOut=true){
   try{
     const ctx=getAudioCtx();
@@ -810,48 +783,27 @@ function playTone(freq,type,duration,volume,fadeOut=true){
     osc.start(ctx.currentTime);osc.stop(ctx.currentTime+duration);
   }catch(e){}
 }
-
-function soundCountdownTick(num){
-  // 3=low, 2=mid, 1=high pitch tick
-  const freqs=[0,880,660,440]; // index by num
-  playTone(freqs[num]||440,'sine',0.12,0.4);
-}
-
+function soundCountdownTick(num){const freqs=[0,880,660,440];playTone(freqs[num]||440,'sine',0.12,0.4);}
 function soundGo(){
-  // Rising two-tone "GO!" chime
   try{
     const ctx=getAudioCtx();
-    const notes=[523,784,1046]; // C5, G5, C6
+    const notes=[523,784,1046];
     notes.forEach((freq,i)=>{
-      const osc=ctx.createOscillator();
-      const gain=ctx.createGain();
+      const osc=ctx.createOscillator();const gain=ctx.createGain();
       osc.connect(gain);gain.connect(ctx.destination);
       osc.type='sine';osc.frequency.setValueAtTime(freq,ctx.currentTime);
       gain.gain.setValueAtTime(0,ctx.currentTime+i*0.1);
       gain.gain.linearRampToValueAtTime(0.35,ctx.currentTime+i*0.1+0.02);
       gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.1+0.35);
-      osc.start(ctx.currentTime+i*0.1);
-      osc.stop(ctx.currentTime+i*0.1+0.4);
+      osc.start(ctx.currentTime+i*0.1);osc.stop(ctx.currentTime+i*0.1+0.4);
     });
   }catch(e){}
 }
-
-function soundTimerTick(){
-  // Soft metronome click
-  playTone(1200,'square',0.06,0.15,true);
-}
-
-function soundTimerUrgent(){
-  // Sharper urgent tick for last 5 seconds
-  playTone(1600,'square',0.08,0.25,true);
-}
-
+function soundTimerTick(){playTone(1200,'square',0.06,0.15,true);}
+function soundTimerUrgent(){playTone(1600,'square',0.08,0.25,true);}
 function soundTimerEnd(){
-  // Descending buzzer
   try{
-    const ctx=getAudioCtx();
-    const osc=ctx.createOscillator();
-    const gain=ctx.createGain();
+    const ctx=getAudioCtx();const osc=ctx.createOscillator();const gain=ctx.createGain();
     osc.connect(gain);gain.connect(ctx.destination);
     osc.type='sawtooth';
     osc.frequency.setValueAtTime(400,ctx.currentTime);
@@ -862,7 +814,6 @@ function soundTimerEnd(){
   }catch(e){}
 }
 
-let wakeLock=null;
 async function requestWakeLock(){
   try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');}}catch(e){}
 }
@@ -888,8 +839,7 @@ function startTimer(){
     }
     if(timerRemaining<=0){
       clearInterval(timerInterval);timerInterval=null;
-      soundTimerEnd();
-      endGame();
+      soundTimerEnd();endGame();
     }
   },1000);
 }
