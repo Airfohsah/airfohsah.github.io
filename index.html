@@ -94,34 +94,7 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .word-log-item:last-child{border-bottom:none;}
 .wli-got{color:var(--accent3);}.wli-skip{color:var(--accent2);}
 .results-btns{display:flex;flex-direction:column;gap:12px;}
-#manageScreen{padding:24px 20px 40px;}
-.manage-cats{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.manage-cat-row{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-.mcr-left{display:flex;align-items:center;gap:12px;}.mcr-icon{font-size:22px;}
-.mcr-info h4{font-size:14px;font-weight:700;}
-.mcr-info p{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
-.mcr-arrow{color:var(--muted);font-size:18px;}
-#wordEditorScreen{padding:24px 20px 40px;}
-.editor-meta{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.editor-meta-icon{font-size:24px;}
-.editor-meta-info h4{font-size:15px;font-weight:700;}
-.editor-meta-info p{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
-.paste-area{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
-.paste-area label{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:10px;}
-.paste-area textarea{width:100%;min-height:120px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;resize:vertical;outline:none;transition:border-color .2s;}
-.paste-area textarea:focus{border-color:var(--accent);}
-.add-result{padding:10px 14px;border-radius:10px;font-size:13px;font-family:'DM Mono',monospace;margin-bottom:14px;display:none;}
-.add-result.success{background:#0a2a1e;color:var(--accent3);border:1px solid #0e3a28;}
-.add-result.info{background:#1a1800;color:var(--accent);border:1px solid #2a2800;}
-.word-list-section{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;}
-.wls-header{padding:12px 16px;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;}
-.wls-search{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;}
-.wls-search:focus{border-color:var(--accent);}
-.wls-items{max-height:260px;overflow-y:auto;}
-.wls-item{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;}
-.wls-item:last-child{border-bottom:none;}
-.wls-item-del{background:none;border:none;color:var(--accent2);font-size:16px;cursor:pointer;padding:2px 6px;}
-.wls-empty{padding:20px;text-align:center;color:var(--muted);font-size:13px;}
+
 #permScreen{align-items:center;justify-content:center;padding:32px 24px;gap:24px;text-align:center;background:radial-gradient(ellipse at 50% 50%,#1a1500 0%,var(--bg) 70%);}
 #permScreen .icon{font-size:64px;}#permScreen h2{font-size:24px;font-weight:800;}
 #permScreen p{color:var(--muted);font-size:14px;line-height:1.7;max-width:300px;}
@@ -178,7 +151,7 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
     <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">&#9654; &nbsp;Play</button>
     <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">&#10067; &nbsp;How to Play</button>
     <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">&#127942; &nbsp;Leaderboard</button>
-    <button class="btn btn-secondary" onclick="showScreen('manageScreen')">&#9881; &nbsp;Manage Words</button>
+
   </div>
   <div style="text-align:center;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;padding-bottom:8px;">
     Landscape mode &middot; tap right = got it &middot; tap left = skip
@@ -304,13 +277,20 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- TURN TRANSITION SCREEN -->
 <div class="screen hidden" id="turnScreen">
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:24px;text-align:center;">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:20px;text-align:center;">
     <div style="font-size:48px" id="turnEmoji">&#127918;</div>
     <h2 id="turnTitle" style="font-size:28px;">Player 1</h2>
     <p id="turnSubtitle" style="color:var(--muted);font-size:15px;">Your turn! Hold the phone and get ready.</p>
     <div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 20px;font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);" id="turnMeta">Round 1</div>
+    <!-- Rule -->
+    <div style="background:#1a1800;border:1.5px solid rgba(245,197,24,0.3);border-radius:14px;padding:14px 20px;max-width:300px;">
+      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">The Rule</div>
+      <div style="font-size:16px;font-weight:900;color:var(--accent);line-height:1.4;">Describe the word without saying the word!</div>
+    </div>
+    <!-- Countdown -->
+    <div id="countdownDisplay" style="display:none;font-size:96px;font-weight:900;line-height:1;color:var(--accent3);transition:transform .2s,opacity .2s;">3</div>
   </div>
-  <div style="padding:24px;">
+  <div style="padding:24px;" id="readyBtnWrap">
     <button class="btn btn-primary" style="width:100%" onclick="beginTurn()">I'm Ready &#9654;</button>
   </div>
 </div>
@@ -372,43 +352,9 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<!-- MANAGE SCREEN -->
-<div class="screen hidden" id="manageScreen">
-  <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
-    <h2>Manage Words</h2>
-  </div>
-  <div class="manage-cats" id="manageCats"></div>
-  <button class="btn btn-danger btn-sm" onclick="confirmResetAll()">Reset All to Defaults</button>
-</div>
 
-<!-- WORD EDITOR SCREEN -->
-<div class="screen hidden" id="wordEditorScreen">
-  <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('manageScreen')">&#8592;</div>
-    <h2 id="editorTitle">Edit Words</h2>
-  </div>
-  <div class="editor-meta" id="editorMeta">
-    <div class="editor-meta-icon" id="editorIcon">&#128288;</div>
-    <div class="editor-meta-info">
-      <h4 id="editorCatName">Category</h4>
-      <p id="editorWordCount">0 words</p>
-    </div>
-  </div>
-  <div class="paste-area">
-    <label>Paste new words (one per line)</label>
-    <textarea id="pasteInput" placeholder="Agbalumo&#10;Jollof rice&#10;Owambe&#10;Lagos Island&#10;..."></textarea>
-  </div>
-  <button class="btn btn-primary" style="margin-bottom:14px;width:100%" onclick="addPastedWords()">Add Words</button>
-  <div class="add-result" id="addResult"></div>
-  <div class="word-list-section">
-    <div class="wls-header">
-      <span id="wlsCount">All words</span>
-      <input class="wls-search" id="wlsSearch" placeholder="Search..." oninput="renderWordList()" style="width:130px;"/>
-    </div>
-    <div class="wls-items" id="wlsItems"></div>
-  </div>
-</div>
+
+
 
 <!-- Feedback overlay -->
 <div class="feedback-overlay" id="feedbackOverlay"></div>
@@ -445,22 +391,17 @@ const DEFAULT_WORDS = {
 
 // ===================== STATE =====================
 let words={};
-let customWords={};
 let currentGame={queue:[],index:0,got:0,log:[]};
 let wordCount=20;
 let selectedCats=[];
 let tiltEnabled=false;
-let currentEditorCat=null;
 
 // ===================== INIT =====================
 function init(){
-  loadCustomWords();
   mergeWords();
   renderCatGrid();
-  renderManageCats();
   checkMotionPermission();
   setupBackButton();
-  // Bottom sheet close handlers
   document.getElementById('bsCloseBtn').addEventListener('click',()=>{
     document.getElementById('lockedSheet').classList.remove('open');
   });
@@ -471,18 +412,12 @@ function init(){
   });
 }
 
-function loadCustomWords(){
-  try{customWords=JSON.parse(localStorage.getItem('bendrades_custom')||'{}');}
-  catch(e){customWords={};}
-}
-function saveCustomWords(){localStorage.setItem('bendrades_custom',JSON.stringify(customWords));}
-
 function mergeWords(){
   words={};
   for(const key in DEFAULT_WORDS){
     const cat=DEFAULT_WORDS[key];
-    if(cat.enabled===false) continue; // skip disabled categories
-    words[key]={...cat,words:[...cat.words,...(customWords[key]||[])]};
+    if(cat.enabled===false) continue;
+    words[key]={...cat,words:[...cat.words]};
   }
 }
 
@@ -492,7 +427,6 @@ function showScreen(id){
   const target=document.getElementById(id);
   if(target) target.classList.remove('hidden');
   if(id==='categoryScreen') renderCatGrid();
-  if(id==='manageScreen') renderManageCats();
 }
 
 // ===================== MOTION =====================
@@ -685,81 +619,6 @@ function playAgain(){
   versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 
-// ===================== MANAGE WORDS =====================
-function renderManageCats(){
-  const container=document.getElementById('manageCats');container.innerHTML='';
-  for(const key in words){
-    const cat=words[key];const row=document.createElement('div');row.className='manage-cat-row';
-    row.innerHTML=`<div class="mcr-left"><div class="mcr-icon">${cat.icon}</div><div class="mcr-info"><h4>${cat.name}</h4><p>${cat.words.length} words &middot; ${(customWords[key]||[]).length} custom</p></div></div><div class="mcr-arrow">&#8250;</div>`;
-    row.onclick=()=>openEditor(key);container.appendChild(row);
-  }
-}
-
-function openEditor(key){
-  currentEditorCat=key;const cat=words[key];
-  document.getElementById('editorTitle').textContent=cat.name;
-  document.getElementById('editorIcon').textContent=cat.icon;
-  document.getElementById('editorCatName').textContent=cat.name;
-  document.getElementById('editorWordCount').textContent=cat.words.length+' words';
-  document.getElementById('pasteInput').value='';
-  document.getElementById('addResult').style.display='none';
-  renderWordList();showScreen('wordEditorScreen');
-}
-
-function renderWordList(){
-  const key=currentEditorCat;if(!key) return;
-  const cat=words[key];const search=document.getElementById('wlsSearch').value.toLowerCase();
-  const container=document.getElementById('wlsItems');container.innerHTML='';
-  const filtered=cat.words.filter(w=>w.toLowerCase().includes(search));
-  document.getElementById('wlsCount').textContent=`${filtered.length} / ${cat.words.length} words`;
-  if(filtered.length===0){container.innerHTML='<div class="wls-empty">No words found</div>';return;}
-  filtered.slice(0,200).forEach(word=>{
-    const isCustom=(customWords[key]||[]).includes(word);
-    const row=document.createElement('div');row.className='wls-item';
-    row.innerHTML=`<span>${word}${isCustom?' <span style="font-size:10px;color:var(--accent);font-family:DM Mono,monospace">[custom]</span>':''}</span>${isCustom?`<button class="wls-item-del" onclick="deleteCustomWord('${key}','${word.replace(/'/g,"\\'")}')">&#10005;</button>`:'<span style="color:var(--muted);font-size:11px">built-in</span>'}`;
-    container.appendChild(row);
-  });
-  if(filtered.length>200){
-    const more=document.createElement('div');more.className='wls-empty';
-    more.textContent=`+${filtered.length-200} more words. Use search to narrow down.`;container.appendChild(more);
-  }
-}
-
-function addPastedWords(){
-  const key=currentEditorCat;if(!key) return;
-  const raw=document.getElementById('pasteInput').value.trim();
-  if(!raw){showToast('Nothing to add');return;}
-  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
-  const existing=new Set(words[key].words.map(w=>w.toLowerCase()));
-  if(!customWords[key]) customWords[key]=[];
-  let added=0,skipped=0;
-  lines.forEach(line=>{
-    if(existing.has(line.toLowerCase())){skipped++;}
-    else{customWords[key].push(line);existing.add(line.toLowerCase());added++;}
-  });
-  saveCustomWords();mergeWords();
-  const resultEl=document.getElementById('addResult');resultEl.style.display='block';
-  if(added>0&&skipped>0){resultEl.className='add-result success';resultEl.textContent=`Added ${added} word${added>1?'s':''}. Skipped ${skipped} duplicate${skipped>1?'s':''}.`;}
-  else if(added>0){resultEl.className='add-result success';resultEl.textContent=`Added ${added} word${added>1?'s':''}!`;}
-  else{resultEl.className='add-result info';resultEl.textContent=`All ${skipped} word${skipped>1?'s':''} already exist.`;}
-  document.getElementById('pasteInput').value='';
-  document.getElementById('editorWordCount').textContent=words[key].words.length+' words';
-  renderWordList();renderManageCats();
-}
-
-function deleteCustomWord(key,word){
-  if(!customWords[key]) return;
-  const idx=customWords[key].indexOf(word);
-  if(idx!==-1){customWords[key].splice(idx,1);saveCustomWords();mergeWords();
-    document.getElementById('editorWordCount').textContent=words[key].words.length+' words';
-    renderWordList();renderManageCats();showToast('Word removed');}
-}
-
-function confirmResetAll(){
-  if(confirm('This will delete all your custom words. Built-in words stay. Continue?')){
-    customWords={};saveCustomWords();mergeWords();renderManageCats();showToast('Custom words cleared');}
-}
-
 // ===================== GAME MODE SELECTION =====================
 let currentPlayMode='versus';let totalRounds=1;let currentRound=1;
 
@@ -787,7 +646,7 @@ function startFromMode(){if(currentPlayMode==='solo'){startSolo();}else{startVer
 
 function startSolo(){
   versusPlayers=[{name:'Solo',totalScore:0,rounds:[]}];
-  versusCurrentIdx=0;versusRound=1;currentRound=1;startGame();
+  versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 
 function lockLandscape(){
@@ -811,7 +670,7 @@ function setupBackButton(){
   window.addEventListener('popstate',function(){
     const current=document.querySelector('.screen:not(.hidden)');
     const currentId=current?current.id:'homeScreen';
-    const backMap={'modeSelectScreen':'homeScreen','howToPlayScreen':'homeScreen','historyScreen':'homeScreen','manageScreen':'homeScreen','playersScreen':'modeSelectScreen','categoryScreen':currentPlayMode==='solo'?'modeSelectScreen':'playersScreen','gameModeScreen':'categoryScreen','turnScreen':'gameModeScreen','resultsScreen':'homeScreen','wordEditorScreen':'manageScreen'};
+    const backMap={'modeSelectScreen':'homeScreen','howToPlayScreen':'homeScreen','historyScreen':'homeScreen','playersScreen':'modeSelectScreen','categoryScreen':currentPlayMode==='solo'?'modeSelectScreen':'playersScreen','gameModeScreen':'categoryScreen','turnScreen':'gameModeScreen','resultsScreen':'homeScreen'};
     const dest=backMap[currentId];if(dest){showScreen(dest);}
     history.pushState({screen:dest||currentId},'');
   });
@@ -855,19 +714,126 @@ function startVersus(){
   versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 function showTurnScreen(){
+  // Reset state
+  document.getElementById('readyBtnWrap').style.display='block';
+  document.getElementById('countdownDisplay').style.display='none';
   const player=versusPlayers[versusCurrentIdx];
   const emojis=['🎮','🔥','⚡','🎯','🏆','💥','🎪','🎭','🎨','🎲'];
   document.getElementById('turnEmoji').textContent=emojis[versusCurrentIdx%emojis.length];
   document.getElementById('turnTitle').textContent=player.name;
-  document.getElementById('turnSubtitle').textContent='Your turn! Hold the phone and get ready.';
+  document.getElementById('turnSubtitle').textContent=versusPlayers.length===1?'Hold the phone up so everyone can see!':'Your turn! Hold the phone and get ready.';
   const modeText=gameMode==='timer'?`${timerSeconds}s on the clock`:`${wordCount} words to go`;
   const roundText=totalRounds>1?`Round ${currentRound} of ${totalRounds}`:`Round ${currentRound}`;
   document.getElementById('turnMeta').textContent=`${roundText} · ${modeText}`;
   showScreen('turnScreen');
 }
-function beginTurn(){startGame();}
+function beginTurn(){
+  // Hide button, show countdown
+  document.getElementById('readyBtnWrap').style.display='none';
+  const display=document.getElementById('countdownDisplay');
+  display.style.display='block';
+  let count=3;
+  display.textContent=count;
+  display.style.color='var(--accent)';
+  soundCountdownTick(count);
+
+  const tick=setInterval(()=>{
+    // Pulse animation
+    display.style.transform='scale(1.3)';display.style.opacity='0.6';
+    setTimeout(()=>{display.style.transform='scale(1)';display.style.opacity='1';},150);
+
+    count--;
+    if(count>0){
+      display.textContent=count;
+      display.style.color=count===2?'#ff9c27':'var(--accent2)';
+      soundCountdownTick(count);
+    } else {
+      clearInterval(tick);
+      display.textContent='GO!';
+      display.style.color='var(--accent3)';
+      display.style.transform='scale(1.4)';
+      soundGo();
+      setTimeout(()=>{
+        display.style.display='none';
+        document.getElementById('readyBtnWrap').style.display='block';
+        startGame();
+      },600);
+    }
+  },1000);
+}
 function exitGame(){
   if(confirm('Exit game? Current progress will be lost.')){stopTimer();unlockOrientation();releaseWakeLock();showScreen('homeScreen');}
+}
+
+// ===================== SOUND ENGINE =====================
+let audioCtx=null;
+function getAudioCtx(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq,type,duration,volume,fadeOut=true){
+  try{
+    const ctx=getAudioCtx();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type=type;osc.frequency.setValueAtTime(freq,ctx.currentTime);
+    gain.gain.setValueAtTime(volume,ctx.currentTime);
+    if(fadeOut) gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+duration);
+    osc.start(ctx.currentTime);osc.stop(ctx.currentTime+duration);
+  }catch(e){}
+}
+
+function soundCountdownTick(num){
+  // 3=low, 2=mid, 1=high pitch tick
+  const freqs=[0,880,660,440]; // index by num
+  playTone(freqs[num]||440,'sine',0.12,0.4);
+}
+
+function soundGo(){
+  // Rising two-tone "GO!" chime
+  try{
+    const ctx=getAudioCtx();
+    const notes=[523,784,1046]; // C5, G5, C6
+    notes.forEach((freq,i)=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.type='sine';osc.frequency.setValueAtTime(freq,ctx.currentTime);
+      gain.gain.setValueAtTime(0,ctx.currentTime+i*0.1);
+      gain.gain.linearRampToValueAtTime(0.35,ctx.currentTime+i*0.1+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.1+0.35);
+      osc.start(ctx.currentTime+i*0.1);
+      osc.stop(ctx.currentTime+i*0.1+0.4);
+    });
+  }catch(e){}
+}
+
+function soundTimerTick(){
+  // Soft metronome click
+  playTone(1200,'square',0.06,0.15,true);
+}
+
+function soundTimerUrgent(){
+  // Sharper urgent tick for last 5 seconds
+  playTone(1600,'square',0.08,0.25,true);
+}
+
+function soundTimerEnd(){
+  // Descending buzzer
+  try{
+    const ctx=getAudioCtx();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type='sawtooth';
+    osc.frequency.setValueAtTime(400,ctx.currentTime);
+    osc.frequency.linearRampToValueAtTime(80,ctx.currentTime+0.6);
+    gain.gain.setValueAtTime(0.4,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.6);
+    osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.7);
+  }catch(e){}
 }
 
 let wakeLock=null;
@@ -889,8 +855,16 @@ function startTimer(){
   display.style.display='block';display.classList.remove('timer-urgent');updateTimerDisplay();
   timerInterval=setInterval(()=>{
     timerRemaining--;updateTimerDisplay();
-    if(timerRemaining<=10) display.classList.add('timer-urgent');
-    if(timerRemaining<=0){clearInterval(timerInterval);timerInterval=null;endGame();}
+    if(timerRemaining<=10){
+      display.classList.add('timer-urgent');
+      if(timerRemaining<=5) soundTimerUrgent();
+      else soundTimerTick();
+    }
+    if(timerRemaining<=0){
+      clearInterval(timerInterval);timerInterval=null;
+      soundTimerEnd();
+      endGame();
+    }
   },1000);
 }
 function updateTimerDisplay(){const d=document.getElementById('timerDisplay');if(d) d.textContent=timerRemaining+'s';}
