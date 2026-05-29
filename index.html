@@ -9,462 +9,149 @@
 <title>Charades - Watin Be This?</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Mono:wght@400;500&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-
 :root{
-  --bg:#080b14;
-  --card:#0f1420;
-  --card2:#151c2e;
-  --accent:#f5c518;
-  --accent2:#ff5252;
-  --accent3:#00e5a0;
-  --text:#f0f0f0;
-  --muted:#6b7a99;
-  --border:#1e2a40;
+  --bg:#080b14;--card:#0f1420;--card2:#151c2e;--accent:#f5c518;--accent2:#ff5252;
+  --accent3:#00e5a0;--text:#f0f0f0;--muted:#6b7a99;--border:#1e2a40;
 }
-
-html,body{
-  height:100%;width:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Syne',sans-serif;
-  overflow:hidden;
-  touch-action:manipulation;
-}
-
-/* ---- SCREENS ---- */
-.screen{
-  position:fixed;inset:0;
-  display:flex;flex-direction:column;
-  overflow-y:auto;
-  transition:opacity .3s, transform .3s;
-}
+html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow:hidden;touch-action:manipulation;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;transition:opacity .3s,transform .3s;}
 .screen.hidden{opacity:0;pointer-events:none;transform:translateY(20px);}
-
-/* ---- HOME ---- */
-#homeScreen{
-  background: radial-gradient(ellipse at 20% 50%, #1a2540 0%, var(--bg) 60%);
-  align-items:center;justify-content:center;padding:32px 24px;gap:32px;
-}
+#homeScreen{background:radial-gradient(ellipse at 20% 50%,#1a2540 0%,var(--bg) 60%);align-items:center;justify-content:center;padding:32px 24px;gap:32px;}
 .logo{text-align:center;}
-.logo h1{
-  font-size:clamp(42px,12vw,72px);
-  font-weight:900;
-  letter-spacing:-2px;
-  line-height:1;
-  background:linear-gradient(135deg,var(--accent),#ff9c27);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.logo h1{font-size:clamp(42px,12vw,72px);font-weight:900;letter-spacing:-2px;line-height:1;background:linear-gradient(135deg,var(--accent),#ff9c27);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .logo p{color:var(--muted);font-size:14px;margin-top:6px;font-family:'DM Mono',monospace;}
-
 .home-btns{display:flex;flex-direction:column;gap:14px;width:100%;max-width:320px;}
-
-.btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  padding:16px 24px;border-radius:14px;border:none;
-  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
-  cursor:pointer;transition:transform .15s,opacity .15s;
-  text-decoration:none;
-}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:14px;border:none;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s;text-decoration:none;}
 .btn:active{transform:scale(0.96);}
 .btn-primary{background:var(--accent);color:#080b14;}
 .btn-secondary{background:var(--card2);color:var(--text);border:1.5px solid var(--border);}
 .btn-danger{background:#2a1015;color:var(--accent2);border:1.5px solid #3a1520;}
 .btn-success{background:#0a2a1e;color:var(--accent3);border:1.5px solid #0e3a28;}
 .btn-sm{padding:10px 16px;font-size:13px;border-radius:10px;}
-
-/* ---- CATEGORY SELECT ---- */
 #categoryScreen{padding:24px 20px 40px;}
-.screen-header{
-  display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-top:8px;
-}
-.back-btn{
-  width:40px;height:40px;border-radius:10px;
-  background:var(--card2);border:1.5px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;font-size:18px;
-}
+.screen-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-top:8px;}
+.back-btn{width:40px;height:40px;border-radius:10px;background:var(--card2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;}
 .screen-header h2{font-size:22px;font-weight:800;}
-
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.cat-card{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:16px;padding:18px 14px;
-  display:flex;flex-direction:column;gap:8px;
-  cursor:pointer;transition:border-color .2s,background .2s;
-  position:relative;
-}
+.cat-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:18px 14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;}
 .cat-card.selected{border-color:var(--accent);background:#1a1800;}
-.cat-card.selected::after{
-  content:'✓';position:absolute;top:10px;right:12px;
-  color:var(--accent);font-size:14px;font-weight:900;
-}
-.cat-icon{font-size:28px;}
-.cat-name{font-size:14px;font-weight:700;}
+.cat-card.selected::after{content:'✓';position:absolute;top:10px;right:12px;color:var(--accent);font-size:14px;font-weight:900;}
+.cat-icon{font-size:28px;}.cat-name{font-size:14px;font-weight:700;}
 .cat-count{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;}
-
-.all-card{
-  grid-column:1/-1;
-  flex-direction:row;align-items:center;
-  padding:16px 18px;
-}
+.all-card{grid-column:1/-1;flex-direction:row;align-items:center;padding:16px 18px;}
 .all-card .cat-icon{font-size:24px;}
-
+/* LOCKED CARD */
+.cat-card.locked{cursor:pointer;opacity:0.55;border-color:var(--border);background:var(--card);overflow:hidden;}
+.cat-card.locked::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(255,255,255,0.03) 6px,rgba(255,255,255,0.03) 12px);border-radius:16px;pointer-events:none;}
+.cat-card.locked .cat-name{color:var(--muted);}
+.locked-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,197,24,0.12);border:1px solid rgba(245,197,24,0.3);border-radius:6px;padding:2px 7px;font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);font-weight:700;letter-spacing:0.5px;width:fit-content;margin-top:2px;}
+/* BOTTOM SHEET */
+.bottom-sheet-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.65);display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s;}
+.bottom-sheet-overlay.open{opacity:1;pointer-events:all;}
+.bottom-sheet{width:100%;background:var(--card2);border-top:1.5px solid var(--border);border-radius:20px 20px 0 0;padding:24px 24px 40px;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,0,.15,1);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;}
+.bottom-sheet-overlay.open .bottom-sheet{transform:translateY(0);}
+.bs-handle{width:40px;height:4px;border-radius:2px;background:var(--border);margin-bottom:8px;}
+.bs-icon{font-size:48px;line-height:1;}.bs-title{font-size:22px;font-weight:900;}
+.bs-subtitle{font-size:14px;color:var(--muted);line-height:1.6;max-width:280px;}
+.bs-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(245,197,24,0.1);border:1.5px solid rgba(245,197,24,0.35);border-radius:8px;padding:6px 14px;font-size:12px;font-family:'DM Mono',monospace;color:var(--accent);font-weight:700;letter-spacing:1px;}
+.bs-close{margin-top:4px;background:var(--card);border:1.5px solid var(--border);color:var(--text);padding:13px 24px;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;width:100%;max-width:280px;}
+.bs-close:active{opacity:0.7;}
 .start-section{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
-.round-config{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:16px;
-  display:flex;align-items:center;justify-content:space-between;
-}
+.round-config{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;}
 .round-config span{font-size:14px;color:var(--muted);}
 .stepper{display:flex;align-items:center;gap:12px;}
-.step-btn{
-  width:32px;height:32px;border-radius:8px;
-  background:var(--card2);border:1.5px solid var(--border);
-  color:var(--text);font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
+.step-btn{width:32px;height:32px;border-radius:8px;background:var(--card2);border:1.5px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .step-val{font-size:16px;font-weight:700;min-width:28px;text-align:center;}
-
-/* ---- GAME SCREEN ---- */
-#gameScreen{
-  background:var(--bg);
-  padding:0;overflow:hidden;
-}
-
-.game-layout{
-  display:flex;
-  flex-direction:row;
-  width:100%;
-  height:100%;
-  position:absolute;
-  inset:0;
-}
-
-.tap-zone{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition:opacity .15s;
-}
+#gameScreen{background:var(--bg);padding:0;overflow:hidden;}
+.game-layout{display:flex;flex-direction:row;width:100%;height:100%;position:absolute;inset:0;}
+.tap-zone{flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .15s;}
 .tap-zone:active{opacity:0.6;}
-
-.tap-got{
-  background:linear-gradient(90deg, #0a2018 0%, #0d2e1e 100%);
-  border-left: 2px solid #0e3a28;
-  order:3;
-}
-.tap-skip{
-  background:linear-gradient(90deg, #1e0a10 0%, #2a1018 100%);
-  border-right: 2px solid #3a1520;
-  order:1;
-}
-
-.tap-label{
-  font-size:clamp(14px,4vw,22px);
-  font-weight:900;
-  letter-spacing:1px;
-  pointer-events:none;
-  opacity:0.6;
-  text-align:center;
-  line-height:1.4;
-}
-.tap-got .tap-label{ color:var(--accent3); }
-.tap-skip .tap-label{ color:var(--accent2); }
-
-.word-stage{
-  flex:2.5;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:16px 12px;
-  position:relative;
-  background:var(--bg);
-  border-left:1.5px solid var(--border);
-  border-right:1.5px solid var(--border);
-  order:2;
-}
-
-.game-meta{
-  position:absolute;top:12px;
-  left:0;right:0;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 14px;
-}
-
-.game-actions{ display:none; }
-
-.word-display{
-  text-align:center;
-  transition:opacity .25s, transform .25s;
-}
+.tap-got{background:linear-gradient(90deg,#0a2018 0%,#0d2e1e 100%);border-left:2px solid #0e3a28;order:3;}
+.tap-skip{background:linear-gradient(90deg,#1e0a10 0%,#2a1018 100%);border-right:2px solid #3a1520;order:1;}
+.tap-label{font-size:clamp(14px,4vw,22px);font-weight:900;letter-spacing:1px;pointer-events:none;opacity:0.6;text-align:center;line-height:1.4;}
+.tap-got .tap-label{color:var(--accent3);}.tap-skip .tap-label{color:var(--accent2);}
+.word-stage{flex:2.5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 12px;position:relative;background:var(--bg);border-left:1.5px solid var(--border);border-right:1.5px solid var(--border);order:2;}
+.game-meta{position:absolute;top:12px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 14px;}
+.game-actions{display:none;}
+.word-display{text-align:center;transition:opacity .25s,transform .25s;}
 .word-display.flash{opacity:0;transform:scale(0.92);}
-
-.word-text{
-  font-size:clamp(32px,10vw,56px);
-  font-weight:900;
-  line-height:1.1;
-  letter-spacing:-1px;
-  color:var(--text);
-}
-.word-category{
-  margin-top:10px;font-size:12px;
-  font-family:'DM Mono',monospace;color:var(--muted);
-  text-transform:uppercase;letter-spacing:2px;
-}
-
-.game-actions{ display:none; }
-
-/* Feedback flash overlay */
-.feedback-overlay{
-  position:fixed;inset:0;z-index:100;
-  display:flex;align-items:center;justify-content:center;
-  font-size:80px;
-  pointer-events:none;opacity:0;
-  transition:opacity .2s;
-}
+.word-text{font-size:clamp(32px,10vw,56px);font-weight:900;line-height:1.1;letter-spacing:-1px;color:var(--text);}
+.word-category{margin-top:10px;font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:2px;}
+.feedback-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;font-size:80px;pointer-events:none;opacity:0;transition:opacity .2s;}
 .feedback-overlay.show{opacity:1;}
-
-/* ---- RESULTS ---- */
-#resultsScreen{
-  padding:24px 20px 40px;
-  background: radial-gradient(ellipse at 80% 20%, #1a2010 0%, var(--bg) 60%);
-}
+#resultsScreen{padding:24px 20px 40px;background:radial-gradient(ellipse at 80% 20%,#1a2010 0%,var(--bg) 60%);}
 .results-header{text-align:center;margin-bottom:28px;padding-top:16px;}
 .results-header h2{font-size:32px;font-weight:900;}
 .results-header p{color:var(--muted);margin-top:6px;font-family:'DM Mono',monospace;}
-
-.score-big{
-  text-align:center;margin:20px 0 28px;
-}
-.score-big .num{
-  font-size:80px;font-weight:900;
-  background:linear-gradient(135deg,var(--accent3),var(--accent));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;
-}
+.score-big{text-align:center;margin:20px 0 28px;}
+.score-big .num{font-size:80px;font-weight:900;background:linear-gradient(135deg,var(--accent3),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
 .score-big .label{color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;margin-top:4px;}
-
-.word-log{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:16px;overflow:hidden;margin-bottom:20px;
-}
-.word-log-header{
-  padding:14px 16px;border-bottom:1.5px solid var(--border);
-  font-size:13px;font-weight:700;color:var(--muted);
-  font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;
-}
+.word-log{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;}
+.word-log-header{padding:14px 16px;border-bottom:1.5px solid var(--border);font-size:13px;font-weight:700;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;}
 .word-log-list{max-height:220px;overflow-y:auto;}
-.word-log-item{
-  padding:12px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:14px;
-}
+.word-log-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:14px;}
 .word-log-item:last-child{border-bottom:none;}
-.wli-got{color:var(--accent3);}
-.wli-skip{color:var(--accent2);}
-
+.wli-got{color:var(--accent3);}.wli-skip{color:var(--accent2);}
 .results-btns{display:flex;flex-direction:column;gap:12px;}
-
-/* ---- MANAGE WORDS ---- */
 #manageScreen{padding:24px 20px 40px;}
 .manage-cats{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.manage-cat-row{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:16px;
-  display:flex;align-items:center;justify-content:space-between;
-  cursor:pointer;
-}
-.mcr-left{display:flex;align-items:center;gap:12px;}
-.mcr-icon{font-size:22px;}
+.manage-cat-row{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.mcr-left{display:flex;align-items:center;gap:12px;}.mcr-icon{font-size:22px;}
 .mcr-info h4{font-size:14px;font-weight:700;}
 .mcr-info p{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
 .mcr-arrow{color:var(--muted);font-size:18px;}
-
-/* ---- WORD EDITOR ---- */
 #wordEditorScreen{padding:24px 20px 40px;}
-.editor-meta{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:14px 16px;
-  margin-bottom:16px;
-  display:flex;align-items:center;gap:12px;
-}
+.editor-meta{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
 .editor-meta-icon{font-size:24px;}
 .editor-meta-info h4{font-size:15px;font-weight:700;}
 .editor-meta-info p{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
-
-.paste-area{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:16px;margin-bottom:14px;
-}
-.paste-area label{
-  font-size:12px;font-family:'DM Mono',monospace;
-  color:var(--muted);text-transform:uppercase;letter-spacing:1px;
-  display:block;margin-bottom:10px;
-}
-.paste-area textarea{
-  width:100%;min-height:120px;
-  background:var(--bg);border:1.5px solid var(--border);
-  border-radius:10px;padding:12px;
-  color:var(--text);font-family:'DM Mono',monospace;font-size:13px;
-  resize:vertical;outline:none;
-  transition:border-color .2s;
-}
+.paste-area{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
+.paste-area label{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:10px;}
+.paste-area textarea{width:100%;min-height:120px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;resize:vertical;outline:none;transition:border-color .2s;}
 .paste-area textarea:focus{border-color:var(--accent);}
-
-.add-result{
-  padding:10px 14px;border-radius:10px;
-  font-size:13px;font-family:'DM Mono',monospace;
-  margin-bottom:14px;display:none;
-}
+.add-result{padding:10px 14px;border-radius:10px;font-size:13px;font-family:'DM Mono',monospace;margin-bottom:14px;display:none;}
 .add-result.success{background:#0a2a1e;color:var(--accent3);border:1px solid #0e3a28;}
 .add-result.info{background:#1a1800;color:var(--accent);border:1px solid #2a2800;}
-
-.word-list-section{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;overflow:hidden;margin-bottom:16px;
-}
-.wls-header{
-  padding:12px 16px;border-bottom:1.5px solid var(--border);
-  font-size:12px;font-family:'DM Mono',monospace;
-  color:var(--muted);text-transform:uppercase;letter-spacing:1px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.wls-search{
-  width:100%;background:var(--bg);border:1.5px solid var(--border);
-  border-radius:8px;padding:8px 12px;
-  color:var(--text);font-family:'DM Mono',monospace;font-size:13px;
-  outline:none;margin-bottom:0;
-}
+.word-list-section{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;}
+.wls-header{padding:12px 16px;border-bottom:1.5px solid var(--border);font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;}
+.wls-search{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;}
 .wls-search:focus{border-color:var(--accent);}
 .wls-items{max-height:260px;overflow-y:auto;}
-.wls-item{
-  padding:10px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:13px;
-}
+.wls-item{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;}
 .wls-item:last-child{border-bottom:none;}
-.wls-item-del{
-  background:none;border:none;color:var(--accent2);
-  font-size:16px;cursor:pointer;padding:2px 6px;
-}
+.wls-item-del{background:none;border:none;color:var(--accent2);font-size:16px;cursor:pointer;padding:2px 6px;}
 .wls-empty{padding:20px;text-align:center;color:var(--muted);font-size:13px;}
-
-/* ---- PERMISSION SCREEN ---- */
-#permScreen{
-  align-items:center;justify-content:center;
-  padding:32px 24px;gap:24px;text-align:center;
-  background: radial-gradient(ellipse at 50% 50%, #1a1500 0%, var(--bg) 70%);
-}
-#permScreen .icon{font-size:64px;}
-#permScreen h2{font-size:24px;font-weight:800;}
+#permScreen{align-items:center;justify-content:center;padding:32px 24px;gap:24px;text-align:center;background:radial-gradient(ellipse at 50% 50%,#1a1500 0%,var(--bg) 70%);}
+#permScreen .icon{font-size:64px;}#permScreen h2{font-size:24px;font-weight:800;}
 #permScreen p{color:var(--muted);font-size:14px;line-height:1.7;max-width:300px;}
-
-
-
-/* ---- SCROLLBAR ---- */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-
-/* ---- PLAYERS & MODE SCREENS ---- */
-.player-name-field{
-  display:flex;align-items:center;gap:10px;
-}
-.player-name-field label{
-  font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);
-  min-width:70px;
-}
-.player-name-field input{
-  flex:1;background:var(--card);border:1.5px solid var(--border);
-  color:var(--text);padding:10px 14px;border-radius:10px;
-  font-family:'Syne',sans-serif;font-size:14px;outline:none;
-}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.player-name-field{display:flex;align-items:center;gap:10px;}
+.player-name-field label{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);min-width:70px;}
+.player-name-field input{flex:1;background:var(--card);border:1.5px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;outline:none;}
 .player-name-field input:focus{border-color:var(--accent);}
-
-.mode-toggle{
-  display:flex;gap:10px;
-}
-.mode-btn{
-  flex:1;padding:14px;text-align:center;
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:12px;cursor:pointer;font-weight:700;font-size:14px;
-  transition:all .2s;
-}
-.mode-btn.active{
-  border-color:var(--accent);color:var(--accent);
-  background:rgba(245,197,24,0.08);
-}
-
-/* ---- MODE SELECT ---- */
-.mode-select-card{
-  display:flex;gap:20px;align-items:center;
-  background:var(--card);border:2px solid var(--border);
-  border-radius:18px;padding:24px 20px;
-  cursor:pointer;transition:border-color .2s, background .2s;
-}
+.mode-toggle{display:flex;gap:10px;}
+.mode-btn{flex:1;padding:14px;text-align:center;background:var(--card);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;font-weight:700;font-size:14px;transition:all .2s;}
+.mode-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,0.08);}
+.mode-select-card{display:flex;gap:20px;align-items:center;background:var(--card);border:2px solid var(--border);border-radius:18px;padding:24px 20px;cursor:pointer;transition:border-color .2s,background .2s;}
 .mode-select-card:active{border-color:var(--accent);background:#1a1800;}
 .mode-select-card h3{font-size:20px;font-weight:800;margin-bottom:6px;}
 .mode-select-card p{font-size:13px;color:var(--muted);line-height:1.5;}
-
-/* ---- HISTORY ---- */
-.history-game{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:16px;
-}
-.history-game-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
-}
-.history-game-date{
-  font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);
-}
-.history-player-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0;border-bottom:1px solid var(--border);
-}
+.history-game{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;}
+.history-game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.history-game-date{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);}
+.history-player-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
 .history-player-row:last-child{border-bottom:none;}
 .history-player-name{font-weight:700;font-size:14px;}
-.history-player-score{
-  font-family:'DM Mono',monospace;font-size:14px;color:var(--accent);
-}
-.history-winner{color:var(--accent3);font-size:11px;font-family:'DM Mono',monospace;}
-
-/* ---- HOW TO PLAY ---- */
-.htp-card{
-  display:flex;gap:16px;align-items:flex-start;
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:16px;
-}
-.htp-icon{font-size:28px;flex-shrink:0;}
-.htp-card h4{font-size:15px;margin-bottom:4px;}
-.htp-card p{font-size:13px;color:var(--muted);line-height:1.5;}
-.htp-card strong{color:var(--accent);}
-
-.exit-game-btn{
-  position:absolute;bottom:10px;right:10px;
-  width:32px;height:32px;border-radius:8px;
-  background:rgba(255,255,255,0.05);border:1px solid var(--border);
-  color:var(--muted);font-size:14px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:10;
-}
+.history-player-score{font-family:'DM Mono',monospace;font-size:14px;color:var(--accent);}
+.htp-card{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;}
+.htp-icon{font-size:28px;flex-shrink:0;}.htp-card h4{font-size:15px;margin-bottom:4px;}
+.htp-card p{font-size:13px;color:var(--muted);line-height:1.5;}.htp-card strong{color:var(--accent);}
+.exit-game-btn{position:absolute;bottom:10px;right:10px;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;}
 .exit-game-btn:active{background:rgba(255,82,82,0.2);color:var(--accent2);}
-
-/* ---- TIMER FLASH ---- */
 @keyframes timerPulse{0%,100%{color:var(--accent);}50%{color:var(--accent2);}}
 .timer-urgent{animation:timerPulse .5s infinite;}
-
-.toast{
-  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--card2);border:1.5px solid var(--border);
-  color:var(--text);padding:12px 20px;border-radius:12px;
-  font-size:13px;font-family:'DM Mono',monospace;
-  opacity:0;transition:opacity .3s, transform .3s;
-  z-index:200;white-space:nowrap;pointer-events:none;
-}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1.5px solid var(--border);color:var(--text);padding:12px 20px;border-radius:12px;font-size:13px;font-family:'DM Mono',monospace;opacity:0;transition:opacity .3s,transform .3s;z-index:200;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -488,247 +175,185 @@ html,body{
     <p>// naija charades, next level //</p>
   </div>
   <div class="home-btns">
-    <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">▶ &nbsp;Play</button>
-    <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">❓ &nbsp;How to Play</button>
-    <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">🏆 &nbsp;Leaderboard</button>
-    <button class="btn btn-secondary" onclick="showScreen('manageScreen')">⚙ &nbsp;Manage Words</button>
+    <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">&#9654; &nbsp;Play</button>
+    <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">&#10067; &nbsp;How to Play</button>
+    <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">&#127942; &nbsp;Leaderboard</button>
+    <button class="btn btn-secondary" onclick="showScreen('manageScreen')">&#9881; &nbsp;Manage Words</button>
   </div>
   <div style="text-align:center;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;padding-bottom:8px;">
-    Landscape mode · tap right = got it · tap left = skip
+    Landscape mode &middot; tap right = got it &middot; tap left = skip
   </div>
 </div>
 
 <!-- MODE SELECT SCREEN -->
 <div class="screen hidden" id="modeSelectScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('homeScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>How are you playing?</h2>
   </div>
   <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
-
     <div class="mode-select-card" onclick="pickMode('solo')">
-      <div style="font-size:36px">👤</div>
-      <div>
-        <h3>Solo</h3>
-        <p>One person holds the phone. Everyone else gives clues. Race against words or the clock.</p>
-      </div>
+      <div style="font-size:36px">&#128100;</div>
+      <div><h3>Solo</h3><p>One person holds the phone. Everyone else gives clues. Race against words or the clock.</p></div>
     </div>
-
     <div class="mode-select-card" onclick="pickMode('versus')">
-      <div style="font-size:36px">⚔️</div>
-      <div>
-        <h3>Versus</h3>
-        <p>2 to 10 players take turns. Name your players or teams. Highest score wins.</p>
-      </div>
+      <div style="font-size:36px">&#9876;&#65039;</div>
+      <div><h3>Versus</h3><p>2 to 10 players take turns. Name your players or teams. Highest score wins.</p></div>
     </div>
-
   </div>
 </div>
 
 <!-- HOW TO PLAY SCREEN -->
 <div class="screen hidden" id="howToPlayScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('homeScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>How to Play</h2>
   </div>
   <div style="padding:20px;display:flex;flex-direction:column;gap:16px;padding-bottom:40px;">
-    <div class="htp-card">
-      <div class="htp-icon">📱</div>
-      <div><h4>Landscape Mode</h4><p>When the game starts it rotates to landscape. Hold the phone up so the crowd can see the word.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">✅</div>
-      <div><h4>Got It</h4><p>Your team guessed it? Tap the <strong>right side</strong> of the screen. In landscape that becomes the top.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">⏭️</div>
-      <div><h4>Skip</h4><p>Too hard? Tap the <strong>left side</strong>. In landscape that becomes the bottom. Skipped words don't count.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">👤</div>
-      <div><h4>Solo Mode</h4><p>One player holds the phone, everyone else gives clues. Race against words or the clock.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">⚔️</div>
-      <div><h4>Versus Mode</h4><p>2 to 10 players take turns. Each holds the phone for their turn. Highest score wins. Saved to leaderboard.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">⏱️</div>
-      <div><h4>Timer Mode</h4><p>Race against the clock instead of fixed word count. Set from 30 seconds to 3 minutes.</p></div>
-    </div>
-    <div class="htp-card">
-      <div class="htp-icon">🔄</div>
-      <div><h4>Rounds</h4><p>In Versus mode choose how many rounds. Most points across all rounds wins.</p></div>
-    </div>
+    <div class="htp-card"><div class="htp-icon">&#128241;</div><div><h4>Landscape Mode</h4><p>When the game starts it rotates to landscape. Hold the phone up so the crowd can see the word.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#9989;</div><div><h4>Got It</h4><p>Your team guessed it? Tap the <strong>right side</strong> of the screen. In landscape that becomes the top.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#9197;&#65039;</div><div><h4>Skip</h4><p>Too hard? Tap the <strong>left side</strong>. In landscape that becomes the bottom. Skipped words don't count.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#128100;</div><div><h4>Solo Mode</h4><p>One player holds the phone, everyone else gives clues. Race against words or the clock.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#9876;&#65039;</div><div><h4>Versus Mode</h4><p>2 to 10 players take turns. Each holds the phone for their turn. Highest score wins. Saved to leaderboard.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#9201;&#65039;</div><div><h4>Timer Mode</h4><p>Race against the clock instead of fixed word count. Set from 30 seconds to 3 minutes.</p></div></div>
+    <div class="htp-card"><div class="htp-icon">&#128260;</div><div><h4>Rounds</h4><p>In Versus mode choose how many rounds. Most points across all rounds wins.</p></div></div>
   </div>
 </div>
 
 <!-- CATEGORY SELECT -->
 <div class="screen hidden" id="categoryScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="categoryGoBack()">←</div>
+    <div class="back-btn" onclick="categoryGoBack()">&#8592;</div>
     <h2>Pick Categories</h2>
   </div>
-
-  <div class="cat-grid" id="catGrid">
-    <!-- Filled by JS -->
-  </div>
-
+  <div class="cat-grid" id="catGrid"></div>
   <div class="start-section">
-    <button class="btn btn-primary" onclick="goToPlayers()">Next →</button>
+    <button class="btn btn-primary" onclick="goToPlayers()">Next &#8594;</button>
   </div>
 </div>
 
 <!-- PLAYERS SETUP SCREEN -->
 <div class="screen hidden" id="playersScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('modeSelectScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('modeSelectScreen')">&#8592;</div>
   </div>
-
   <div style="padding:20px 20px 0;">
     <p style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;margin-bottom:16px;">How many players / teams?</p>
     <div class="round-config">
       <span>Players</span>
       <div class="stepper">
-        <div class="step-btn" onclick="changePlayers(-1)">−</div>
+        <div class="step-btn" onclick="changePlayers(-1)">&#8722;</div>
         <div class="step-val" id="playerCountVal">2</div>
         <div class="step-btn" onclick="changePlayers(1)">+</div>
       </div>
     </div>
   </div>
-
-  <div id="playerNameFields" style="padding:16px 20px;display:flex;flex-direction:column;gap:12px;">
-    <!-- filled by JS -->
-  </div>
-
+  <div id="playerNameFields" style="padding:16px 20px;display:flex;flex-direction:column;gap:12px;"></div>
   <div style="padding:0 20px 20px;">
-    <button class="btn btn-primary" style="width:100%" onclick="playersNext()">Next →</button>
+    <button class="btn btn-primary" style="width:100%" onclick="playersNext()">Next &#8594;</button>
   </div>
 </div>
 
 <!-- GAME MODE SCREEN -->
 <div class="screen hidden" id="gameModeScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('playersScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('playersScreen')">&#8592;</div>
     <h2>Round Setup</h2>
   </div>
-
   <div style="padding:20px;display:flex;flex-direction:column;gap:20px;">
-
     <p style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;">Choose how the round is timed:</p>
-
-    <!-- Mode toggle -->
     <div class="mode-toggle">
-      <div class="mode-btn active" id="modeWordsBtn" onclick="selectMode('words')">📝 Words</div>
-      <div class="mode-btn" id="modeTimerBtn" onclick="selectMode('timer')">⏱️ Timer</div>
+      <div class="mode-btn active" id="modeWordsBtn" onclick="selectMode('words')">&#128221; Words</div>
+      <div class="mode-btn" id="modeTimerBtn" onclick="selectMode('timer')">&#9201;&#65039; Timer</div>
     </div>
-
-    <!-- Words config -->
     <div id="wordsConfig">
       <div class="round-config">
         <span>Words per turn</span>
         <div class="stepper">
-          <div class="step-btn" onclick="changeWords(-5)">−</div>
+          <div class="step-btn" onclick="changeWords(-5)">&#8722;</div>
           <div class="step-val" id="wordCountVal2">20</div>
           <div class="step-btn" onclick="changeWords(5)">+</div>
         </div>
       </div>
     </div>
-
-    <!-- Timer config -->
     <div id="timerConfig" style="display:none;">
       <div class="round-config">
         <span>Time per turn</span>
         <div class="stepper">
-          <div class="step-btn" onclick="changeTimer(-30)">−</div>
+          <div class="step-btn" onclick="changeTimer(-30)">&#8722;</div>
           <div class="step-val" id="timerVal">60s</div>
           <div class="step-btn" onclick="changeTimer(30)">+</div>
         </div>
       </div>
     </div>
-
     <div id="roundsConfig" style="display:none;">
       <div class="round-config">
         <span>Number of rounds</span>
         <div class="stepper">
-          <div class="step-btn" onclick="changeRounds(-1)">−</div>
+          <div class="step-btn" onclick="changeRounds(-1)">&#8722;</div>
           <div class="step-val" id="roundCountVal">1</div>
           <div class="step-btn" onclick="changeRounds(1)">+</div>
         </div>
       </div>
     </div>
-
   </div>
-
   <div style="padding:0 20px 20px;margin-top:auto;">
-    <button class="btn btn-primary" style="width:100%" onclick="startFromMode()">▶ &nbsp;Start Game</button>
+    <button class="btn btn-primary" style="width:100%" onclick="startFromMode()">&#9654; &nbsp;Start Game</button>
   </div>
 </div>
 
 <!-- TURN TRANSITION SCREEN -->
 <div class="screen hidden" id="turnScreen">
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:24px;text-align:center;">
-    <div style="font-size:48px" id="turnEmoji">🎮</div>
+    <div style="font-size:48px" id="turnEmoji">&#127918;</div>
     <h2 id="turnTitle" style="font-size:28px;">Player 1</h2>
     <p id="turnSubtitle" style="color:var(--muted);font-size:15px;">Your turn! Hold the phone and get ready.</p>
     <div style="background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 20px;font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);" id="turnMeta">Round 1</div>
   </div>
   <div style="padding:24px;">
-    <button class="btn btn-primary" style="width:100%" onclick="beginTurn()">I'm Ready ▶</button>
+    <button class="btn btn-primary" style="width:100%" onclick="beginTurn()">I'm Ready &#9654;</button>
   </div>
 </div>
 
 <!-- GAME SCREEN -->
 <div class="screen hidden" id="gameScreen">
-
   <div class="game-layout">
-
-    <!-- LEFT = SKIP -->
     <div class="tap-zone tap-skip" onclick="markSkip()">
-      <div class="tap-label">⏭️<br>SKIP</div>
+      <div class="tap-label">&#9197;&#65039;<br>SKIP</div>
     </div>
-
-    <!-- CENTRE: word -->
     <div class="word-stage">
       <div class="game-meta">
-        <div class="game-cat-label" id="gameCatLabel">—</div>
+        <div class="game-cat-label" id="gameCatLabel">&#8212;</div>
         <div class="game-score" id="gameScore">0 / 0</div>
       </div>
-      <div class="exit-game-btn" onclick="exitGame()">✕</div>
-      <div id="timerDisplay" style="display:none;font-size:28px;font-weight:900;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:8px;" id="timerDisplay">60</div>
+      <div class="exit-game-btn" onclick="exitGame()">&#10005;</div>
+      <div id="timerDisplay" style="display:none;font-size:28px;font-weight:900;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:8px;">60</div>
       <div class="word-display" id="wordDisplay">
         <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;opacity:0.7;">Watin Be This?</div>
-        <div class="word-text" id="wordText">—</div>
-        <div class="word-category" id="wordCat">—</div>
+        <div class="word-text" id="wordText">&#8212;</div>
+        <div class="word-category" id="wordCat">&#8212;</div>
       </div>
     </div>
-
-    <!-- RIGHT = GOT IT -->
     <div class="tap-zone tap-got" onclick="markGot()">
-      <div class="tap-label">✅<br>GOT IT</div>
+      <div class="tap-label">&#9989;<br>GOT IT</div>
     </div>
-
   </div>
-
 </div>
 
 <!-- RESULTS SCREEN -->
 <div class="screen hidden" id="resultsScreen">
   <div class="results-header">
     <h2>Round Over!</h2>
-    <p id="resultsSubtitle">— categories played —</p>
+    <p id="resultsSubtitle">&#8212; categories played &#8212;</p>
   </div>
-
   <div class="score-big">
     <div class="num" id="resultsScore">0</div>
     <div class="label">words got</div>
   </div>
-
   <div class="word-log">
     <div class="word-log-header">Word Log</div>
     <div class="word-log-list" id="wordLog"></div>
   </div>
-
   <div class="results-btns">
     <button class="btn btn-primary" onclick="showScreen('categoryScreen')">Play Again</button>
     <button class="btn btn-secondary" onclick="showScreen('homeScreen')">Home</button>
@@ -738,12 +363,10 @@ html,body{
 <!-- HISTORY SCREEN -->
 <div class="screen hidden" id="historyScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('homeScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>Leaderboard</h2>
   </div>
-  <div id="historyContent" style="padding:16px;display:flex;flex-direction:column;gap:16px;">
-    <!-- filled by JS -->
-  </div>
+  <div id="historyContent" style="padding:16px;display:flex;flex-direction:column;gap:16px;"></div>
   <div style="padding:0 20px 20px;">
     <button class="btn btn-danger btn-sm" onclick="clearHistory()">Clear History</button>
   </div>
@@ -752,35 +375,32 @@ html,body{
 <!-- MANAGE SCREEN -->
 <div class="screen hidden" id="manageScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('homeScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('homeScreen')">&#8592;</div>
     <h2>Manage Words</h2>
   </div>
-  <div class="manage-cats" id="manageCats"><!-- filled by JS --></div>
+  <div class="manage-cats" id="manageCats"></div>
   <button class="btn btn-danger btn-sm" onclick="confirmResetAll()">Reset All to Defaults</button>
 </div>
 
 <!-- WORD EDITOR SCREEN -->
 <div class="screen hidden" id="wordEditorScreen">
   <div class="screen-header">
-    <div class="back-btn" onclick="showScreen('manageScreen')">←</div>
+    <div class="back-btn" onclick="showScreen('manageScreen')">&#8592;</div>
     <h2 id="editorTitle">Edit Words</h2>
   </div>
-
   <div class="editor-meta" id="editorMeta">
-    <div class="editor-meta-icon" id="editorIcon">🔤</div>
+    <div class="editor-meta-icon" id="editorIcon">&#128288;</div>
     <div class="editor-meta-info">
       <h4 id="editorCatName">Category</h4>
       <p id="editorWordCount">0 words</p>
     </div>
   </div>
-
   <div class="paste-area">
     <label>Paste new words (one per line)</label>
     <textarea id="pasteInput" placeholder="Agbalumo&#10;Jollof rice&#10;Owambe&#10;Lagos Island&#10;..."></textarea>
   </div>
   <button class="btn btn-primary" style="margin-bottom:14px;width:100%" onclick="addPastedWords()">Add Words</button>
   <div class="add-result" id="addResult"></div>
-
   <div class="word-list-section">
     <div class="wls-header">
       <span id="wlsCount">All words</span>
@@ -796,67 +416,41 @@ html,body{
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- LOCKED CATEGORY BOTTOM SHEET -->
+<div class="bottom-sheet-overlay" id="lockedSheet">
+  <div class="bottom-sheet" id="lockedSheetInner">
+    <div class="bs-handle"></div>
+    <div class="bs-icon">&#128274;</div>
+    <div class="bs-title">Premium Pack</div>
+    <div class="bs-subtitle" id="bsSubtitle">This category is part of a Premium Pack. Unlock it to play with these words.</div>
+    <div class="bs-tag">&#10024; &nbsp;COMING SOON</div>
+    <button class="bs-close" id="bsCloseBtn">Got It</button>
+  </div>
+</div>
+
 <script>
 // ===================== WORD DATA =====================
 const DEFAULT_WORDS = {
-  food: {
-    name:"Food & Drinks", icon:"🍲", difficulty:"EASY",
-    words:["Jollof rice","Eguisi Soup","Pounded yam","Amala","Suya","Pepper soup","Banga soup","Afang soup","Edikaikong","Oha soup","Egusi soup","Okra soup","Ogbono soup","Bitterleaf soup","Nsala soup","Ofada rice","Abacha","Nkwobi","Isi ewu","Ugba","Moi moi","Akara","Puff puff","Chin chin","Bole and fish","Roasted corn","Fried plantain","Dodo","Yam porridge","Asun","Kilishi","Ogi","Akamu","Kunu","Zobo","Fura da nono","Tuwo shinkafa","Masa","Dan wake","Tuwon masara","Garri and groundnut","Soaked garri","Eba","Fufu","Semovita","Agege bread","Egg roll","Buns","Sausage roll","Scotch egg","Small chops","Gizdodo","Peppered snail","Cow leg","Tripe","Stockfish stew","Smoked fish","Catfish pepper soup","Goat meat pepper soup","Assorted pepper soup","Ofe onugbu","Abula","Efo riro","Buka stew","Ayamase","Coconut rice","Fried rice","Agidi jollof","Tiger nut drink","Agbalumo","Ube","Bush pear","Udala","Coconut water","Palmwine","Ogogoro","Burukutu","Pito","Orijin","Alomo bitters","Hero beer","Star beer","Gulder","Malta Guinness","Hollandia yoghurt","Peak milk","Indomie","Noodles","Bread and akara","Yam and egg","Fried yam","Plantain chips","Kelewele","Basmati rice"]
-  },
-  emotions: {
-    name:"Emotions & Feelings", icon:"😂", difficulty:"MEDIUM",
-    words:["Sapa","suffer","Heartbreak","Joy","Fear","Jealousy","Shame","Vex","Shock","Love","Anger","Excitement","Sadness","Anxiety","Confused","Regret","Guilty","Embarrassment","Betrayal","Loneliness","Depression","Overthinking","Gratitude","Peace of mind","Contentment","Motivation","Determination","Hopelessness","Relief","Pride","Humility","Bitterness","Resentment","Forgiveness","Envy","Obsession","Panic","Numbness","Emptiness","Crush","Butterflies in my stomach","Trust issues","Disappointment","Frustration","Overwhelmed","Stress","Burnout","Healing","Growth","Nostalgia","Homesick","Culture shock","Identity crisis","Imposter syndrome","Low self esteem","Confidence","Courage","Fear of rejection","Abandonment issues","Attachment","Mood swing","Emotional instability","Crying","Laughing out loud","Fake life","Letting go","Starting over","Second chances","New beginnings","Closure","Unfinished business","Mixed emotions","Already decided","Point of no return","Rock bottom","Bounce back","Glow up","Character development","Lessons learned"]
-  },
-  activities: {
-    name:"Activities", icon:"⚽", difficulty:"HARD",
-    words:["Entering danfo","Arguing with conductor","Begging for change","Running after bus","Stopping keke","Haggling at market","Carrying load on head","Eating at buka","Greeting elder","Prostrating to greet","Kneeling to greet","Spraying money at owambe","Dancing at owambe","Attending naming ceremony","Traditional wedding","Church wedding","Night vigil","Speaking in tongues","Binding and casting","Paying tithe","Sowing seed offering","Going to crusade","Fasting and praying","NYSC camping","Pop ceremony","Teaching","Queuing at ATM","Complaining about NEPA","Fueling generator","Queuing for petrol","School runs","Going to JAMB","WAEC preparation","Collecting PVC","Election day","Protest","EndSARS protest","Paying agbero","Gele tying","Aso ebi shopping","Ankara shopping","Tailoring fitting","Okada riding","Third mainland bridge traffic","Lekki toll gate","Pothole dodging","One chance escape","Danfo driver fighting","Bus conductor shouting","Area boy confrontation","Market woman argument","buying Mama put","Fetching water","Morning devotion","House fellowship","Cell meeting","Sunday school","Going to mosque","Friday prayer","Eid celebration","Sallah meat sharing","Christmas jollof cooking","New Year watchnight","Birthday spraying","Owambe dancing","Shaku shaku dance","Zanku dance","Leg work dance","Etighi dance","Bata dance","Talking drum performance","Praise and worship","Choir rehearsal","Wedding reception","Engagement party","Introduction ceremony","Kola nut presentation","Palm wine drinking","Traditional festival","Masquerade running","Egungun dancing","New Yam festival","Chieftaincy installation","Coronation ceremony","Town union meeting","Age grade meeting"]
-  },
-  movies: {
-    name:"Movies & Shows", icon:"🎬", difficulty:"EASY",
-    words:["Jenifa","Living in Bondage","Glamour Girls","Osuofia in London","Aki and Pawpaw","Chief Daddy","A Tribe Called Judah","Blood Sisters","Shanty Town","Brotherhood","The Black Book","King of Boys","Castle and Castle","Tinsel","Jenifa's Diary","Super Story","Third Eye","Fuji House of Commotion","The Johnsons","Papa Ajasco","Wale Adenuga productions","Checkmate","Basi and Company","Nollywood","Kannywood","Yoruba movie","Igbo movie","Big Brother Naija","Ebuka Obi-Uchendu","Saturday night party","Funke Akindele","Toyin Abraham","Odunlade Adekola","Femi Adebayo","Mercy Johnson","Patience Ozokwor","Pete Edochie","Kanayo O Kanayo","Genevieve Nnaji","Ramsey Nouah","Richard Mofe-Damijo","Nkem Owoh","Chiwetalu Agu","John Okafor","Sam Loco Efe","Hanks Anuku","Tonto Dikeh","Ini Edo","Omotola Jalade","Rita Dominic","Broda Shaggi","Taaooma","Mr Macaroni","Craze Clown","Lasisi Elenu","Officer Woos","Josh2Funny","Maraji","Real Warri Pikin","AY (Comedian)","Basketmouth","Bovi","Gordons","Nigerian idol","The Voice Nigeria","Gulder Ultimate Search","Who Wants to Be a Millionaire Nigeria","Zee World","Africa Magic","Ebony Life TV","Sound Sultan","Isoken movie","The Wedding Party","The Bling Lagosians","Merry Men","Your Excellency","Citation","Breath of Life","Far from Home","Eagle Wings","Phone Swap"]
-  },
-  locations: {
-    name:"Locations", icon:"📍", difficulty:"MEDIUM",
-    words:["Balogun Market","Computer Village Ikeja","Alaba International Market","Oshodi","Mile 12 Market","Tejuosho Market","Lekki Phase 1","Victoria Island","Lagos Island","Banana Island","Ikoyi","Surulere","Yaba","Mushin","Agege","Ajegunle","Festac Town","Apapa","Third Mainland Bridge","Lekki-Ikoyi Bridge","Eko Bridge","Carter Bridge","Murtala Muhammed Airport","Ikeja","Maryland","Ojota","Ketu","Mile 2","Orile","Badagry","Epe","Ikorodu","Sagamu","Abeokuta","Ibadan","Dugbe Market","Bodija Market","UI Ibadan","Oyo","Ogbomosho","Ile Ife","Osogbo","Oshogbo","Ilesa","Akure","Ondo","Benin City","Ring Road Benin","Sapele","Warri","Asaba","Onitsha","Main Market Onitsha","Nnewi","Awka","Enugu","Ogui Road","Coal Camp","Trans Ekulu","Port Harcourt","GRA Port Harcourt","Diobu","Mile 1","Mile 3","Trans Amadi","Bonny Island","Aba","Ariaria Market","Owerri","Onitsha Head Bridge","Abuja","Wuse Market","Maitama","Asokoro","Gwarinpa","Kubwa","Area 1","Garki","Utako","Jabi","Kano","Sabon Gari Kano","Kurmi Market","Kantin Kwari","Jos","Kaduna","Zaria","Maiduguri","Sokoto","Ilorin","Lokoja","Calabar","Marina Lagos","Tafawa Balewa Square","National Stadium Surulere","Eko Hotel","Freedom Park Lagos","Lekki Conservation Centre","Bar Beach","Elegushi Beach","Oniru Beach","Kuramo Beach","Nike Art Gallery","Terra Kulture","National Theatre Lagos","Aso Rock","Eagle Square Abuja","Millennium Tower Abuja","Transcorp Hilton","Jabi Lake","Wuse Zone 4","Ogun","Cross River","Calabar carnival ground"]
-  },
-  music: {
-    name:"Musicians & Songs", icon:"🎵", difficulty:"EASY",
-    words:["Burna Boy","Wizkid","Davido","Tiwa Savage","Fela Kuti","King Sunny Ade","Ebenezer Obey","Onyeka Onwenu","Evi Edna Ogholi","Majek Fashek","2Baba","P-Square","D'banj","Don Jazzy","Olamide","Phyno","Flavour","Kcee","Tekno","Mr Eazi","Fireboy DML","Rema","Tems","Ayra Starr","CKay","Omah Lay","Asake","Kizz Daniel","Patoranking","Wande Coal","Banky W","Adekunle Gold","Simi","Falz","Seun Kuti","Femi Kuti","Lagbaja","Obesere","Pasuma","Wasiu Ayinde K1","Saheed Osupa","Fuji music","Afrobeats","Highlife","Juju music","Apala","Afropop","Street pop","Afrofusion","Amapiano","Zanku","Shaku shaku","Ye","Essence by Wizkid ft Tems","Fall by Davido","Pere by Davido","FEM by Davido","Kizz Daniel Buga","Asake Organise","Rema Calm Down","Tems Free Mind","Ayra Starr Rush","CKay Love Nwantiti","Omah Lay Godly","Fireboy Peru","Olamide Wo","Phyno Fada Fada","Flavour Nwa Baby","Kcee Limpopo","Tekno Pana","Wande Coal Bumper to Bumper","Adekunle Gold Okay","Falz This is Nigeria","Grammy","Headies","Timaya","Yemi Alade","Yemi Alade Johnny","Tiwa Savage Kele Kele","D'banj Oliver Twist","2Baba African Queen","P-Square Personally","Mavin Records","DMW crew","YBNL Nation","30BG","O2 Arena","Afronation festival"]
-  },
-  slangs: {
-    name:"Slangs & Phrases", icon:"🗣️", difficulty:"HARD",
-    words:["Sapa dey catch me","E don do","Abeg comot","Oya now","Na wa o","E be things","No cap","Omo mehn","Bros relax","Na so e be","Who send you","You don do am","E go be","Wahala dey","Shey you dey craze","Na your mate","I nor gree","E nor make sense","Na lie","Shine your eyes","You don fall my hand","Omo","See as e be","Story for the gods","Them do you","You don kukuma do am","E reach","Person wey guide","You will learn","No dulling","Carry go","I don tire","Big man ting","Pepper dem gang","E be like say","Na today","You don see","Sharp sharp","E nor reach you","Who you epp","E choke","Correct vibes","No wahala","Na God dey run am","E don land","Levels don change","Blessing scatter","Na beans","God when","We move","Different strokes","God Abeg","Stay woke","No gree for anybody","Stand your ground","Collect your money","Run your race","Mind your business","Face your front","Do your thing","Hustle hard","Make am","Money don enter","Shake my account","Wetin dey sup","How far na","Nothing dey sup","All na packaging","Opor","E be like play","See your life","Help a brother","Anything for the boys?","I nor get","Broke life","Moving mad","Odogwu","Omo you try","Good for nothing"]
-  },
-  animals: {
-    name:"Animals", icon:"🐾", difficulty:"MEDIUM",
-    words:["Agama lizard","Monitor lizard","Python","Cobra","Mamba","Crocodile","Grasscutter","Bush rat","Porcupine","Pangolin","Warthog","Hippopotamus","African buffalo","Chimpanzee","Gorilla","Baboon","Lion","Elephant","Leopard","Hyena","Jackal","Mongoose","Honey badger","Civet cat","Squirrel","Rabbit","Grass snake","Tortoise","Chameleon","Gecko","Toad","Bullfrog","Tree frog","Tilapia","Catfish","Mudfish","Perch","Crayfish","Periwinkle","Snail","Crab","Shrimp","Lobster","Oyster","Guinea fowl","Turkey","Duck","Pigeon","Parrot","Weaver bird","Sunbird","Eagle","Vulture","Kite","Owl","Bat","Egret","Pelican","Flamingo","Hornbill","Hen","Rooster","Goat","Sheep","Cow","Bull","Donkey","Horse","Pig","Dog","Cat","Rat","Mouse","Millipede","Centipede","Scorpion","Tarantula","Praying mantis","Firefly","Termite","Driver ant","Mosquito","Tsetse fly","Housefly","Grasshopper","Cricket","Beetle","Butterfly","Dragonfly","Wasp","Bee","Earthworm","Leech","Maggot","Cockroach","Bedbug","Tick","Louse","Flea","Mite","Elephant shrew","Flying squirrel","Otter","Manatee","Nile crocodile","Dwarf crocodile","Spitting cobra"]
-  },
-  occupations: {
-    name:"Occupations", icon:"💼", difficulty:"MEDIUM",
-    words:["Okada rider","Danfo driver","Keke driver","Bus conductor","Agbero","Gateman","Security guard","Bricklayer","Carpenter","Welder","Plumber","Electrician","Painter","Tiler","Roofer","Generator repairer","Phone repairer","Tailor","Fashion designer","Barber","Hair dresser","Makeup artist","Photographer","Videographer","DJ","MC","Event planner","Catering","Mama put","Suya seller","Mallam","Pure water seller","Ice block seller","Recharge card seller","POS operator","Market woman","Pepper grinder","akara seller","Bread seller","Vegetable seller","Fish monger","Meat seller","Butcher","Farmer","Fisherman","Hunter","Palm wine tapper","Teacher","NYSC corper","Lecturer","Principal","Professor","Doctor","Nurse","Pharmacist","Dentist","Optician","Midwife","Herbalist","Babalawo","Pastor","Imam","Chorister","Trader","Chairman","CEO","Politician","Senator","Governor","Local government chairman","Civil servant","LASTMA officer","FRSC officer","Police officer","Army officer","Navy officer","Air force officer","Prison warden","Customs officer","Immigration officer","NAFDAC officer","Lawyer","Judge","Accountant","Banker","Insurance agent","Stock broker","Software developer","Graphics designer","Content creator","Skit maker","President","Influencer","Comedian","Actor","Musician","Footballer"]
-  },
-  sports: {
-    name:"Sports & Games", icon:"🏆", difficulty:"EASY",
-    words:["Super Eagles","Super Falcons","NPFL","Enyimba FC","Kano Pillars","Heartland FC","Rangers International","Shooting Stars","Sunshine Stars","Wrestling","Table tennis","Lawn tennis","Basketball","Volleyball","Handball","Athletics","Boxing","Taekwondo","Swimming","CAF Champions League","AFCON","World Cup qualifier","Penalty shootout","Hat trick","Offside","Corner kick","Free kick","Yellow card","Red card","VAR check","Own goal","Goalkeeper","Striker","Midfielder","Defender","Coach","Referee","Linesman","Betting slip","Bet9ja","NairaBet","SportyBet","Suwe","Ten ten","Boju boju","Who is in the garden","Police and thief","Rotten egg","Ludo","Ayo olopon","Whot","Draft","Monopoly","Chess","Ayo game","Boxing","Argungu fishing festival","Gidigbo (Traditional wrestling)","Scrabble","Draught","Table football","Sack race","Egg and spoon race","Tug of war","Relay race","High jump","Long jump","Shot put","Javelin","100 metres","Marathon","Cycling","Swimming relay","Water polo","CODM","FIFA game","NBA 2K","PUBG","Free Fire","Call of Duty","Pro evolution soccer","Streetball","Road tennis","Arm wrestling","Pillow fight","Musical chairs","Penalty kick","Free throw","Slam dunk","Corner flag","Offside trap","Goal celebration","Bicycle kick","Peter Odemwingie","Nwankwo Kanu","Jay-Jay Okocha","Rashidi Yekini","Sunday Oliseh","Segun Odegbami","John Mikel Obi","Victor Enyeama","Stephen Keshi","Victor Osimhen","Ademola Lookman"]
-  }
+  food:{name:"Food & Drinks",icon:"🍲",difficulty:"EASY",paid:false,enabled:true,words:["Jollof rice","Eguisi Soup","Pounded yam","Amala","Suya","Pepper soup","Banga soup","Afang soup","Edikaikong","Oha soup","Egusi soup","Okra soup","Ogbono soup","Bitterleaf soup","Nsala soup","Ofada rice","Abacha","Nkwobi","Isi ewu","Ugba","Moi moi","Akara","Puff puff","Chin chin","Bole and fish","Roasted corn","Fried plantain","Dodo","Yam porridge","Asun","Kilishi","Ogi","Akamu","Kunu","Zobo","Fura da nono","Tuwo shinkafa","Masa","Dan wake","Tuwon masara","Garri and groundnut","Soaked garri","Eba","Fufu","Semovita","Agege bread","Egg roll","Buns","Sausage roll","Scotch egg","Small chops","Gizdodo","Peppered snail","Cow leg","Tripe","Stockfish stew","Smoked fish","Catfish pepper soup","Goat meat pepper soup","Assorted pepper soup","Ofe onugbu","Abula","Efo riro","Buka stew","Ayamase","Coconut rice","Fried rice","Agidi jollof","Tiger nut drink","Agbalumo","Ube","Bush pear","Udala","Coconut water","Palmwine","Ogogoro","Burukutu","Pito","Orijin","Alomo bitters","Hero beer","Star beer","Gulder","Malta Guinness","Hollandia yoghurt","Peak milk","Indomie","Noodles","Bread and akara","Yam and egg","Fried yam","Plantain chips","Kelewele","Basmati rice"]},
+  emotions:{name:"Emotions & Feelings",icon:"😂",difficulty:"MEDIUM",paid:false,enabled:true,words:["Sapa","suffer","Heartbreak","Joy","Fear","Jealousy","Shame","Vex","Shock","Love","Anger","Excitement","Sadness","Anxiety","Confused","Regret","Guilty","Embarrassment","Betrayal","Loneliness","Depression","Overthinking","Gratitude","Peace of mind","Contentment","Motivation","Determination","Hopelessness","Relief","Pride","Humility","Bitterness","Resentment","Forgiveness","Envy","Obsession","Panic","Numbness","Emptiness","Crush","Butterflies in my stomach","Trust issues","Disappointment","Frustration","Overwhelmed","Stress","Burnout","Healing","Growth","Nostalgia","Homesick","Culture shock","Identity crisis","Imposter syndrome","Low self esteem","Confidence","Courage","Fear of rejection","Abandonment issues","Attachment","Mood swing","Emotional instability","Crying","Laughing out loud","Fake life","Letting go","Starting over","Second chances","New beginnings","Closure","Unfinished business","Mixed emotions","Already decided","Point of no return","Rock bottom","Bounce back","Glow up","Character development","Lessons learned"]},
+  activities:{name:"Activities",icon:"⚽",difficulty:"HARD",paid:false,enabled:true,words:["Entering danfo","Arguing with conductor","Begging for change","Running after bus","Stopping keke","Haggling at market","Carrying load on head","Eating at buka","Greeting elder","Prostrating to greet","Kneeling to greet","Spraying money at owambe","Dancing at owambe","Attending naming ceremony","Traditional wedding","Church wedding","Night vigil","Speaking in tongues","Binding and casting","Paying tithe","Sowing seed offering","Going to crusade","Fasting and praying","NYSC camping","Pop ceremony","Teaching","Queuing at ATM","Complaining about NEPA","Fueling generator","Queuing for petrol","School runs","Going to JAMB","WAEC preparation","Collecting PVC","Election day","Protest","EndSARS protest","Paying agbero","Gele tying","Aso ebi shopping","Ankara shopping","Tailoring fitting","Okada riding","Third mainland bridge traffic","Lekki toll gate","Pothole dodging","One chance escape","Danfo driver fighting","Bus conductor shouting","Area boy confrontation","Market woman argument","buying Mama put","Fetching water","Morning devotion","House fellowship","Cell meeting","Sunday school","Going to mosque","Friday prayer","Eid celebration","Sallah meat sharing","Christmas jollof cooking","New Year watchnight","Birthday spraying","Owambe dancing","Shaku shaku dance","Zanku dance","Leg work dance","Etighi dance","Bata dance","Talking drum performance","Praise and worship","Choir rehearsal","Wedding reception","Engagement party","Introduction ceremony","Kola nut presentation","Palm wine drinking","Traditional festival","Masquerade running","Egungun dancing","New Yam festival","Chieftaincy installation","Coronation ceremony","Town union meeting","Age grade meeting"]},
+  movies:{name:"Movies & Shows",icon:"🎬",difficulty:"EASY",paid:false,enabled:true,words:["Jenifa","Living in Bondage","Glamour Girls","Osuofia in London","Aki and Pawpaw","Chief Daddy","A Tribe Called Judah","Blood Sisters","Shanty Town","Brotherhood","The Black Book","King of Boys","Castle and Castle","Tinsel","Jenifa's Diary","Super Story","Third Eye","Fuji House of Commotion","The Johnsons","Papa Ajasco","Wale Adenuga productions","Checkmate","Basi and Company","Nollywood","Kannywood","Yoruba movie","Igbo movie","Big Brother Naija","Ebuka Obi-Uchendu","Saturday night party","Funke Akindele","Toyin Abraham","Odunlade Adekola","Femi Adebayo","Mercy Johnson","Patience Ozokwor","Pete Edochie","Kanayo O Kanayo","Genevieve Nnaji","Ramsey Nouah","Richard Mofe-Damijo","Nkem Owoh","Chiwetalu Agu","John Okafor","Sam Loco Efe","Hanks Anuku","Tonto Dikeh","Ini Edo","Omotola Jalade","Rita Dominic","Broda Shaggi","Taaooma","Mr Macaroni","Craze Clown","Lasisi Elenu","Officer Woos","Josh2Funny","Maraji","Real Warri Pikin","AY (Comedian)","Basketmouth","Bovi","Gordons","Nigerian idol","The Voice Nigeria","Gulder Ultimate Search","Who Wants to Be a Millionaire Nigeria","Zee World","Africa Magic","Ebony Life TV","Sound Sultan","Isoken movie","The Wedding Party","The Bling Lagosians","Merry Men","Your Excellency","Citation","Breath of Life","Far from Home","Eagle Wings","Phone Swap"]},
+  locations:{name:"Locations",icon:"📍",difficulty:"MEDIUM",paid:false,enabled:true,words:["Balogun Market","Computer Village Ikeja","Alaba International Market","Oshodi","Mile 12 Market","Tejuosho Market","Lekki Phase 1","Victoria Island","Lagos Island","Banana Island","Ikoyi","Surulere","Yaba","Mushin","Agege","Ajegunle","Festac Town","Apapa","Third Mainland Bridge","Lekki-Ikoyi Bridge","Eko Bridge","Carter Bridge","Murtala Muhammed Airport","Ikeja","Maryland","Ojota","Ketu","Mile 2","Orile","Badagry","Epe","Ikorodu","Sagamu","Abeokuta","Ibadan","Dugbe Market","Bodija Market","UI Ibadan","Oyo","Ogbomosho","Ile Ife","Osogbo","Oshogbo","Ilesa","Akure","Ondo","Benin City","Ring Road Benin","Sapele","Warri","Asaba","Onitsha","Main Market Onitsha","Nnewi","Awka","Enugu","Ogui Road","Coal Camp","Trans Ekulu","Port Harcourt","GRA Port Harcourt","Diobu","Mile 1","Mile 3","Trans Amadi","Bonny Island","Aba","Ariaria Market","Owerri","Onitsha Head Bridge","Abuja","Wuse Market","Maitama","Asokoro","Gwarinpa","Kubwa","Area 1","Garki","Utako","Jabi","Kano","Sabon Gari Kano","Kurmi Market","Kantin Kwari","Jos","Kaduna","Zaria","Maiduguri","Sokoto","Ilorin","Lokoja","Calabar","Marina Lagos","Tafawa Balewa Square","National Stadium Surulere","Eko Hotel","Freedom Park Lagos","Lekki Conservation Centre","Bar Beach","Elegushi Beach","Oniru Beach","Kuramo Beach","Nike Art Gallery","Terra Kulture","National Theatre Lagos","Aso Rock","Eagle Square Abuja","Millennium Tower Abuja","Transcorp Hilton","Jabi Lake","Wuse Zone 4","Ogun","Cross River","Calabar carnival ground"]},
+  music:{name:"Musicians & Songs",icon:"🎵",difficulty:"EASY",paid:false,enabled:true,words:["Burna Boy","Wizkid","Davido","Tiwa Savage","Fela Kuti","King Sunny Ade","Ebenezer Obey","Onyeka Onwenu","Evi Edna Ogholi","Majek Fashek","2Baba","P-Square","D'banj","Don Jazzy","Olamide","Phyno","Flavour","Kcee","Tekno","Mr Eazi","Fireboy DML","Rema","Tems","Ayra Starr","CKay","Omah Lay","Asake","Kizz Daniel","Patoranking","Wande Coal","Banky W","Adekunle Gold","Simi","Falz","Seun Kuti","Femi Kuti","Lagbaja","Obesere","Pasuma","Wasiu Ayinde K1","Saheed Osupa","Fuji music","Afrobeats","Highlife","Juju music","Apala","Afropop","Street pop","Afrofusion","Amapiano","Zanku","Shaku shaku","Ye","Essence by Wizkid ft Tems","Fall by Davido","Pere by Davido","FEM by Davido","Kizz Daniel Buga","Asake Organise","Rema Calm Down","Tems Free Mind","Ayra Starr Rush","CKay Love Nwantiti","Omah Lay Godly","Fireboy Peru","Olamide Wo","Phyno Fada Fada","Flavour Nwa Baby","Kcee Limpopo","Tekno Pana","Wande Coal Bumper to Bumper","Adekunle Gold Okay","Falz This is Nigeria","Grammy","Headies","Timaya","Yemi Alade","Yemi Alade Johnny","Tiwa Savage Kele Kele","D'banj Oliver Twist","2Baba African Queen","P-Square Personally","Mavin Records","DMW crew","YBNL Nation","30BG","O2 Arena","Afronation festival"]},
+  slangs:{name:"Slangs & Phrases",icon:"🗣️",difficulty:"HARD",paid:false,enabled:true,words:["Sapa dey catch me","E don do","Abeg comot","Oya now","Na wa o","E be things","No cap","Omo mehn","Bros relax","Na so e be","Who send you","You don do am","E go be","Wahala dey","Shey you dey craze","Na your mate","I nor gree","E nor make sense","Na lie","Shine your eyes","You don fall my hand","Omo","See as e be","Story for the gods","Them do you","You don kukuma do am","E reach","Person wey guide","You will learn","No dulling","Carry go","I don tire","Big man ting","Pepper dem gang","E be like say","Na today","You don see","Sharp sharp","E nor reach you","Who you epp","E choke","Correct vibes","No wahala","Na God dey run am","E don land","Levels don change","Blessing scatter","Na beans","God when","We move","Different strokes","God Abeg","Stay woke","No gree for anybody","Stand your ground","Collect your money","Run your race","Mind your business","Face your front","Do your thing","Hustle hard","Make am","Money don enter","Shake my account","Wetin dey sup","How far na","Nothing dey sup","All na packaging","Opor","E be like play","See your life","Help a brother","Anything for the boys?","I nor get","Broke life","Moving mad","Odogwu","Omo you try","Good for nothing"]},
+  animals:{name:"Animals",icon:"🐾",difficulty:"MEDIUM",paid:false,enabled:true,words:["Agama lizard","Monitor lizard","Python","Cobra","Mamba","Crocodile","Grasscutter","Bush rat","Porcupine","Pangolin","Warthog","Hippopotamus","African buffalo","Chimpanzee","Gorilla","Baboon","Lion","Elephant","Leopard","Hyena","Jackal","Mongoose","Honey badger","Civet cat","Squirrel","Rabbit","Grass snake","Tortoise","Chameleon","Gecko","Toad","Bullfrog","Tree frog","Tilapia","Catfish","Mudfish","Perch","Crayfish","Periwinkle","Snail","Crab","Shrimp","Lobster","Oyster","Guinea fowl","Turkey","Duck","Pigeon","Parrot","Weaver bird","Sunbird","Eagle","Vulture","Kite","Owl","Bat","Egret","Pelican","Flamingo","Hornbill","Hen","Rooster","Goat","Sheep","Cow","Bull","Donkey","Horse","Pig","Dog","Cat","Rat","Mouse","Millipede","Centipede","Scorpion","Tarantula","Praying mantis","Firefly","Termite","Driver ant","Mosquito","Tsetse fly","Housefly","Grasshopper","Cricket","Beetle","Butterfly","Dragonfly","Wasp","Bee","Earthworm","Leech","Maggot","Cockroach","Bedbug","Tick","Louse","Flea","Mite","Elephant shrew","Flying squirrel","Otter","Manatee","Nile crocodile","Dwarf crocodile","Spitting cobra"]},
+  occupations:{name:"Occupations",icon:"💼",difficulty:"MEDIUM",paid:false,enabled:true,words:["Okada rider","Danfo driver","Keke driver","Bus conductor","Agbero","Gateman","Security guard","Bricklayer","Carpenter","Welder","Plumber","Electrician","Painter","Tiler","Roofer","Generator repairer","Phone repairer","Tailor","Fashion designer","Barber","Hair dresser","Makeup artist","Photographer","Videographer","DJ","MC","Event planner","Catering","Mama put","Suya seller","Mallam","Pure water seller","Ice block seller","Recharge card seller","POS operator","Market woman","Pepper grinder","akara seller","Bread seller","Vegetable seller","Fish monger","Meat seller","Butcher","Farmer","Fisherman","Hunter","Palm wine tapper","Teacher","NYSC corper","Lecturer","Principal","Professor","Doctor","Nurse","Pharmacist","Dentist","Optician","Midwife","Herbalist","Babalawo","Pastor","Imam","Chorister","Trader","Chairman","CEO","Politician","Senator","Governor","Local government chairman","Civil servant","LASTMA officer","FRSC officer","Police officer","Army officer","Navy officer","Air force officer","Prison warden","Customs officer","Immigration officer","NAFDAC officer","Lawyer","Judge","Accountant","Banker","Insurance agent","Stock broker","Software developer","Graphics designer","Content creator","Skit maker","President","Influencer","Comedian","Actor","Musician","Footballer"]},
+  sports:{name:"Sports & Games",icon:"🏆",difficulty:"EASY",paid:false,enabled:true,words:["Super Eagles","Super Falcons","NPFL","Enyimba FC","Kano Pillars","Heartland FC","Rangers International","Shooting Stars","Sunshine Stars","Wrestling","Table tennis","Lawn tennis","Basketball","Volleyball","Handball","Athletics","Boxing","Taekwondo","Swimming","CAF Champions League","AFCON","World Cup qualifier","Penalty shootout","Hat trick","Offside","Corner kick","Free kick","Yellow card","Red card","VAR check","Own goal","Goalkeeper","Striker","Midfielder","Defender","Coach","Referee","Linesman","Betting slip","Bet9ja","NairaBet","SportyBet","Suwe","Ten ten","Boju boju","Who is in the garden","Police and thief","Rotten egg","Ludo","Ayo olopon","Whot","Draft","Monopoly","Chess","Ayo game","Boxing","Argungu fishing festival","Gidigbo (Traditional wrestling)","Scrabble","Draught","Table football","Sack race","Egg and spoon race","Tug of war","Relay race","High jump","Long jump","Shot put","Javelin","100 metres","Marathon","Cycling","Swimming relay","Water polo","CODM","FIFA game","NBA 2K","PUBG","Free Fire","Call of Duty","Pro evolution soccer","Streetball","Road tennis","Arm wrestling","Pillow fight","Musical chairs","Penalty kick","Free throw","Slam dunk","Corner flag","Offside trap","Goal celebration","Bicycle kick","Peter Odemwingie","Nwankwo Kanu","Jay-Jay Okocha","Rashidi Yekini","Sunday Oliseh","Segun Odegbami","John Mikel Obi","Victor Enyeama","Stephen Keshi","Victor Osimhen","Ademola Lookman"]}
 };
 
 // ===================== STATE =====================
-let words = {}; // merged built-in + custom
-let customWords = {}; // only extras
-let currentGame = {
-  queue: [],
-  index: 0,
-  got: 0,
-  log: []
-};
-let wordCount = 20;
-let selectedCats = [];
-let tiltEnabled = false;
-let lastTilt = 0;
-let tiltThreshold = 30;
-let tiltTriggered = false;
-let currentEditorCat = null;
+let words={};
+let customWords={};
+let currentGame={queue:[],index:0,got:0,log:[]};
+let wordCount=20;
+let selectedCats=[];
+let tiltEnabled=false;
+let currentEditorCat=null;
 
 // ===================== INIT =====================
 function init(){
@@ -866,823 +460,472 @@ function init(){
   renderManageCats();
   checkMotionPermission();
   setupBackButton();
+  // Bottom sheet close handlers
+  document.getElementById('bsCloseBtn').addEventListener('click',()=>{
+    document.getElementById('lockedSheet').classList.remove('open');
+  });
+  document.getElementById('lockedSheet').addEventListener('click',(e)=>{
+    if(e.target===document.getElementById('lockedSheet')){
+      document.getElementById('lockedSheet').classList.remove('open');
+    }
+  });
 }
 
 function loadCustomWords(){
-  try{
-    customWords = JSON.parse(localStorage.getItem('bendrades_custom') || '{}');
-  }catch(e){ customWords = {}; }
+  try{customWords=JSON.parse(localStorage.getItem('bendrades_custom')||'{}');}
+  catch(e){customWords={};}
 }
-
-function saveCustomWords(){
-  localStorage.setItem('bendrades_custom', JSON.stringify(customWords));
-}
+function saveCustomWords(){localStorage.setItem('bendrades_custom',JSON.stringify(customWords));}
 
 function mergeWords(){
-  words = {};
+  words={};
   for(const key in DEFAULT_WORDS){
-    words[key] = {
-      ...DEFAULT_WORDS[key],
-      words: [...DEFAULT_WORDS[key].words, ...(customWords[key] || [])]
-    };
+    const cat=DEFAULT_WORDS[key];
+    if(cat.enabled===false) continue; // skip disabled categories
+    words[key]={...cat,words:[...cat.words,...(customWords[key]||[])]};
   }
 }
 
 // ===================== SCREENS =====================
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
-  const target = document.getElementById(id);
+  const target=document.getElementById(id);
   if(target) target.classList.remove('hidden');
-  if(id === 'categoryScreen') renderCatGrid();
-  if(id === 'manageScreen') renderManageCats();
+  if(id==='categoryScreen') renderCatGrid();
+  if(id==='manageScreen') renderManageCats();
 }
 
 // ===================== MOTION =====================
-function checkMotionPermission(){
-  // Tilt disabled — using tap zones only
-  showScreen('homeScreen');
-}
-
+function checkMotionPermission(){showScreen('homeScreen');}
 function requestMotion(){
   DeviceOrientationEvent.requestPermission().then(state=>{
-    if(state === 'granted'){
-      tiltEnabled = true;
-      window.addEventListener('deviceorientation', handleOrientation, true);
-    }
+    if(state==='granted'){tiltEnabled=true;window.addEventListener('deviceorientation',handleOrientation,true);}
     showScreen('homeScreen');
-  }).catch(()=>{
-    showScreen('homeScreen');
-  });
+  }).catch(()=>{showScreen('homeScreen');});
 }
-
-function skipMotion(){
-  tiltEnabled = false;
-  showScreen('homeScreen');
-}
-
-let tiltCooldown = false;
-let tiltBaseline = null;
-
+function skipMotion(){tiltEnabled=false;showScreen('homeScreen');}
+let tiltCooldown=false;let tiltBaseline=null;
 function calibrateTilt(e){
-  tiltBaseline = e.gamma || 0;
-  window.removeEventListener('deviceorientation', calibrateTilt, true);
-  window.addEventListener('deviceorientation', handleOrientation, true);
+  tiltBaseline=e.gamma||0;
+  window.removeEventListener('deviceorientation',calibrateTilt,true);
+  window.addEventListener('deviceorientation',handleOrientation,true);
 }
-
 function handleOrientation(e){
   if(document.getElementById('gameScreen').classList.contains('hidden')) return;
   if(tiltCooldown) return;
-
-  const gamma = e.gamma || 0;
-  const delta = gamma - (tiltBaseline || 0);
-
-  // Tilt LEFT from baseline = GOT IT
-  // Tilt RIGHT from baseline = SKIP
-  if(delta < -35){
-    tiltCooldown = true;
-    markGot();
-    setTimeout(()=>{ tiltCooldown = false; }, 1200);
-  } else if(delta > 35){
-    tiltCooldown = true;
-    markSkip();
-    setTimeout(()=>{ tiltCooldown = false; }, 1200);
-  }
+  const gamma=e.gamma||0;const delta=gamma-(tiltBaseline||0);
+  if(delta<-35){tiltCooldown=true;markGot();setTimeout(()=>{tiltCooldown=false;},1200);}
+  else if(delta>35){tiltCooldown=true;markSkip();setTimeout(()=>{tiltCooldown=false;},1200);}
 }
 
 // ===================== CATEGORY GRID =====================
 function renderCatGrid(){
-  const grid = document.getElementById('catGrid');
-  grid.innerHTML = '';
-
-  // All / Mix card
-  const allCard = document.createElement('div');
-  allCard.className = 'cat-card all-card' + (selectedCats.length === Object.keys(words).length ? ' selected' : '');
-  allCard.innerHTML = `<div class="cat-icon">🌍</div><div style="flex:1"><div class="cat-name">All Categories</div><div class="cat-count">Mix everything</div></div>`;
-  allCard.onclick = () => toggleAllCats();
+  const grid=document.getElementById('catGrid');
+  grid.innerHTML='';
+  const freeKeys=Object.keys(words).filter(k=>!DEFAULT_WORDS[k].paid);
+  const allFreeSelected=freeKeys.length>0&&freeKeys.every(k=>selectedCats.includes(k));
+  // All card
+  const allCard=document.createElement('div');
+  allCard.className='cat-card all-card'+(allFreeSelected?' selected':'');
+  allCard.innerHTML='<div class="cat-icon">🌍</div><div style="flex:1"><div class="cat-name">All Categories</div><div class="cat-count">Mix everything free</div></div>';
+  allCard.onclick=()=>toggleAllCats();
   grid.appendChild(allCard);
-
   for(const key in words){
-    const cat = words[key];
-    const diff = cat.difficulty || '';
-    const diffColor = diff === 'EASY' ? 'var(--accent3)' : diff === 'MEDIUM' ? 'var(--accent)' : 'var(--accent2)';
-    const card = document.createElement('div');
-    card.className = 'cat-card' + (selectedCats.includes(key) ? ' selected' : '');
-    card.innerHTML = `
-      <div class="cat-icon">${cat.icon}</div>
-      <div class="cat-name">${cat.name}</div>
-      <div class="cat-count">${cat.words.length} words · <span style="color:${diffColor};font-weight:700;">${diff}</span></div>
-    `;
-    card.onclick = () => toggleCat(key);
+    const cat=words[key];const def=DEFAULT_WORDS[key];const isPaid=def&&def.paid===true;
+    const diff=cat.difficulty||'';
+    const diffColor=diff==='EASY'?'var(--accent3)':diff==='MEDIUM'?'var(--accent)':'var(--accent2)';
+    const card=document.createElement('div');
+    if(isPaid){
+      card.className='cat-card locked';
+      card.innerHTML=`<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.words.length} words &middot; <span style="color:${diffColor};font-weight:700;">${diff}</span></div><div class="locked-badge">&#128274; Premium</div>`;
+      card.onclick=()=>showLockedSheet(cat.name);
+    } else {
+      card.className='cat-card'+(selectedCats.includes(key)?' selected':'');
+      card.innerHTML=`<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.words.length} words &middot; <span style="color:${diffColor};font-weight:700;">${diff}</span></div>`;
+      card.onclick=()=>toggleCat(key);
+    }
     grid.appendChild(card);
   }
 }
 
 function toggleCat(key){
-  const idx = selectedCats.indexOf(key);
-  if(idx === -1) selectedCats.push(key);
-  else selectedCats.splice(idx, 1);
+  if(DEFAULT_WORDS[key]&&DEFAULT_WORDS[key].paid) return;
+  const idx=selectedCats.indexOf(key);
+  if(idx===-1) selectedCats.push(key);
+  else selectedCats.splice(idx,1);
   renderCatGrid();
 }
 
 function toggleAllCats(){
-  if(selectedCats.length === Object.keys(words).length){
-    selectedCats = [];
-  } else {
-    selectedCats = Object.keys(words);
-  }
+  const freeKeys=Object.keys(words).filter(k=>DEFAULT_WORDS[k]&&!DEFAULT_WORDS[k].paid);
+  const allFreeSelected=freeKeys.every(k=>selectedCats.includes(k));
+  if(allFreeSelected){selectedCats=[];}
+  else{selectedCats=[...freeKeys];}
   renderCatGrid();
 }
 
+// ===================== LOCKED SHEET =====================
+function showLockedSheet(catName){
+  document.getElementById('bsSubtitle').textContent='"'+catName+'" is part of a Premium Pack. Unlock it to play with these words.';
+  document.getElementById('lockedSheet').classList.add('open');
+}
+
 function changeWords(delta){
-  wordCount = Math.max(5, Math.min(100, wordCount + delta));
-  const el = document.getElementById('wordCountVal2');
-  if(el) el.textContent = wordCount;
+  wordCount=Math.max(5,Math.min(100,wordCount+delta));
+  const el=document.getElementById('wordCountVal2');
+  if(el) el.textContent=wordCount;
 }
 
 // ===================== GAME =====================
 function startGame(){
-  if(selectedCats.length === 0){
-    showToast('Pick at least one category');
-    return;
-  }
-
+  if(selectedCats.length===0){showToast('Pick at least one category');return;}
   lockLandscape();
-
-  // Build pool
-  let pool = [];
-  for(const key of selectedCats){
-    const cat = words[key];
-    cat.words.forEach(w => pool.push({word:w, cat:cat.name}));
-  }
-  pool = pool.sort(() => Math.random() - 0.5);
-
-  // In timer mode use full pool; in words mode slice to wordCount
-  if(gameMode === 'words') pool = pool.slice(0, wordCount);
-
-  currentGame = {queue: pool, index: 0, got: 0, log: []};
-
-  const catNames = selectedCats.map(k => words[k].name).join(' + ');
-  document.getElementById('gameCatLabel').textContent = catNames;
-
-  // Update score label
-  const player = versusPlayers[versusCurrentIdx];
-  document.getElementById('gameScore').textContent = player ? `${player.name}: 0` : '0 / 0';
-
+  let pool=[];
+  for(const key of selectedCats){const cat=words[key];cat.words.forEach(w=>pool.push({word:w,cat:cat.name}));}
+  pool=pool.sort(()=>Math.random()-0.5);
+  if(gameMode==='words') pool=pool.slice(0,wordCount);
+  currentGame={queue:pool,index:0,got:0,log:[]};
+  const catNames=selectedCats.map(k=>words[k].name).join(' + ');
+  document.getElementById('gameCatLabel').textContent=catNames;
+  const player=versusPlayers[versusCurrentIdx];
+  const initTotal=gameMode==='words'?wordCount:0;
+  document.getElementById('gameScore').textContent=player?`${player.name}: 0 / ${initTotal}`:`0 / ${initTotal}`;
   showScreen('gameScreen');
   renderCurrentWord();
   requestWakeLock();
-
-  // Calibrate tilt baseline from current phone position
-  tiltBaseline = null;
-  if(tiltEnabled){
-    window.removeEventListener('deviceorientation', handleOrientation, true);
-    window.addEventListener('deviceorientation', calibrateTilt, true);
-  }
-
-  if(gameMode === 'timer') startTimer();
-  else document.getElementById('timerDisplay').style.display = 'none';
+  tiltBaseline=null;
+  if(tiltEnabled){window.removeEventListener('deviceorientation',handleOrientation,true);window.addEventListener('deviceorientation',calibrateTilt,true);}
+  if(gameMode==='timer') startTimer();
+  else document.getElementById('timerDisplay').style.display='none';
 }
 
 function renderCurrentWord(){
-  const game = currentGame;
-  if(gameMode === 'words' && game.index >= game.queue.length){
-    endGame();
-    return;
-  }
-  // In timer mode, cycle through pool
-  const idx = game.index % game.queue.length;
-  const item = game.queue[idx];
-  document.getElementById('wordText').textContent = item.word;
-  document.getElementById('wordCat').textContent = item.cat;
-  const player = versusPlayers[versusCurrentIdx];
-  if(gameMode === 'words'){
-    document.getElementById('gameScore').textContent = player ? `${player.name}: ${game.got}` : `${game.got} / ${game.index}`;
-  } else {
-    document.getElementById('gameScore').textContent = player ? `${player.name}: ${game.got}` : `${game.got}`;
-  }
+  const game=currentGame;
+  if(gameMode==='words'&&game.index>=game.queue.length){endGame();return;}
+  const idx=game.index%game.queue.length;const item=game.queue[idx];
+  document.getElementById('wordText').textContent=item.word;
+  document.getElementById('wordCat').textContent=item.cat;
+  const player=versusPlayers[versusCurrentIdx];
+  const total=gameMode==='words'?wordCount:game.index;
+  const scoreStr=`${game.got} / ${total}`;
+  document.getElementById('gameScore').textContent=player?`${player.name}: ${scoreStr}`:scoreStr;
 }
 
 function markGot(){
-  const game = currentGame;
-  if(game.index >= game.queue.length) return;
-  const item = game.queue[game.index];
-  game.log.push({word: item.word, got: true});
-  game.got++;
-  game.index++;
-  // Update score display
-  const player = versusPlayers[versusCurrentIdx];
-  if(player) document.getElementById('gameScore').textContent = `${player.name}: ${game.got}`;
+  const game=currentGame;if(game.index>=game.queue.length) return;
+  const item=game.queue[game.index];
+  game.log.push({word:item.word,got:true});game.got++;game.index++;
+  const player=versusPlayers[versusCurrentIdx];
+  const total=gameMode==='words'?wordCount:game.index;
+  const scoreStr=`${game.got} / ${total}`;
+  if(player) document.getElementById('gameScore').textContent=`${player.name}: ${scoreStr}`;
   flashWord('got');
 }
 
 function markSkip(){
-  const game = currentGame;
-  const idx = game.index % game.queue.length;
-  const item = game.queue[idx];
-  game.log.push({word: item.word, got: false});
-  game.index++;
-  flashWord('skip');
+  const game=currentGame;const idx=game.index%game.queue.length;const item=game.queue[idx];
+  game.log.push({word:item.word,got:false});game.index++;flashWord('skip');
 }
 
 function flashWord(type){
-  const display = document.getElementById('wordDisplay');
-  const overlay = document.getElementById('feedbackOverlay');
-
-  display.classList.add('flash');
-  overlay.textContent = type === 'got' ? '✅' : '⏭️';
-  overlay.classList.add('show');
-
-  setTimeout(()=>{
-    display.classList.remove('flash');
-    overlay.classList.remove('show');
-    renderCurrentWord();
-  }, 280);
+  const display=document.getElementById('wordDisplay');const overlay=document.getElementById('feedbackOverlay');
+  display.classList.add('flash');overlay.textContent=type==='got'?'✅':'⏭️';overlay.classList.add('show');
+  setTimeout(()=>{display.classList.remove('flash');overlay.classList.remove('show');renderCurrentWord();},280);
 }
 
 function endGame(){
-  stopTimer();
-  unlockOrientation();
-  releaseWakeLock();
-  const game = currentGame;
-
-  // Save score to current player
-  if(versusPlayers.length > 0){
-    versusPlayers[versusCurrentIdx].totalScore += game.got;
-    versusPlayers[versusCurrentIdx].rounds = versusPlayers[versusCurrentIdx].rounds || [];
+  stopTimer();unlockOrientation();releaseWakeLock();const game=currentGame;
+  game.total=gameMode==='words'?wordCount:game.index;
+  if(versusPlayers.length>0){
+    versusPlayers[versusCurrentIdx].totalScore+=game.got;
+    versusPlayers[versusCurrentIdx].rounds=versusPlayers[versusCurrentIdx].rounds||[];
     versusPlayers[versusCurrentIdx].rounds.push(game.got);
   }
-
-  // Check if more players to go this round
-  const nextIdx = versusCurrentIdx + 1;
-  if(nextIdx < versusPlayers.length){
-    // Show mid-round results then next player's turn
-    versusCurrentIdx = nextIdx;
-    showMidResults(game);
-    return;
-  }
-
-  // All players done — show final results
+  const nextIdx=versusCurrentIdx+1;
+  if(nextIdx<versusPlayers.length){versusCurrentIdx=nextIdx;showMidResults(game);return;}
   showFinalResults(game);
 }
 
-function showMidResults(game, newRound = false){
-  document.getElementById('resultsScore').textContent = game.got;
-  const player = versusPlayers[newRound ? versusPlayers.length - 1 : versusCurrentIdx - 1];
-  document.getElementById('resultsSubtitle').textContent = newRound
-    ? `Round ${currentRound - 1} done! Starting Round ${currentRound}`
-    : `${player ? player.name : ''} got ${game.got} word${game.got !== 1 ? 's' : ''}`;
-
-  const logList = document.getElementById('wordLog');
-  logList.innerHTML = '';
+function showMidResults(game,newRound=false){
+  document.getElementById('resultsScore').textContent=`${game.got} / ${game.total}`;
+  const player=versusPlayers[newRound?versusPlayers.length-1:versusCurrentIdx-1];
+  document.getElementById('resultsSubtitle').textContent=newRound
+    ?`Round ${currentRound-1} done! Starting Round ${currentRound}`
+    :`${player?player.name:''} got ${game.got} word${game.got!==1?'s':''}`;
+  const logList=document.getElementById('wordLog');logList.innerHTML='';
   game.log.forEach(item=>{
-    const div = document.createElement('div');
-    div.className = 'word-log-item';
-    div.innerHTML = `<span>${item.word}</span><span class="${item.got ? 'wli-got' : 'wli-skip'}">${item.got ? 'Got it' : 'Skipped'}</span>`;
+    const div=document.createElement('div');div.className='word-log-item';
+    div.innerHTML=`<span>${item.word}</span><span class="${item.got?'wli-got':'wli-skip'}">${item.got?'Got it':'Skipped'}</span>`;
     logList.appendChild(div);
   });
-
-  const btns = document.querySelector('.results-btns');
-  btns.innerHTML = `<button class="btn btn-primary" onclick="showTurnScreen()">Next Player →</button>`;
+  const btns=document.querySelector('.results-btns');
+  btns.innerHTML='<button class="btn btn-primary" onclick="showTurnScreen()">Next Player &#8594;</button>';
   showScreen('resultsScreen');
 }
 
 function showFinalResults(lastGame){
-  // Build final scoreboard
-  const sorted = [...versusPlayers].sort((a,b) => b.totalScore - a.totalScore);
-  const winner = sorted[0];
-
-  document.getElementById('resultsScore').textContent = winner.totalScore;
-  document.getElementById('resultsSubtitle').textContent = `🏆 ${winner.name} wins!`;
-
-  const logList = document.getElementById('wordLog');
-  logList.innerHTML = `<div style="font-weight:700;margin-bottom:10px;font-size:13px;color:var(--muted);font-family:DM Mono,monospace;">FINAL SCORES</div>`;
-  sorted.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'word-log-item';
-    div.innerHTML = `<span>${i === 0 ? '👑 ' : ''}${p.name}</span><span class="wli-got">${p.totalScore} pts</span>`;
+  const sorted=[...versusPlayers].sort((a,b)=>b.totalScore-a.totalScore);const winner=sorted[0];
+  document.getElementById('resultsScore').textContent=versusPlayers.length===1?`${winner.totalScore} / ${lastGame.total}`:winner.totalScore;
+  document.getElementById('resultsSubtitle').textContent='🏆 '+winner.name+' wins!';
+  const logList=document.getElementById('wordLog');
+  logList.innerHTML='<div style="font-weight:700;margin-bottom:10px;font-size:13px;color:var(--muted);font-family:DM Mono,monospace;">FINAL SCORES</div>';
+  sorted.forEach((p,i)=>{
+    const div=document.createElement('div');div.className='word-log-item';
+    div.innerHTML=`<span>${i===0?'👑 ':''}${p.name}</span><span class="wli-got">${p.totalScore} pts</span>`;
     logList.appendChild(div);
   });
-
-  // Save to history
-  saveGameToHistory(sorted.map(p => ({name: p.name, score: p.totalScore})));
-
-  // Restore normal buttons
-  const btns = document.querySelector('.results-btns');
-  btns.innerHTML = `
-    <button class="btn btn-primary" onclick="playAgain()">Play Again</button>
-    <button class="btn btn-secondary" onclick="showScreen('homeScreen')">Home</button>
-  `;
+  saveGameToHistory(sorted.map(p=>({name:p.name,score:p.totalScore})));
+  const btns=document.querySelector('.results-btns');
+  btns.innerHTML='<button class="btn btn-primary" onclick="playAgain()">Play Again</button><button class="btn btn-secondary" onclick="showScreen(\'homeScreen\')">Home</button>';
   showScreen('resultsScreen');
 }
 
 function playAgain(){
-  versusPlayers.forEach(p => { p.totalScore = 0; p.rounds = []; });
-  versusCurrentIdx = 0;
-  versusRound = 1;
-  currentRound = 1;
-  showTurnScreen();
+  versusPlayers.forEach(p=>{p.totalScore=0;p.rounds=[];});
+  versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
 
 // ===================== MANAGE WORDS =====================
 function renderManageCats(){
-  const container = document.getElementById('manageCats');
-  container.innerHTML = '';
+  const container=document.getElementById('manageCats');container.innerHTML='';
   for(const key in words){
-    const cat = words[key];
-    const row = document.createElement('div');
-    row.className = 'manage-cat-row';
-    row.innerHTML = `
-      <div class="mcr-left">
-        <div class="mcr-icon">${cat.icon}</div>
-        <div class="mcr-info">
-          <h4>${cat.name}</h4>
-          <p>${cat.words.length} words · ${(customWords[key]||[]).length} custom</p>
-        </div>
-      </div>
-      <div class="mcr-arrow">›</div>
-    `;
-    row.onclick = () => openEditor(key);
-    container.appendChild(row);
+    const cat=words[key];const row=document.createElement('div');row.className='manage-cat-row';
+    row.innerHTML=`<div class="mcr-left"><div class="mcr-icon">${cat.icon}</div><div class="mcr-info"><h4>${cat.name}</h4><p>${cat.words.length} words &middot; ${(customWords[key]||[]).length} custom</p></div></div><div class="mcr-arrow">&#8250;</div>`;
+    row.onclick=()=>openEditor(key);container.appendChild(row);
   }
 }
 
 function openEditor(key){
-  currentEditorCat = key;
-  const cat = words[key];
-  document.getElementById('editorTitle').textContent = cat.name;
-  document.getElementById('editorIcon').textContent = cat.icon;
-  document.getElementById('editorCatName').textContent = cat.name;
-  document.getElementById('editorWordCount').textContent = cat.words.length + ' words';
-  document.getElementById('pasteInput').value = '';
-  document.getElementById('addResult').style.display = 'none';
-  renderWordList();
-  showScreen('wordEditorScreen');
+  currentEditorCat=key;const cat=words[key];
+  document.getElementById('editorTitle').textContent=cat.name;
+  document.getElementById('editorIcon').textContent=cat.icon;
+  document.getElementById('editorCatName').textContent=cat.name;
+  document.getElementById('editorWordCount').textContent=cat.words.length+' words';
+  document.getElementById('pasteInput').value='';
+  document.getElementById('addResult').style.display='none';
+  renderWordList();showScreen('wordEditorScreen');
 }
 
 function renderWordList(){
-  const key = currentEditorCat;
-  if(!key) return;
-  const cat = words[key];
-  const search = document.getElementById('wlsSearch').value.toLowerCase();
-  const container = document.getElementById('wlsItems');
-  container.innerHTML = '';
-
-  const filtered = cat.words.filter(w => w.toLowerCase().includes(search));
-  document.getElementById('wlsCount').textContent = `${filtered.length} / ${cat.words.length} words`;
-
-  if(filtered.length === 0){
-    container.innerHTML = '<div class="wls-empty">No words found</div>';
-    return;
-  }
-
+  const key=currentEditorCat;if(!key) return;
+  const cat=words[key];const search=document.getElementById('wlsSearch').value.toLowerCase();
+  const container=document.getElementById('wlsItems');container.innerHTML='';
+  const filtered=cat.words.filter(w=>w.toLowerCase().includes(search));
+  document.getElementById('wlsCount').textContent=`${filtered.length} / ${cat.words.length} words`;
+  if(filtered.length===0){container.innerHTML='<div class="wls-empty">No words found</div>';return;}
   filtered.slice(0,200).forEach(word=>{
-    const isCustom = (customWords[key]||[]).includes(word);
-    const row = document.createElement('div');
-    row.className = 'wls-item';
-    row.innerHTML = `
-      <span>${word}${isCustom ? ' <span style="font-size:10px;color:var(--accent);font-family:DM Mono,monospace">[custom]</span>' : ''}</span>
-      ${isCustom ? `<button class="wls-item-del" onclick="deleteCustomWord('${key}','${word.replace(/'/g,"\\'")}')">✕</button>` : '<span style="color:var(--muted);font-size:11px">built-in</span>'}
-    `;
+    const isCustom=(customWords[key]||[]).includes(word);
+    const row=document.createElement('div');row.className='wls-item';
+    row.innerHTML=`<span>${word}${isCustom?' <span style="font-size:10px;color:var(--accent);font-family:DM Mono,monospace">[custom]</span>':''}</span>${isCustom?`<button class="wls-item-del" onclick="deleteCustomWord('${key}','${word.replace(/'/g,"\\'")}')">&#10005;</button>`:'<span style="color:var(--muted);font-size:11px">built-in</span>'}`;
     container.appendChild(row);
   });
-
-  if(filtered.length > 200){
-    const more = document.createElement('div');
-    more.className = 'wls-empty';
-    more.textContent = `+${filtered.length - 200} more words. Use search to narrow down.`;
-    container.appendChild(more);
+  if(filtered.length>200){
+    const more=document.createElement('div');more.className='wls-empty';
+    more.textContent=`+${filtered.length-200} more words. Use search to narrow down.`;container.appendChild(more);
   }
 }
 
 function addPastedWords(){
-  const key = currentEditorCat;
-  if(!key) return;
-  const raw = document.getElementById('pasteInput').value.trim();
-  if(!raw){ showToast('Nothing to add'); return; }
-
-  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l.length > 0);
-  const existing = new Set(words[key].words.map(w=>w.toLowerCase()));
-
-  if(!customWords[key]) customWords[key] = [];
-
-  let added = 0, skipped = 0;
+  const key=currentEditorCat;if(!key) return;
+  const raw=document.getElementById('pasteInput').value.trim();
+  if(!raw){showToast('Nothing to add');return;}
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+  const existing=new Set(words[key].words.map(w=>w.toLowerCase()));
+  if(!customWords[key]) customWords[key]=[];
+  let added=0,skipped=0;
   lines.forEach(line=>{
-    if(existing.has(line.toLowerCase())){
-      skipped++;
-    } else {
-      customWords[key].push(line);
-      existing.add(line.toLowerCase());
-      added++;
-    }
+    if(existing.has(line.toLowerCase())){skipped++;}
+    else{customWords[key].push(line);existing.add(line.toLowerCase());added++;}
   });
-
-  saveCustomWords();
-  mergeWords();
-
-  const resultEl = document.getElementById('addResult');
-  resultEl.style.display = 'block';
-  if(added > 0 && skipped > 0){
-    resultEl.className = 'add-result success';
-    resultEl.textContent = `Added ${added} word${added>1?'s':''}. Skipped ${skipped} duplicate${skipped>1?'s':''}.`;
-  } else if(added > 0){
-    resultEl.className = 'add-result success';
-    resultEl.textContent = `Added ${added} word${added>1?'s':''}!`;
-  } else {
-    resultEl.className = 'add-result info';
-    resultEl.textContent = `All ${skipped} word${skipped>1?'s':''} already exist.`;
-  }
-
-  document.getElementById('pasteInput').value = '';
-  document.getElementById('editorWordCount').textContent = words[key].words.length + ' words';
-  renderWordList();
-  renderManageCats();
+  saveCustomWords();mergeWords();
+  const resultEl=document.getElementById('addResult');resultEl.style.display='block';
+  if(added>0&&skipped>0){resultEl.className='add-result success';resultEl.textContent=`Added ${added} word${added>1?'s':''}. Skipped ${skipped} duplicate${skipped>1?'s':''}.`;}
+  else if(added>0){resultEl.className='add-result success';resultEl.textContent=`Added ${added} word${added>1?'s':''}!`;}
+  else{resultEl.className='add-result info';resultEl.textContent=`All ${skipped} word${skipped>1?'s':''} already exist.`;}
+  document.getElementById('pasteInput').value='';
+  document.getElementById('editorWordCount').textContent=words[key].words.length+' words';
+  renderWordList();renderManageCats();
 }
 
-function deleteCustomWord(key, word){
+function deleteCustomWord(key,word){
   if(!customWords[key]) return;
-  const idx = customWords[key].indexOf(word);
-  if(idx !== -1){
-    customWords[key].splice(idx, 1);
-    saveCustomWords();
-    mergeWords();
-    document.getElementById('editorWordCount').textContent = words[key].words.length + ' words';
-    renderWordList();
-    renderManageCats();
-    showToast('Word removed');
-  }
+  const idx=customWords[key].indexOf(word);
+  if(idx!==-1){customWords[key].splice(idx,1);saveCustomWords();mergeWords();
+    document.getElementById('editorWordCount').textContent=words[key].words.length+' words';
+    renderWordList();renderManageCats();showToast('Word removed');}
 }
 
 function confirmResetAll(){
   if(confirm('This will delete all your custom words. Built-in words stay. Continue?')){
-    customWords = {};
-    saveCustomWords();
-    mergeWords();
-    renderManageCats();
-    showToast('Custom words cleared');
-  }
+    customWords={};saveCustomWords();mergeWords();renderManageCats();showToast('Custom words cleared');}
 }
 
 // ===================== GAME MODE SELECTION =====================
-let currentPlayMode = 'versus';
-let totalRounds = 1;
-let currentRound = 1;
+let currentPlayMode='versus';let totalRounds=1;let currentRound=1;
 
 function pickMode(mode){
-  currentPlayMode = mode;
-  if(mode === 'solo'){
-    showScreen('categoryScreen');
-  } else {
-    showScreen('playersScreen');
-    renderPlayerFields();
-  }
+  currentPlayMode=mode;
+  if(mode==='solo'){showScreen('categoryScreen');}
+  else{showScreen('playersScreen');renderPlayerFields();}
 }
 
 function categoryGoBack(){
-  if(currentPlayMode === 'solo'){
-    showScreen('modeSelectScreen');
-  } else {
-    showScreen('playersScreen');
-  }
+  if(currentPlayMode==='solo'){showScreen('modeSelectScreen');}
+  else{showScreen('playersScreen');}
 }
 
 function goToPlayers(){
-  if(selectedCats.length === 0){
-    showToast('Pick at least one category first');
-    return;
-  }
-  document.getElementById('roundsConfig').style.display = currentPlayMode === 'versus' ? 'block' : 'none';
-  document.getElementById('wordCountVal2').textContent = wordCount;
+  if(selectedCats.length===0){showToast('Pick at least one category first');return;}
+  document.getElementById('roundsConfig').style.display=currentPlayMode==='versus'?'block':'none';
+  document.getElementById('wordCountVal2').textContent=wordCount;
   showScreen('gameModeScreen');
 }
 
-function gameModeGoBack(){
-  showScreen('categoryScreen');
-}
+function changeRounds(delta){totalRounds=Math.max(1,Math.min(10,totalRounds+delta));document.getElementById('roundCountVal').textContent=totalRounds;}
 
-function changeRounds(delta){
-  totalRounds = Math.max(1, Math.min(10, totalRounds + delta));
-  document.getElementById('roundCountVal').textContent = totalRounds;
-}
-
-function startFromMode(){
-  if(currentPlayMode === 'solo'){
-    startSolo();
-  } else {
-    startVersus();
-  }
-}
+function startFromMode(){if(currentPlayMode==='solo'){startSolo();}else{startVersus();}}
 
 function startSolo(){
-  versusPlayers = [{name: 'Solo', totalScore: 0, rounds: []}];
-  versusCurrentIdx = 0;
-  versusRound = 1;
-  currentRound = 1;
-  startGame();
+  versusPlayers=[{name:'Solo',totalScore:0,rounds:[]}];
+  versusCurrentIdx=0;versusRound=1;currentRound=1;startGame();
 }
 
 function lockLandscape(){
-  try{
-    if(screen.orientation && screen.orientation.lock){
-      screen.orientation.lock('landscape').catch(()=>{ forceLandscapeCSS(true); });
-    } else {
-      forceLandscapeCSS(true);
-    }
-  } catch(e){ forceLandscapeCSS(true); }
+  try{if(screen.orientation&&screen.orientation.lock){screen.orientation.lock('landscape').catch(()=>{forceLandscapeCSS(true);});}else{forceLandscapeCSS(true);}}
+  catch(e){forceLandscapeCSS(true);}
 }
-
 function unlockOrientation(){
-  try{
-    if(screen.orientation && screen.orientation.unlock){
-      screen.orientation.unlock();
-    }
-  } catch(e){}
+  try{if(screen.orientation&&screen.orientation.unlock){screen.orientation.unlock();}}catch(e){}
   forceLandscapeCSS(false);
 }
-
 function forceLandscapeCSS(on){
-  const gs = document.getElementById('gameScreen');
-  if(on && window.innerHeight > window.innerWidth){
-    const w = window.innerWidth, h = window.innerHeight;
-    gs.style.cssText = `
-      transform: rotate(90deg);
-      transform-origin: center center;
-      width: ${h}px;
-      height: ${w}px;
-      position: fixed;
-      top: ${(h - w) / 2}px;
-      left: -${(h - w) / 2}px;
-      overflow: hidden;
-    `;
-  } else if(!on){
-    gs.style.cssText = '';
-  }
+  const gs=document.getElementById('gameScreen');
+  if(on&&window.innerHeight>window.innerWidth){
+    const w=window.innerWidth,h=window.innerHeight;
+    gs.style.cssText=`transform:rotate(90deg);transform-origin:center center;width:${h}px;height:${w}px;position:fixed;top:${(h-w)/2}px;left:-${(h-w)/2}px;overflow:hidden;`;
+  }else if(!on){gs.style.cssText='';}
 }
 
-// ===================== ANDROID BACK BUTTON =====================
 function setupBackButton(){
-  history.pushState({screen:'homeScreen'}, '');
-  window.addEventListener('popstate', function(){
-    const current = document.querySelector('.screen:not(.hidden)');
-    const currentId = current ? current.id : 'homeScreen';
-    const backMap = {
-      'modeSelectScreen':'homeScreen',
-      'howToPlayScreen':'homeScreen',
-      'historyScreen':'homeScreen',
-      'manageScreen':'homeScreen',
-      'playersScreen':'modeSelectScreen',
-      'categoryScreen': currentPlayMode === 'solo' ? 'modeSelectScreen' : 'playersScreen',
-      'gameModeScreen':'categoryScreen',
-      'turnScreen':'gameModeScreen',
-      'resultsScreen':'homeScreen',
-      'wordEditorScreen':'manageScreen',
-    };
-    const dest = backMap[currentId];
-    if(dest){
-      showScreen(dest);
-    }
-    // Always push new state to keep stack alive
-    history.pushState({screen: dest || currentId}, '');
+  history.pushState({screen:'homeScreen'},'');
+  window.addEventListener('popstate',function(){
+    const current=document.querySelector('.screen:not(.hidden)');
+    const currentId=current?current.id:'homeScreen';
+    const backMap={'modeSelectScreen':'homeScreen','howToPlayScreen':'homeScreen','historyScreen':'homeScreen','manageScreen':'homeScreen','playersScreen':'modeSelectScreen','categoryScreen':currentPlayMode==='solo'?'modeSelectScreen':'playersScreen','gameModeScreen':'categoryScreen','turnScreen':'gameModeScreen','resultsScreen':'homeScreen','wordEditorScreen':'manageScreen'};
+    const dest=backMap[currentId];if(dest){showScreen(dest);}
+    history.pushState({screen:dest||currentId},'');
   });
 }
 
-// ===================== PLAYERS =====================
-let playerCount = 2;
-let playerNames = ['Player 1', 'Player 2'];
-let gameMode = 'words'; // 'words' or 'timer'
-let timerSeconds = 60;
-let timerInterval = null;
-let timerRemaining = 0;
-
-// Versus state
-let versusPlayers = [];  // [{name, score, log}]
-let versusCurrentIdx = 0;
-let versusRound = 1;
+let playerCount=2;let playerNames=['Player 1','Player 2'];
+let gameMode='words';let timerSeconds=60;let timerInterval=null;let timerRemaining=0;
+let versusPlayers=[];let versusCurrentIdx=0;let versusRound=1;
 
 function changePlayers(delta){
-  playerCount = Math.max(2, Math.min(10, playerCount + delta));
-  document.getElementById('playerCountVal').textContent = playerCount;
-  renderPlayerFields();
+  playerCount=Math.max(2,Math.min(10,playerCount+delta));
+  document.getElementById('playerCountVal').textContent=playerCount;renderPlayerFields();
 }
-
 function renderPlayerFields(){
-  const container = document.getElementById('playerNameFields');
-  container.innerHTML = '';
-  for(let i = 0; i < playerCount; i++){
-    const div = document.createElement('div');
-    div.className = 'player-name-field';
-    div.innerHTML = `
-      <label>Player ${i+1}</label>
-      <input type="text" placeholder="Enter name..." value="${playerNames[i] || ''}"
-        oninput="playerNames[${i}] = this.value" maxlength="20"/>
-    `;
+  const container=document.getElementById('playerNameFields');container.innerHTML='';
+  for(let i=0;i<playerCount;i++){
+    const div=document.createElement('div');div.className='player-name-field';
+    div.innerHTML=`<label>Player ${i+1}</label><input type="text" placeholder="Enter name..." value="${playerNames[i]||''}" oninput="playerNames[${i}]=this.value" maxlength="20"/>`;
     container.appendChild(div);
   }
 }
-
 function playersNext(){
-  // Save player names then go to category selection
-  const fields = document.querySelectorAll('#playerNameFields input');
-  playerNames = [];
-  fields.forEach((f, i) => {
-    playerNames.push(f.value.trim() || `Player ${i+1}`);
-  });
+  const fields=document.querySelectorAll('#playerNameFields input');playerNames=[];
+  fields.forEach((f,i)=>{playerNames.push(f.value.trim()||`Player ${i+1}`);});
   showScreen('categoryScreen');
 }
-
-function goToGameMode(){
-  const fields = document.querySelectorAll('#playerNameFields input');
-  playerNames = [];
-  fields.forEach((f, i) => {
-    playerNames.push(f.value.trim() || `Player ${i+1}`);
-  });
-  document.getElementById('wordCountVal2').textContent = wordCount;
-  document.getElementById('roundsConfig').style.display = currentPlayMode === 'versus' ? 'block' : 'none';
-  showScreen('gameModeScreen');
-}
-
 function selectMode(mode){
-  gameMode = mode;
-  document.getElementById('modeWordsBtn').classList.toggle('active', mode === 'words');
-  document.getElementById('modeTimerBtn').classList.toggle('active', mode === 'timer');
-  document.getElementById('wordsConfig').style.display = mode === 'words' ? 'block' : 'none';
-  document.getElementById('timerConfig').style.display = mode === 'timer' ? 'block' : 'none';
+  gameMode=mode;
+  document.getElementById('modeWordsBtn').classList.toggle('active',mode==='words');
+  document.getElementById('modeTimerBtn').classList.toggle('active',mode==='timer');
+  document.getElementById('wordsConfig').style.display=mode==='words'?'block':'none';
+  document.getElementById('timerConfig').style.display=mode==='timer'?'block':'none';
 }
-
 function changeTimer(delta){
-  timerSeconds = Math.max(30, Math.min(180, timerSeconds + delta));
-  const m = Math.floor(timerSeconds / 60);
-  const s = timerSeconds % 60;
-  document.getElementById('timerVal').textContent = m > 0 ? (s > 0 ? `${m}m ${s}s` : `${m}m`) : `${s}s`;
+  timerSeconds=Math.max(30,Math.min(180,timerSeconds+delta));
+  const m=Math.floor(timerSeconds/60);const s=timerSeconds%60;
+  document.getElementById('timerVal').textContent=m>0?(s>0?`${m}m ${s}s`:`${m}m`):`${s}s`;
 }
-
 function startVersus(){
-  versusPlayers = playerNames.slice(0, playerCount).map(name => ({
-    name, totalScore: 0, rounds: []
-  }));
-  versusCurrentIdx = 0;
-  versusRound = 1;
-  currentRound = 1;
-  showTurnScreen();
+  versusPlayers=playerNames.slice(0,playerCount).map(name=>({name,totalScore:0,rounds:[]}));
+  versusCurrentIdx=0;versusRound=1;currentRound=1;showTurnScreen();
 }
-
 function showTurnScreen(){
-  const player = versusPlayers[versusCurrentIdx];
-  const emojis = ['🎮','🔥','⚡','🎯','🏆','💥','🎪','🎭','🎨','🎲'];
-  document.getElementById('turnEmoji').textContent = emojis[versusCurrentIdx % emojis.length];
-  document.getElementById('turnTitle').textContent = player.name;
-  document.getElementById('turnSubtitle').textContent = `Your turn! Hold the phone and get ready.`;
-  const modeText = gameMode === 'timer'
-    ? `${timerSeconds}s on the clock`
-    : `${wordCount} words to go`;
-  const roundText = totalRounds > 1 ? `Round ${currentRound} of ${totalRounds}` : `Round ${currentRound}`;
-  document.getElementById('turnMeta').textContent = `${roundText} · ${modeText}`;
+  const player=versusPlayers[versusCurrentIdx];
+  const emojis=['🎮','🔥','⚡','🎯','🏆','💥','🎪','🎭','🎨','🎲'];
+  document.getElementById('turnEmoji').textContent=emojis[versusCurrentIdx%emojis.length];
+  document.getElementById('turnTitle').textContent=player.name;
+  document.getElementById('turnSubtitle').textContent='Your turn! Hold the phone and get ready.';
+  const modeText=gameMode==='timer'?`${timerSeconds}s on the clock`:`${wordCount} words to go`;
+  const roundText=totalRounds>1?`Round ${currentRound} of ${totalRounds}`:`Round ${currentRound}`;
+  document.getElementById('turnMeta').textContent=`${roundText} · ${modeText}`;
   showScreen('turnScreen');
 }
-
-function beginTurn(){
-  startGame();
-}
-
+function beginTurn(){startGame();}
 function exitGame(){
-  if(confirm('Exit game? Current progress will be lost.')){
-    stopTimer();
-    unlockOrientation();
-    releaseWakeLock();
-    showScreen('homeScreen');
-  }
+  if(confirm('Exit game? Current progress will be lost.')){stopTimer();unlockOrientation();releaseWakeLock();showScreen('homeScreen');}
 }
 
-
-let wakeLock = null;
-
+let wakeLock=null;
 async function requestWakeLock(){
-  try{
-    if('wakeLock' in navigator){
-      wakeLock = await navigator.wakeLock.request('screen');
-    }
-  } catch(e){}
+  try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');}}catch(e){}
 }
-
 function releaseWakeLock(){
-  try{
-    if(wakeLock){
-      wakeLock.release();
-      wakeLock = null;
-    }
-  } catch(e){}
+  try{if(wakeLock){wakeLock.release();wakeLock=null;}}catch(e){}
 }
-
-// Re-acquire wake lock if page becomes visible again
-document.addEventListener('visibilitychange', async ()=>{
-  if(document.visibilityState === 'visible' && wakeLock === null){
-    const gameScreen = document.getElementById('gameScreen');
-    if(gameScreen && !gameScreen.classList.contains('hidden')){
-      await requestWakeLock();
-    }
+document.addEventListener('visibilitychange',async()=>{
+  if(document.visibilityState==='visible'&&wakeLock===null){
+    const gs=document.getElementById('gameScreen');
+    if(gs&&!gs.classList.contains('hidden')) await requestWakeLock();
   }
 });
 
-
 function startTimer(){
-  timerRemaining = timerSeconds;
-  const display = document.getElementById('timerDisplay');
-  display.style.display = 'block';
-  display.classList.remove('timer-urgent');
-  updateTimerDisplay();
-
-  timerInterval = setInterval(()=>{
-    timerRemaining--;
-    updateTimerDisplay();
-    if(timerRemaining <= 10){
-      display.classList.add('timer-urgent');
-    }
-    if(timerRemaining <= 0){
-      clearInterval(timerInterval);
-      timerInterval = null;
-      endGame();
-    }
-  }, 1000);
+  timerRemaining=timerSeconds;const display=document.getElementById('timerDisplay');
+  display.style.display='block';display.classList.remove('timer-urgent');updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timerRemaining--;updateTimerDisplay();
+    if(timerRemaining<=10) display.classList.add('timer-urgent');
+    if(timerRemaining<=0){clearInterval(timerInterval);timerInterval=null;endGame();}
+  },1000);
 }
+function updateTimerDisplay(){const d=document.getElementById('timerDisplay');if(d) d.textContent=timerRemaining+'s';}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}const d=document.getElementById('timerDisplay');if(d) d.style.display='none';}
 
-function updateTimerDisplay(){
-  const display = document.getElementById('timerDisplay');
-  if(display) display.textContent = timerRemaining + 's';
-}
-
-function stopTimer(){
-  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
-  const display = document.getElementById('timerDisplay');
-  if(display) display.style.display = 'none';
-}
-
-// ===================== HISTORY =====================
 function saveGameToHistory(results){
   try{
-    const history = JSON.parse(localStorage.getItem('bendrades_history') || '[]');
-    history.unshift({
-      date: new Date().toLocaleDateString('en-NG', {day:'numeric',month:'short',year:'numeric'}),
-      categories: selectedCats.map(k=>words[k].name),
-      players: results
-    });
-    // keep last 20 games
-    localStorage.setItem('bendrades_history', JSON.stringify(history.slice(0, 20)));
-  } catch(e){}
+    const history=JSON.parse(localStorage.getItem('bendrades_history')||'[]');
+    history.unshift({date:new Date().toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}),categories:selectedCats.map(k=>words[k].name),players:results});
+    localStorage.setItem('bendrades_history',JSON.stringify(history.slice(0,20)));
+  }catch(e){}
 }
-
 function renderHistory(){
-  const container = document.getElementById('historyContent');
+  const container=document.getElementById('historyContent');
   try{
-    const history = JSON.parse(localStorage.getItem('bendrades_history') || '[]');
-    if(history.length === 0){
-      container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;font-family:DM Mono,monospace;font-size:13px;">No games yet. Play one first!</div>';
-      return;
-    }
-    container.innerHTML = '';
-    history.forEach((game, gi)=>{
-      const maxScore = Math.max(...game.players.map(p=>p.score));
-      const winners = game.players.filter(p=>p.score === maxScore).map(p=>p.name);
-      const div = document.createElement('div');
-      div.className = 'history-game';
-      div.innerHTML = `
-        <div class="history-game-header">
-          <span style="font-weight:700;font-size:14px;">Game ${history.length - gi}</span>
-          <span class="history-game-date">${game.date}</span>
-        </div>
-        <div style="font-size:11px;font-family:DM Mono,monospace;color:var(--muted);margin-bottom:10px;">${game.categories.join(' + ')}</div>
-        ${game.players.sort((a,b)=>b.score-a.score).map(p=>`
-          <div class="history-player-row">
-            <div>
-              <div class="history-player-name">${p.name} ${p.score === maxScore ? '👑' : ''}</div>
-            </div>
-            <div class="history-player-score">${p.score} pts</div>
-          </div>
-        `).join('')}
-      `;
+    const history=JSON.parse(localStorage.getItem('bendrades_history')||'[]');
+    if(history.length===0){container.innerHTML='<div style="text-align:center;color:var(--muted);padding:40px;font-family:DM Mono,monospace;font-size:13px;">No games yet. Play one first!</div>';return;}
+    container.innerHTML='';
+    history.forEach((game,gi)=>{
+      const maxScore=Math.max(...game.players.map(p=>p.score));
+      const div=document.createElement('div');div.className='history-game';
+      div.innerHTML=`<div class="history-game-header"><span style="font-weight:700;font-size:14px;">Game ${history.length-gi}</span><span class="history-game-date">${game.date}</span></div><div style="font-size:11px;font-family:DM Mono,monospace;color:var(--muted);margin-bottom:10px;">${game.categories.join(' + ')}</div>${game.players.sort((a,b)=>b.score-a.score).map(p=>`<div class="history-player-row"><div><div class="history-player-name">${p.name} ${p.score===maxScore?'👑':''}</div></div><div class="history-player-score">${p.score} pts</div></div>`).join('')}`;
       container.appendChild(div);
     });
-  } catch(e){
-    container.innerHTML = '<div style="color:var(--muted);padding:20px;">Could not load history.</div>';
-  }
+  }catch(e){container.innerHTML='<div style="color:var(--muted);padding:20px;">Could not load history.</div>';}
 }
-
 function clearHistory(){
-  if(confirm('Clear all game history?')){
-    localStorage.removeItem('bendrades_history');
-    renderHistory();
-    showToast('History cleared');
-  }
+  if(confirm('Clear all game history?')){localStorage.removeItem('bendrades_history');renderHistory();showToast('History cleared');}
 }
-
-
 function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// ===================== START =====================
-window.addEventListener('load', init);
+window.addEventListener('load',init);
 </script>
 </body>
 </html>
