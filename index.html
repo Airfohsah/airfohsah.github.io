@@ -7,6 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Charades - Watin Be This?</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-4414398900850217" crossorigin="anonymous"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Mono:wght@400;500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -126,6 +127,10 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 .timer-urgent{animation:timerPulse .5s infinite;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1.5px solid var(--border);color:var(--text);padding:12px 20px;border-radius:12px;font-size:13px;font-family:'DM Mono',monospace;opacity:0;transition:opacity .3s,transform .3s;z-index:200;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ---- ADS ---- */
+.ad-slot{width:100%;display:flex;align-items:center;justify-content:center;background:transparent;min-height:50px;overflow:hidden;flex-shrink:0;}
+.ad-slot-top{border-bottom:1px solid var(--border);}
+.ad-slot-bottom{border-top:1px solid var(--border);margin-top:auto;padding-bottom:env(safe-area-inset-bottom,0px);}
 </style>
 </head>
 <body>
@@ -143,6 +148,10 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
 
 <!-- HOME SCREEN -->
 <div class="screen" id="homeScreen">
+  <!-- AD TOP -->
+  <div class="ad-slot ad-slot-top">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
+  </div>
   <div class="logo">
     <h1>Watin Be This?</h1>
     <p>// naija charades, next level //</p>
@@ -151,10 +160,13 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
     <button class="btn btn-primary" onclick="showScreen('modeSelectScreen')">&#9654; &nbsp;Play</button>
     <button class="btn btn-secondary" onclick="showScreen('howToPlayScreen')">&#10067; &nbsp;How to Play</button>
     <button class="btn btn-secondary" onclick="showScreen('historyScreen');renderHistory()">&#127942; &nbsp;Leaderboard</button>
-
   </div>
   <div style="text-align:center;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;padding-bottom:8px;">
-    Landscape mode &middot; tap right = got it &middot; tap left = skip
+    Landscape mode &middot; tap right = got it &middot; tap left = skip<br><strong style="color:var(--text);font-size:12px;">Rules: Describe the words without saying the word</strong>
+  </div>
+  <!-- AD BOTTOM -->
+  <div class="ad-slot ad-slot-bottom">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
 </div>
 
@@ -173,6 +185,9 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
       <div style="font-size:36px">&#9876;&#65039;</div>
       <div><h3>Versus</h3><p>2 to 10 players take turns. Name your players or teams. Highest score wins.</p></div>
     </div>
+  </div>
+  <div class="ad-slot ad-slot-bottom">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
 </div>
 
@@ -273,10 +288,17 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
   <div style="padding:0 20px 20px;margin-top:auto;">
     <button class="btn btn-primary" style="width:100%" onclick="startFromMode()">&#9654; &nbsp;Start Game</button>
   </div>
+  <div class="ad-slot ad-slot-bottom">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
+  </div>
 </div>
 
 <!-- TURN TRANSITION SCREEN -->
 <div class="screen hidden" id="turnScreen">
+  <!-- AD TOP -->
+  <div class="ad-slot ad-slot-top">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
+  </div>
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:20px;text-align:center;">
     <div style="font-size:48px" id="turnEmoji">&#127918;</div>
     <h2 id="turnTitle" style="font-size:28px;">Player 1</h2>
@@ -288,6 +310,7 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
       <div style="font-size:16px;font-weight:900;color:var(--accent);line-height:1.4;">Describe the word without saying the word!</div>
     </div>
     <!-- Countdown -->
+
     <div id="countdownDisplay" style="display:none;font-size:96px;font-weight:900;line-height:1;color:var(--accent3);transition:transform .2s,opacity .2s;">3</div>
   </div>
   <div style="padding:24px;" id="readyBtnWrap">
@@ -337,6 +360,9 @@ html,body{height:100%;width:100%;background:var(--bg);color:var(--text);font-fam
   <div class="results-btns">
     <button class="btn btn-primary" onclick="showScreen('categoryScreen')">Play Again</button>
     <button class="btn btn-secondary" onclick="showScreen('homeScreen')">Home</button>
+  </div>
+  <div class="ad-slot ad-slot-bottom">
+    <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4414398900850217" data-ad-slot="4567348855"></ins>
   </div>
 </div>
 
@@ -610,7 +636,7 @@ function showFinalResults(lastGame){
   });
   saveGameToHistory(sorted.map(p=>({name:p.name,score:p.totalScore})));
   const btns=document.querySelector('.results-btns');
-  btns.innerHTML='<button class="btn btn-primary" onclick="playAgain()">Play Again</button><button class="btn btn-secondary" onclick="showScreen(\'homeScreen\')">Home</button>';
+  btns.innerHTML='<button class="btn btn-primary" onclick="playAgain()">Play Again</button><button class="btn btn-secondary" onclick="showScreen(\'categoryScreen\')">Change Category</button><button class="btn btn-secondary" onclick="showScreen(\'homeScreen\')">Home</button>';
   showScreen('resultsScreen');
 }
 
