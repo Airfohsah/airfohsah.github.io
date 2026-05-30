@@ -4,7 +4,9 @@
     "namespace": "android_app",
     "package_name": "com.watinbethis.charades",
     "sha256_cert_fingerprints": [
-      "57:55:45:9E:B9:40:78:07:A1:ED:97:62:EE:FE:42:72:21:0A:E7:36:59:A8:65:B0:F2:FF:06:43:CB:BC:2C:E6"
+      "57:55:45:9E:B9:40:78:07:A1:ED:97:62:EE:FE:42:72:21:0A:E7:36:59:A8:65:B0:F2:FF:06:43:CB:BC:2C:E6",
+      "50:53:69:C9:B0:76:A4:A2:FE:3E:22:5D:C6:BD:A4:85:CA:68:FC:8C:E2:2A:C7:17:DF:5D:7F:4E:99:DB:2F:E1",
+      "00:81:35:A3:E0:71:F8:8A:65:49:33:ED:3D:00:60:1A:B5:B7:60:EA:04:2E:08:FA:D3:7E:9E:05:12:DF:A5:DC"
     ]
   }
 }]
