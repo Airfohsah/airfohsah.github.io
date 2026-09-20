@@ -1,0 +1,67 @@
+import { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts, Syne_400Regular, Syne_700Bold, Syne_800ExtraBold } from '@expo-google-fonts/syne';
+import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
+import { View } from 'react-native';
+import { colors } from '../constants/theme';
+import { GameStoreProvider, useGameStore } from '../store/GameStore';
+import { loadWordsFast, refreshWordsFromRemote } from '../lib/words';
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
+function AppBootstrap({ children }: { children: React.ReactNode }) {
+  const { setWords, loadSettings } = useGameStore();
+
+  useEffect(() => {
+    (async () => {
+      await loadSettings();
+      const { words } = await loadWordsFast();
+      setWords(words);
+      try {
+        const fresh = await refreshWordsFromRemote();
+        setWords(fresh);
+      } catch {
+        // offline or content host unreachable — keep using cached/bundled words
+      }
+    })();
+  }, [loadSettings, setWords]);
+
+  return <>{children}</>;
+}
+
+export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    Syne_400Regular,
+    Syne_700Bold,
+    Syne_800ExtraBold,
+    DMMono_400Regular,
+    DMMono_500Medium,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync().catch(() => {});
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return <View style={{ flex: 1, backgroundColor: colors.bg }} />;
+  }
+
+  return (
+    <GameStoreProvider>
+      <AppBootstrap>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: colors.bg },
+          }}
+        />
+      </AppBootstrap>
+    </GameStoreProvider>
+  );
+}

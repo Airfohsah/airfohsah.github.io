@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Watin Be This?",
+    "slug": "watin-be-this",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "watinbethis",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#080b14",
+    "android": {
+      "package": "com.watinbethis.charades",
+      "adaptiveIcon": {
+        "backgroundColor": "#080b14",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#080b14",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160
+        }
+      ],
+      "expo-secure-store",
+      "expo-audio",
+      "expo-sharing",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT_UP"
+        }
+      ],
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
