@@ -286,7 +286,7 @@ export function AdminDashboard() {
             <View style={{ flex: 1 }}>
               <Text style={styles.bannerName}>{cat.name}</Text>
               <Text style={styles.bannerMeta}>
-                {cat.words.length} words {'·'} <Text style={{ color: difficultyColor(cat.difficulty, colors) }}>{cat.difficulty}</Text>
+                {cat.words.length} words {'·'} <Text style={{ color: difficultyColor(cat.difficulty) }}>{cat.difficulty}</Text>
               </Text>
             </View>
           </View>
@@ -453,7 +453,7 @@ export function AdminDashboard() {
             <View style={styles.diffRow}>
               {(['EASY', 'MEDIUM', 'HARD'] as Difficulty[]).map((d) => (
                 <Pressable key={d} onPress={() => setNewCatDiff(d)} style={[styles.diffChip, newCatDiff === d && styles.diffChipActive]}>
-                  <Text style={[styles.diffChipText, { color: difficultyColor(d, colors) }]}>{d}</Text>
+                  <Text style={[styles.diffChipText, { color: difficultyColor(d) }]}>{d}</Text>
                 </Pressable>
               ))}
             </View>

@@ -1,7 +1,5 @@
-// Two palettes (dark = the original design, light = its counterpart), swapped
-// at runtime by ThemeContext based on system preference or an explicit
-// user override (Settings). Every screen reads colors via useTheme()
-// instead of importing a static palette, so switching is instant everywhere.
+// The app is pinned to this single dark illustrated palette everywhere —
+// no light-mode variant (see history for the retired light/dark toggle).
 export interface Palette {
   bg: string;
   card: string;
@@ -24,18 +22,6 @@ export const darkColors: Palette = {
   text: '#f0f0f0',
   muted: '#6b7a99',
   border: '#1e2a40',
-};
-
-export const lightColors: Palette = {
-  bg: '#f5f6fa',
-  card: '#ffffff',
-  card2: '#eef0f6',
-  accent: '#c98f00',
-  accent2: '#d63f3f',
-  accent3: '#00a870',
-  text: '#12151f',
-  muted: '#5b6478',
-  border: '#dde1ec',
 };
 
 export const fonts = {
@@ -66,9 +52,9 @@ export const spacing = {
   xxl: 24,
 } as const;
 
-export const difficultyColor = (difficulty?: string, colors: Palette = darkColors) => {
-  if (difficulty === 'EASY') return colors.accent3;
-  if (difficulty === 'MEDIUM') return colors.accent;
-  if (difficulty === 'HARD') return colors.accent2;
-  return colors.muted;
+export const difficultyColor = (difficulty?: string) => {
+  if (difficulty === 'EASY') return darkColors.accent3;
+  if (difficulty === 'MEDIUM') return darkColors.accent;
+  if (difficulty === 'HARD') return darkColors.accent2;
+  return darkColors.muted;
 };

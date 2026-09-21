@@ -6,7 +6,6 @@ import { fonts, darkColors as colors } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 import { getHistory, setHistory } from '../lib/storage';
 import { writeAndShareBackup, pickAndReadBackup, BackupError } from '../lib/backup';
-import { ThemePreference } from '../types';
 
 function ToggleRow({
   label,
@@ -26,12 +25,6 @@ function ToggleRow({
     </Pressable>
   );
 }
-
-const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
-  { value: 'system', label: 'System' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
-];
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -85,26 +78,6 @@ export default function SettingsScreen() {
     <IllustratedScreen>
       <IllustratedHeader title="Settings" onBack={() => router.push('/')} />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.sectionTitle}>Appearance</Text>
-        <View style={styles.segmentRow}>
-          {THEME_OPTIONS.map((opt) => (
-            <Pressable
-              key={opt.value}
-              style={[styles.segment, state.settings.themePreference === opt.value && styles.segmentActive]}
-              onPress={() => updateSettings({ themePreference: opt.value })}
-            >
-              <Text
-                style={[
-                  styles.segmentText,
-                  state.settings.themePreference === opt.value && styles.segmentTextActive,
-                ]}
-              >
-                {opt.label}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-
         <Text style={styles.sectionTitle}>Game</Text>
         <GlowCard accent="rgba(255,255,255,0.15)" style={{ overflow: 'hidden' }}>
           <ToggleRow
@@ -187,19 +160,6 @@ const styles = StyleSheet.create({
   pillOn: { backgroundColor: '#1a5c3a' },
   pillKnob: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#8b86ad', marginLeft: 3 },
   pillKnobOn: { backgroundColor: colors.accent3, marginLeft: 23 },
-  segmentRow: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(8,10,26,0.72)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 12,
-    padding: 4,
-    gap: 4,
-  },
-  segment: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
-  segmentActive: { backgroundColor: colors.accent },
-  segmentText: { fontFamily: fonts.displaySemi, fontSize: 13, color: '#8b86ad' },
-  segmentTextActive: { color: colors.bg },
   stepperRow: {
     backgroundColor: 'rgba(8,10,26,0.72)',
     borderWidth: 1.5,

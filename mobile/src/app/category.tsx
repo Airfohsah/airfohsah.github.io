@@ -68,7 +68,7 @@ export default function CategoryScreen() {
                 <Text style={[styles.catName, cat.paid && styles.catNameLocked]}>{cat.name}</Text>
                 <Text style={styles.catCount}>
                   {cat.words.length} words {'·'}{' '}
-                  <Text style={{ color: difficultyColor(cat.difficulty, colors), fontFamily: fonts.displaySemi }}>
+                  <Text style={{ color: difficultyColor(cat.difficulty), fontFamily: fonts.displaySemi }}>
                     {cat.difficulty}
                   </Text>
                 </Text>

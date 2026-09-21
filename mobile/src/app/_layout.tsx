@@ -8,7 +8,6 @@ import { PermanentMarker_400Regular } from '@expo-google-fonts/permanent-marker'
 import { View } from 'react-native';
 import { darkColors } from '../constants/theme';
 import { GameStoreProvider, useGameStore } from '../store/GameStore';
-import { ThemeProvider, useTheme } from '../store/ThemeContext';
 import { loadWordsFast, refreshWordsFromRemote } from '../lib/words';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -31,31 +30,6 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   }, [loadSettings, setWords]);
 
   return <>{children}</>;
-}
-
-function ThemedStack() {
-  const { colors, scheme } = useTheme();
-  return (
-    <>
-      <StatusBar style={scheme === 'light' ? 'dark' : 'light'} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: 'fade',
-          contentStyle: { backgroundColor: colors.bg },
-        }}
-      />
-    </>
-  );
-}
-
-function ThemedApp() {
-  const { state } = useGameStore();
-  return (
-    <ThemeProvider preference={state.settings.themePreference}>
-      <ThemedStack />
-    </ThemeProvider>
-  );
 }
 
 export default function RootLayout() {
@@ -81,7 +55,14 @@ export default function RootLayout() {
   return (
     <GameStoreProvider>
       <AppBootstrap>
-        <ThemedApp />
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: 'fade',
+            contentStyle: { backgroundColor: darkColors.bg },
+          }}
+        />
       </AppBootstrap>
     </GameStoreProvider>
   );
