@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import { darkColors } from '../constants/theme';
 import { GameStoreProvider, useGameStore } from '../store/GameStore';
 import { loadWordsFast, refreshWordsFromRemote } from '../lib/words';
+import { HomeBackground } from '../components/HomeBackground';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -49,7 +50,16 @@ export default function RootLayout() {
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded && !fontError) {
-    return <View style={{ flex: 1, backgroundColor: darkColors.bg }} />;
+    // No custom fonts here on purpose — this shows in the gap between the
+    // native splash (a static image, hidden as soon as we get here) and the
+    // fonts finishing load, so anything using fonts.brush would flash in a
+    // fallback font. The illustration itself has no font dependency, so it
+    // carries the same art into that gap without that flash.
+    return (
+      <View style={{ flex: 1, backgroundColor: darkColors.bg }}>
+        <HomeBackground />
+      </View>
+    );
   }
 
   return (
