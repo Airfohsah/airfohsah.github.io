@@ -69,21 +69,23 @@ export default function ModeSelectScreen() {
           </View>
         </View>
 
-        <View style={styles.cards}>
-          <ModeCard
-            icon={'👤'}
-            accent="#3a7dff"
-            title="Solo"
-            desc="One person holds the phone. Everyone else gives clues. Race against words or the clock."
-            onPress={() => choose('solo')}
-          />
-          <ModeCard
-            icon={'⚔️'}
-            accent="#a24bff"
-            title="Versus"
-            desc="2 to 10 players take turns. Name your players or teams. Highest score wins."
-            onPress={() => choose('versus')}
-          />
+        <View style={styles.cardsWrap}>
+          <View style={styles.cards}>
+            <ModeCard
+              icon={'👤'}
+              accent="#3a7dff"
+              title="Solo"
+              desc="One person holds the phone. Everyone else gives clues. Race against words or the clock."
+              onPress={() => choose('solo')}
+            />
+            <ModeCard
+              icon={'⚔️'}
+              accent="#a24bff"
+              title="Versus"
+              desc="2 to 10 players take turns. Name your players or teams. Highest score wins."
+              onPress={() => choose('versus')}
+            />
+          </View>
         </View>
       </View>
     </Screen>
@@ -106,7 +108,8 @@ const styles = StyleSheet.create({
   backIcon: { color: colors.text, fontSize: 18 },
   settingsBtn: { padding: 8 },
   settingsIcon: { fontSize: 20 },
-  titleWrap: { marginTop: 24, marginBottom: 28 },
+  titleWrap: { marginTop: 24 },
+  cardsWrap: { flex: 1, justifyContent: 'center', paddingBottom: 40 },
   titleTop: { fontFamily: fonts.brush, fontSize: 36, color: '#f5f2ea', lineHeight: 42 },
   titleBottom: { fontFamily: fonts.brush, fontSize: 44, color: colors.accent, lineHeight: 50, marginTop: -4 },
   titleUnderline: {
