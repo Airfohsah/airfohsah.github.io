@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Button } from '../ui';
-import { fonts, Palette, radius } from '../../constants/theme';
-import { useTheme } from '../../store/ThemeContext';
+import { GradientButton } from '../illustrated';
+import { fonts, darkColors as colors } from '../../constants/theme';
 import { hasAdminPin, setAdminPin, verifyAdminPin, getGithubToken, setGithubToken } from '../../lib/secure';
 import { getGithubConfig } from '../../lib/storage';
 import { verifyGithubToken } from '../../lib/github';
@@ -13,8 +12,6 @@ import { verifyGithubToken } from '../../lib/github';
 type Mode = 'checking' | 'token' | 'pin-setup' | 'enter';
 
 export function AdminGate({ onUnlocked }: { onUnlocked: () => void }) {
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
   const [mode, setMode] = useState<Mode>('checking');
   const [token, setTokenInput] = useState('');
   const [pin, setPin] = useState('');
@@ -97,12 +94,12 @@ export function AdminGate({ onUnlocked }: { onUnlocked: () => void }) {
           value={token}
           onChangeText={setTokenInput}
           placeholder="ghp_... or github_pat_..."
-          placeholderTextColor={colors.muted}
+          placeholderTextColor="#8b86ad"
           secureTextEntry
           autoCapitalize="none"
         />
         {error && <Text style={styles.error}>{error}</Text>}
-        <Button label="Verify & Continue" onPress={submitToken} loading={busy} style={{ width: '100%', marginTop: 8 }} />
+        <GradientButton label="Verify & Continue" onPress={submitToken} disabled={busy} style={{ width: '100%', marginTop: 8 }} />
       </View>
     );
   }
@@ -122,7 +119,7 @@ export function AdminGate({ onUnlocked }: { onUnlocked: () => void }) {
         value={pin}
         onChangeText={setPin}
         placeholder="PIN"
-        placeholderTextColor={colors.muted}
+        placeholderTextColor="#8b86ad"
         secureTextEntry
         keyboardType="number-pad"
         maxLength={12}
@@ -133,7 +130,7 @@ export function AdminGate({ onUnlocked }: { onUnlocked: () => void }) {
           value={confirmPin}
           onChangeText={setConfirmPin}
           placeholder="Confirm PIN"
-          placeholderTextColor={colors.muted}
+          placeholderTextColor="#8b86ad"
           secureTextEntry
           keyboardType="number-pad"
           maxLength={12}
@@ -141,30 +138,30 @@ export function AdminGate({ onUnlocked }: { onUnlocked: () => void }) {
       )}
       {error && <Text style={styles.error}>{error}</Text>}
 
-      <Button
+      <GradientButton
         label={mode === 'pin-setup' ? 'Set PIN' : 'Unlock'}
         onPress={mode === 'pin-setup' ? submitPinSetup : submitEnter}
-        loading={busy}
+        disabled={busy}
         style={{ width: '100%', marginTop: 8 }}
       />
     </View>
   );
 }
 
-const makeStyles = (colors: Palette) => StyleSheet.create({
+const styles = StyleSheet.create({
   wrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 14 },
   icon: { fontSize: 48 },
-  title: { fontFamily: fonts.displayBold, fontSize: 22, color: colors.text, textAlign: 'center' },
-  subtitle: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, textAlign: 'center', maxWidth: 300, lineHeight: 19 },
+  title: { fontFamily: fonts.displayBold, fontSize: 22, color: '#f5f2ea', textAlign: 'center' },
+  subtitle: { fontFamily: fonts.body, fontSize: 13, color: '#c7c2e0', textAlign: 'center', maxWidth: 300, lineHeight: 19 },
   input: {
     width: '100%',
     maxWidth: 280,
-    backgroundColor: colors.card,
+    backgroundColor: 'rgba(8,10,26,0.72)',
     borderWidth: 1.5,
-    borderColor: colors.border,
-    color: colors.text,
+    borderColor: 'rgba(255,255,255,0.15)',
+    color: '#f5f2ea',
     padding: 14,
-    borderRadius: radius.lg,
+    borderRadius: 12,
     fontFamily: fonts.mono,
     fontSize: 16,
     textAlign: 'center',

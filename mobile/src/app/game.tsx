@@ -5,8 +5,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { deactivateKeepAwake } from 'expo-keep-awake';
 import { DeviceMotion } from 'expo-sensors';
 import { Screen } from '../components/ui';
-import { fonts, Palette } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { fonts, darkColors as colors } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 import { useGameSounds } from '../lib/sound';
 
@@ -21,8 +20,7 @@ export default function GameScreen() {
   const opacity = useRef(new Animated.Value(1)).current;
   const [timerRemaining, setTimerRemaining] = useState(state.timerSeconds);
   const endedRef = useRef(false);
-  const { colors, scheme } = useTheme();
-  const styles = makeStyles(colors, scheme);
+  const styles = makeStyles();
 
   const active = state.active;
   const catLabel = state.selectedCats.map((k) => state.words[k]?.name).filter(Boolean).join(' + ');
@@ -187,19 +185,19 @@ export default function GameScreen() {
   );
 }
 
-const makeStyles = (colors: Palette, scheme: 'light' | 'dark') =>
+const makeStyles = () =>
   StyleSheet.create({
     layout: { flex: 1, flexDirection: 'row' },
     tapZone: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     tapSkip: {
-      backgroundColor: scheme === 'light' ? '#ffe4e6' : '#1e0a10',
+      backgroundColor: '#1e0a10',
       borderRightWidth: 2,
-      borderColor: scheme === 'light' ? '#ffc2c7' : '#3a1520',
+      borderColor: '#3a1520',
     },
     tapGot: {
-      backgroundColor: scheme === 'light' ? '#dcfbee' : '#0a2018',
+      backgroundColor: '#0a2018',
       borderLeftWidth: 2,
-      borderColor: scheme === 'light' ? '#a9f0d1' : '#0e3a28',
+      borderColor: '#0e3a28',
     },
     tapLabelSkip: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent2, textAlign: 'center', opacity: 0.8, lineHeight: 24 },
     tapLabelGot: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent3, textAlign: 'center', opacity: 0.8, lineHeight: 24 },
@@ -223,7 +221,7 @@ const makeStyles = (colors: Palette, scheme: 'light' | 'dark') =>
       width: 32,
       height: 32,
       borderRadius: 8,
-      backgroundColor: scheme === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)',
+      backgroundColor: 'rgba(255,255,255,0.05)',
       borderWidth: 1,
       borderColor: colors.border,
       alignItems: 'center',

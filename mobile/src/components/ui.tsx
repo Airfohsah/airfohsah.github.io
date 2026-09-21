@@ -9,6 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fonts, Palette, radius, spacing } from '../constants/theme';
 import { useTheme } from '../store/ThemeContext';
@@ -77,7 +78,7 @@ export function ScreenHeader({
         style={styles.backBtn}
         hitSlop={8}
       >
-        <Text style={styles.backBtnText}>{'←'}</Text>
+        <Ionicons name="arrow-back" size={18} color={colors.text} />
       </Pressable>
       {title ? <Text style={styles.headerTitle}>{title}</Text> : null}
     </View>

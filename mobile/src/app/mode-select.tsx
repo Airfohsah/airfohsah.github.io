@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../components/ui';
 import { HomeBackground } from '../components/HomeBackground';
 // Same fixed dusk-illustration treatment as Home — this screen shares that
@@ -32,7 +33,7 @@ function ModeCard({
         <View style={[styles.cardUnderline, { backgroundColor: accent }]} />
       </View>
       <View style={[styles.chevronCircle, { borderColor: accent }]}>
-        <Text style={[styles.chevron, { color: accent }]}>{'›'}</Text>
+        <Ionicons name="chevron-forward" size={20} color={accent} />
       </View>
     </Pressable>
   );
@@ -54,7 +55,7 @@ export default function ModeSelectScreen() {
       <View style={styles.safe}>
         <View style={styles.topRow}>
           <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={10}>
-            <Text style={styles.backIcon}>{'←'}</Text>
+            <Ionicons name="arrow-back" size={18} color={colors.text} />
           </Pressable>
           <Pressable onPress={() => router.push('/settings')} style={styles.settingsBtn} hitSlop={10}>
             <Text style={styles.settingsIcon}>{'⚙️'}</Text>
@@ -105,7 +106,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  backIcon: { color: colors.text, fontSize: 18 },
   settingsBtn: { padding: 8 },
   settingsIcon: { fontSize: 20 },
   titleWrap: { marginTop: 24 },
@@ -147,5 +147,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  chevron: { fontSize: 22, fontFamily: fonts.displayBold },
 });

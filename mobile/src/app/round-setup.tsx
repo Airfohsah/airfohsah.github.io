@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, ScreenHeader, Screen, Stepper } from '../components/ui';
-import { fonts, Palette, radius } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { IllustratedScreen, IllustratedHeader, GlowStepper, GradientButton } from '../components/illustrated';
+import { fonts } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 
 function formatTimer(seconds: number) {
@@ -23,8 +22,6 @@ export default function RoundSetupScreen() {
     startSolo,
     startVersus,
   } = useGameStore();
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
 
   const start = () => {
     if (state.playMode === 'solo') startSolo();
@@ -33,8 +30,8 @@ export default function RoundSetupScreen() {
   };
 
   return (
-    <Screen>
-      <ScreenHeader title="Round Setup" onBack={() => router.push('/category')} />
+    <IllustratedScreen>
+      <IllustratedHeader title="Round" subtitle="setup" onBack={() => router.push('/category')} />
       <View style={styles.body}>
         <Text style={styles.hint}>Choose how the round is timed:</Text>
         <View style={styles.toggleRow}>
@@ -57,14 +54,14 @@ export default function RoundSetupScreen() {
         </View>
 
         {state.roundMode === 'words' ? (
-          <Stepper
+          <GlowStepper
             label="Words per turn"
             value={state.wordCount}
             onDecrement={() => changeWordCount(-5)}
             onIncrement={() => changeWordCount(5)}
           />
         ) : (
-          <Stepper
+          <GlowStepper
             label="Time per turn"
             value={state.timerSeconds}
             onDecrement={() => changeTimerSeconds(-30)}
@@ -74,7 +71,7 @@ export default function RoundSetupScreen() {
         )}
 
         {state.playMode === 'versus' && (
-          <Stepper
+          <GlowStepper
             label="Number of rounds"
             value={state.totalRounds}
             onDecrement={() => changeTotalRounds(-1)}
@@ -82,27 +79,26 @@ export default function RoundSetupScreen() {
           />
         )}
 
-        <Button label="▶  Start Game" onPress={start} />
+        <GradientButton label="▶  Start Game" onPress={start} style={{ marginTop: 8 }} />
       </View>
-    </Screen>
+    </IllustratedScreen>
   );
 }
 
-const makeStyles = (colors: Palette) =>
-  StyleSheet.create({
-    body: { flex: 1, padding: 20, gap: 20, justifyContent: 'center' },
-    hint: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
-    toggleRow: { flexDirection: 'row', gap: 10 },
-    toggleBtn: {
-      flex: 1,
-      paddingVertical: 14,
-      alignItems: 'center',
-      backgroundColor: colors.card,
-      borderWidth: 1.5,
-      borderColor: colors.border,
-      borderRadius: radius.lg,
-    },
-    toggleBtnActive: { borderColor: colors.accent, backgroundColor: 'rgba(245,197,24,0.08)' },
-    toggleText: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-    toggleTextActive: { color: colors.accent },
-  });
+const styles = StyleSheet.create({
+  body: { flex: 1, padding: 20, gap: 20, justifyContent: 'center' },
+  hint: { color: '#c7c2e0', fontFamily: fonts.mono, fontSize: 13 },
+  toggleRow: { flexDirection: 'row', gap: 10 },
+  toggleBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: 'center',
+    backgroundColor: 'rgba(8,10,26,0.72)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 12,
+  },
+  toggleBtnActive: { borderColor: '#f5c518', backgroundColor: 'rgba(245,197,24,0.12)' },
+  toggleText: { fontFamily: fonts.displaySemi, fontSize: 14, color: '#f5f2ea' },
+  toggleTextActive: { color: '#f5c518' },
+});

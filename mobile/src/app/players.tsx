@@ -1,15 +1,12 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, ScreenHeader, Screen, Stepper } from '../components/ui';
-import { fonts, Palette, radius } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { IllustratedScreen, IllustratedHeader, GlowCard, GlowStepper, GradientButton } from '../components/illustrated';
+import { fonts } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 
 export default function PlayersScreen() {
   const router = useRouter();
   const { state, setPlayerCount, setPlayerName, confirmPlayerNames } = useGameStore();
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
 
   const next = () => {
     confirmPlayerNames();
@@ -17,57 +14,49 @@ export default function PlayersScreen() {
   };
 
   return (
-    <Screen>
-      <ScreenHeader onBack={() => router.push('/mode-select')} />
-      <View style={styles.intro}>
-        <Text style={styles.hint}>How many players / teams?</Text>
-        <Stepper
+    <IllustratedScreen>
+      <IllustratedHeader title="Who's" subtitle="playing?" onBack={() => router.push('/mode-select')} />
+      <View style={styles.body}>
+        <GlowStepper
           label="Players"
           value={state.playerCount}
           onDecrement={() => setPlayerCount(state.playerCount - 1)}
           onIncrement={() => setPlayerCount(state.playerCount + 1)}
         />
-      </View>
-      <View style={styles.fields}>
-        {state.playerNames.slice(0, state.playerCount).map((name, i) => (
-          <View key={i} style={styles.field}>
-            <Text style={styles.fieldLabel}>Player {i + 1}</Text>
-            <TextInput
-              value={name}
-              onChangeText={(t) => setPlayerName(i, t)}
-              placeholder="Enter name..."
-              placeholderTextColor={colors.muted}
-              maxLength={20}
-              style={styles.input}
-            />
-          </View>
-        ))}
+        <View style={styles.fields}>
+          {state.playerNames.slice(0, state.playerCount).map((name, i) => (
+            <GlowCard key={i} accent="rgba(255,255,255,0.15)" style={styles.field}>
+              <Text style={styles.fieldLabel}>P{i + 1}</Text>
+              <TextInput
+                value={name}
+                onChangeText={(t) => setPlayerName(i, t)}
+                placeholder="Enter name..."
+                placeholderTextColor="#8b86ad"
+                maxLength={20}
+                style={styles.input}
+              />
+            </GlowCard>
+          ))}
+        </View>
       </View>
       <View style={styles.footer}>
-        <Button label="Next →" onPress={next} />
+        <GradientButton label="Next →" onPress={next} />
       </View>
-    </Screen>
+    </IllustratedScreen>
   );
 }
 
-const makeStyles = (colors: Palette) =>
-  StyleSheet.create({
-    intro: { paddingHorizontal: 20, paddingTop: 4, gap: 16 },
-    hint: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
-    fields: { padding: 20, gap: 12, flex: 1 },
-    field: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-    fieldLabel: { fontFamily: fonts.mono, fontSize: 12, color: colors.muted, minWidth: 70 },
-    input: {
-      flex: 1,
-      backgroundColor: colors.card,
-      borderWidth: 1.5,
-      borderColor: colors.border,
-      color: colors.text,
-      paddingVertical: 10,
-      paddingHorizontal: 14,
-      borderRadius: radius.md,
-      fontFamily: fonts.body,
-      fontSize: 14,
-    },
-    footer: { padding: 20, paddingBottom: 24 },
-  });
+const styles = StyleSheet.create({
+  body: { flex: 1, padding: 20, gap: 16 },
+  fields: { gap: 12 },
+  field: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingVertical: 8 },
+  fieldLabel: { fontFamily: fonts.displaySemi, fontSize: 13, color: '#c7c2e0', minWidth: 28 },
+  input: {
+    flex: 1,
+    color: '#f5f2ea',
+    paddingVertical: 10,
+    fontFamily: fonts.body,
+    fontSize: 15,
+  },
+  footer: { padding: 20, paddingBottom: 24 },
+});

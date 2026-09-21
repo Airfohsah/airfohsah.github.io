@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '../components/ui';
 import { HomeBackground } from '../components/HomeBackground';
 // Home keeps its own fixed dusk-illustration look regardless of the app's
@@ -30,7 +31,7 @@ function MenuRow({
         <Text style={[styles.menuIconText, { color: iconColor }]}>{icon}</Text>
       </View>
       <Text style={styles.menuLabel}>{label}</Text>
-      <Text style={[styles.menuChevron, { color: accentColor }]}>{'›'}</Text>
+      <Ionicons name="chevron-forward" size={22} color={accentColor} />
     </Pressable>
   );
 }
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
   },
   menuIconText: { fontSize: 16, fontFamily: fonts.displayBold },
   menuLabel: { flex: 1, fontFamily: fonts.displaySemi, fontSize: 16, color: colors.text },
-  menuChevron: { fontSize: 24, fontFamily: fonts.displayBold },
   footnote: {
     textAlign: 'center',
     color: '#9d97c2',

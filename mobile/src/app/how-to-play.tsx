@@ -1,7 +1,8 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { ScreenHeader, Screen } from '../components/ui';
-import { fonts, Palette, radius } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { IllustratedScreen, IllustratedHeader, GlowCard } from '../components/illustrated';
+import { fonts } from '../constants/theme';
+
+const ACCENTS = ['#3a7dff', '#00c98a', '#ff5252', '#3a7dff', '#a24bff', '#ff9c27', '#00c9c9'];
 
 const ITEMS: { icon: string; title: string; body: string }[] = [
   { icon: '📱', title: 'Landscape Mode', body: "When the game starts it rotates to landscape. Hold the phone up so the crowd can see the word." },
@@ -14,41 +15,29 @@ const ITEMS: { icon: string; title: string; body: string }[] = [
 ];
 
 export default function HowToPlayScreen() {
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
   return (
-    <Screen>
-      <ScreenHeader title="How to Play" />
+    <IllustratedScreen>
+      <IllustratedHeader title="How to" subtitle="play?" />
       <ScrollView contentContainerStyle={styles.list}>
-        {ITEMS.map((item) => (
-          <View key={item.title} style={styles.card}>
+        {ITEMS.map((item, i) => (
+          <GlowCard key={item.title} accent={ACCENTS[i % ACCENTS.length]} style={styles.card}>
             <Text style={styles.icon}>{item.icon}</Text>
             <View style={styles.cardBody}>
               <Text style={styles.cardTitle}>{item.title}</Text>
               <Text style={styles.cardText}>{item.body}</Text>
             </View>
-          </View>
+          </GlowCard>
         ))}
       </ScrollView>
-    </Screen>
+    </IllustratedScreen>
   );
 }
 
-const makeStyles = (colors: Palette) =>
-  StyleSheet.create({
-    list: { padding: 20, paddingTop: 0, gap: 16, paddingBottom: 40 },
-    card: {
-      flexDirection: 'row',
-      gap: 16,
-      alignItems: 'flex-start',
-      backgroundColor: colors.card,
-      borderWidth: 1.5,
-      borderColor: colors.border,
-      borderRadius: radius.xl,
-      padding: 16,
-    },
-    icon: { fontSize: 28 },
-    cardBody: { flex: 1, gap: 4 },
-    cardTitle: { fontFamily: fonts.displaySemi, fontSize: 15, color: colors.text },
-    cardText: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
-  });
+const styles = StyleSheet.create({
+  list: { padding: 20, paddingTop: 24, gap: 14, paddingBottom: 40 },
+  card: { flexDirection: 'row', gap: 16, alignItems: 'flex-start', padding: 16 },
+  icon: { fontSize: 26 },
+  cardBody: { flex: 1, gap: 4 },
+  cardTitle: { fontFamily: fonts.displaySemi, fontSize: 15, color: '#f5f2ea' },
+  cardText: { fontFamily: fonts.body, fontSize: 13, color: '#c7c2e0', lineHeight: 19 },
+});

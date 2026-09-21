@@ -1,16 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { Button, ScreenHeader, Screen } from '../components/ui';
-import { fonts, Palette, radius } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { IllustratedScreen, IllustratedHeader, GlowCard, OutlineButton } from '../components/illustrated';
+import { fonts } from '../constants/theme';
 import { clearHistory, getHistory } from '../lib/storage';
 import { HistoryEntry } from '../types';
 
 export default function HistoryScreen() {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
 
   useFocusEffect(
     useCallback(() => {
@@ -33,8 +30,8 @@ export default function HistoryScreen() {
   };
 
   return (
-    <Screen>
-      <ScreenHeader title="Leaderboard" />
+    <IllustratedScreen>
+      <IllustratedHeader title="Leader" subtitle="board" />
       <ScrollView contentContainerStyle={styles.content}>
         {entries.length === 0 ? (
           <Text style={styles.empty}>No games yet. Play one first!</Text>
@@ -42,7 +39,7 @@ export default function HistoryScreen() {
           entries.map((game, gi) => {
             const maxScore = Math.max(...game.players.map((p) => p.score));
             return (
-              <View key={gi} style={styles.card}>
+              <GlowCard key={gi} accent="rgba(255,255,255,0.15)" style={styles.card}>
                 <View style={styles.cardHeader}>
                   <Text style={styles.cardTitle}>Game {entries.length - gi}</Text>
                   <Text style={styles.cardDate}>{game.date}</Text>
@@ -58,31 +55,30 @@ export default function HistoryScreen() {
                       <Text style={styles.playerScore}>{p.score} pts</Text>
                     </View>
                   ))}
-              </View>
+              </GlowCard>
             );
           })
         )}
       </ScrollView>
       {entries.length > 0 && (
         <View style={styles.footer}>
-          <Button label="Clear History" variant="danger" small onPress={onClear} />
+          <OutlineButton label="Clear History" accent="rgba(255,82,82,0.5)" small onPress={onClear} />
         </View>
       )}
-    </Screen>
+    </IllustratedScreen>
   );
 }
 
-const makeStyles = (colors: Palette) =>
-  StyleSheet.create({
-    content: { padding: 16, gap: 16, paddingBottom: 20 },
-    empty: { textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13, padding: 40 },
-    card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16 },
-    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    cardTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-    cardDate: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted },
-    cardCats: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, marginBottom: 10 },
-    playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderColor: colors.border },
-    playerName: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-    playerScore: { fontFamily: fonts.mono, fontSize: 14, color: colors.accent },
-    footer: { padding: 20, paddingTop: 4 },
-  });
+const styles = StyleSheet.create({
+  content: { padding: 16, paddingTop: 24, gap: 16, paddingBottom: 20 },
+  empty: { textAlign: 'center', color: '#c7c2e0', fontFamily: fonts.mono, fontSize: 13, padding: 40 },
+  card: { padding: 16 },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  cardTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: '#f5f2ea' },
+  cardDate: { fontFamily: fonts.mono, fontSize: 11, color: '#8b86ad' },
+  cardCats: { fontFamily: fonts.mono, fontSize: 11, color: '#8b86ad', marginBottom: 10 },
+  playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
+  playerName: { fontFamily: fonts.displaySemi, fontSize: 14, color: '#f5f2ea' },
+  playerScore: { fontFamily: fonts.mono, fontSize: 14, color: '#f5c518' },
+  footer: { padding: 20, paddingTop: 4 },
+});

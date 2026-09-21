@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, ScreenHeader, Screen, Stepper } from '../components/ui';
-import { fonts, Palette, radius } from '../constants/theme';
-import { useTheme } from '../store/ThemeContext';
+import { IllustratedScreen, IllustratedHeader, GlowCard, GradientButton, OutlineButton } from '../components/illustrated';
+import { fonts, darkColors as colors } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 import { getHistory, setHistory } from '../lib/storage';
 import { writeAndShareBackup, pickAndReadBackup, BackupError } from '../lib/backup';
@@ -18,8 +17,6 @@ function ToggleRow({
   value: boolean;
   onToggle: () => void;
 }) {
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
   return (
     <Pressable style={styles.toggleRow} onPress={onToggle}>
       <Text style={styles.toggleLabel}>{label}</Text>
@@ -40,8 +37,6 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { state, updateSettings, setWords } = useGameStore();
   const [busy, setBusy] = useState<'export' | 'import' | null>(null);
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
 
   const onExport = async () => {
     setBusy('export');
@@ -87,8 +82,8 @@ export default function SettingsScreen() {
   };
 
   return (
-    <Screen>
-      <ScreenHeader title="Settings" onBack={() => router.push('/')} />
+    <IllustratedScreen>
+      <IllustratedHeader title="Settings" onBack={() => router.push('/')} />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.sectionTitle}>Appearance</Text>
         <View style={styles.segmentRow}>
@@ -111,7 +106,7 @@ export default function SettingsScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Game</Text>
-        <View style={styles.card}>
+        <GlowCard accent="rgba(255,255,255,0.15)" style={{ overflow: 'hidden' }}>
           <ToggleRow
             label="Sound effects"
             value={state.settings.soundEnabled}
@@ -122,21 +117,45 @@ export default function SettingsScreen() {
             value={state.settings.tiltEnabled}
             onToggle={() => updateSettings({ tiltEnabled: !state.settings.tiltEnabled })}
           />
-        </View>
+        </GlowCard>
 
         <View style={{ gap: 12 }}>
-          <Stepper
-            label="Default words per turn"
-            value={state.settings.defaultWordCount}
-            onDecrement={() => updateSettings({ defaultWordCount: Math.max(5, state.settings.defaultWordCount - 5) })}
-            onIncrement={() => updateSettings({ defaultWordCount: Math.min(100, state.settings.defaultWordCount + 5) })}
-          />
-          <Stepper
-            label="Default timer (s)"
-            value={state.settings.defaultTimerSeconds}
-            onDecrement={() => updateSettings({ defaultTimerSeconds: Math.max(30, state.settings.defaultTimerSeconds - 30) })}
-            onIncrement={() => updateSettings({ defaultTimerSeconds: Math.min(180, state.settings.defaultTimerSeconds + 30) })}
-          />
+          <View style={styles.stepperRow}>
+            <Text style={styles.stepperLabel}>Default words per turn</Text>
+            <View style={styles.stepperControls}>
+              <Pressable
+                style={styles.stepBtn}
+                onPress={() => updateSettings({ defaultWordCount: Math.max(5, state.settings.defaultWordCount - 5) })}
+              >
+                <Text style={styles.stepBtnText}>{'−'}</Text>
+              </Pressable>
+              <Text style={styles.stepVal}>{state.settings.defaultWordCount}</Text>
+              <Pressable
+                style={styles.stepBtn}
+                onPress={() => updateSettings({ defaultWordCount: Math.min(100, state.settings.defaultWordCount + 5) })}
+              >
+                <Text style={styles.stepBtnText}>+</Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={styles.stepperRow}>
+            <Text style={styles.stepperLabel}>Default timer (s)</Text>
+            <View style={styles.stepperControls}>
+              <Pressable
+                style={styles.stepBtn}
+                onPress={() => updateSettings({ defaultTimerSeconds: Math.max(30, state.settings.defaultTimerSeconds - 30) })}
+              >
+                <Text style={styles.stepBtnText}>{'−'}</Text>
+              </Pressable>
+              <Text style={styles.stepVal}>{state.settings.defaultTimerSeconds}</Text>
+              <Pressable
+                style={styles.stepBtn}
+                onPress={() => updateSettings({ defaultTimerSeconds: Math.min(180, state.settings.defaultTimerSeconds + 30) })}
+              >
+                <Text style={styles.stepBtnText}>+</Text>
+              </Pressable>
+            </View>
+          </View>
         </View>
 
         <Text style={styles.sectionTitle}>Backup</Text>
@@ -145,42 +164,64 @@ export default function SettingsScreen() {
           anywhere else you choose — then restore it later on this device or a new one.
         </Text>
         <View style={{ gap: 12 }}>
-          <Button label="Export Backup" onPress={onExport} loading={busy === 'export'} />
-          <Button label="Restore from Backup" variant="secondary" onPress={onImport} loading={busy === 'import'} />
+          <GradientButton label="Export Backup" onPress={onExport} disabled={busy === 'export'} />
+          <OutlineButton label="Restore from Backup" onPress={onImport} disabled={busy === 'import'} />
         </View>
 
         <Text style={styles.sectionTitle}>Content</Text>
         <View style={{ gap: 12 }}>
-          <Button label="Admin Panel" variant="secondary" onPress={() => router.push('/admin')} />
+          <OutlineButton label="Admin Panel" onPress={() => router.push('/admin')} />
         </View>
       </ScrollView>
-    </Screen>
+    </IllustratedScreen>
   );
 }
 
-const makeStyles = (colors: Palette) =>
-  StyleSheet.create({
-    content: { padding: 20, gap: 14, paddingBottom: 40 },
-    sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.muted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 },
-    sectionHint: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
-    card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, overflow: 'hidden' },
-    toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderColor: colors.border },
-    toggleLabel: { fontFamily: fonts.body, fontSize: 14, color: colors.text },
-    pill: { width: 44, height: 24, borderRadius: 12, backgroundColor: colors.border, justifyContent: 'center' },
-    pillOn: { backgroundColor: '#1a5c3a' },
-    pillKnob: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.muted, marginLeft: 3 },
-    pillKnobOn: { backgroundColor: colors.accent3, marginLeft: 23 },
-    segmentRow: {
-      flexDirection: 'row',
-      backgroundColor: colors.card,
-      borderWidth: 1.5,
-      borderColor: colors.border,
-      borderRadius: radius.lg,
-      padding: 4,
-      gap: 4,
-    },
-    segment: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: radius.md },
-    segmentActive: { backgroundColor: colors.accent },
-    segmentText: { fontFamily: fonts.displaySemi, fontSize: 13, color: colors.muted },
-    segmentTextActive: { color: colors.bg },
-  });
+const styles = StyleSheet.create({
+  content: { padding: 20, paddingTop: 24, gap: 14, paddingBottom: 40 },
+  sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: '#8b86ad', textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 },
+  sectionHint: { fontFamily: fonts.body, fontSize: 13, color: '#c7c2e0', lineHeight: 19 },
+  toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
+  toggleLabel: { fontFamily: fonts.body, fontSize: 14, color: '#f5f2ea' },
+  pill: { width: 44, height: 24, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.15)', justifyContent: 'center' },
+  pillOn: { backgroundColor: '#1a5c3a' },
+  pillKnob: { width: 18, height: 18, borderRadius: 9, backgroundColor: '#8b86ad', marginLeft: 3 },
+  pillKnobOn: { backgroundColor: colors.accent3, marginLeft: 23 },
+  segmentRow: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(8,10,26,0.72)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 12,
+    padding: 4,
+    gap: 4,
+  },
+  segment: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
+  segmentActive: { backgroundColor: colors.accent },
+  segmentText: { fontFamily: fonts.displaySemi, fontSize: 13, color: '#8b86ad' },
+  segmentTextActive: { color: colors.bg },
+  stepperRow: {
+    backgroundColor: 'rgba(8,10,26,0.72)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 14,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  stepperLabel: { fontSize: 14, color: '#c7c2e0', fontFamily: fonts.body },
+  stepperControls: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  stepBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepBtnText: { color: '#f5f2ea', fontSize: 18, lineHeight: 20 },
+  stepVal: { fontSize: 16, fontFamily: fonts.displaySemi, color: '#f5f2ea', minWidth: 40, textAlign: 'center' },
+});

@@ -9,12 +9,12 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Button, Toast, useToast } from '../ui';
-import { difficultyColor, fonts, Palette, radius } from '../../constants/theme';
-import { useTheme } from '../../store/ThemeContext';
+import { useToast } from '../ui';
+import { GradientButton, OutlineButton } from '../illustrated';
+import { difficultyColor, fonts, darkColors as colors, radius } from '../../constants/theme';
 import { useGameStore } from '../../store/GameStore';
 import { Difficulty, WordCategory, WordsData } from '../../types';
-import { getGithubConfig, getWordsSha, saveGithubConfig, setCachedWords, setWordsSha, GithubConfig } from '../../lib/storage';
+import { getGithubConfig, getWordsSha, setCachedWords, setWordsSha, GithubConfig } from '../../lib/storage';
 import { getGithubToken, setGithubToken as saveGithubTokenSecure, clearGithubToken } from '../../lib/secure';
 import { GithubPushError, pushWordsToGithub, verifyGithubToken } from '../../lib/github';
 
@@ -26,11 +26,31 @@ function slugify(name: string, existing: WordsData): string {
   return key;
 }
 
+function MiniButton({
+  label,
+  onPress,
+  tone = 'default',
+  disabled,
+}: {
+  label: string;
+  onPress: () => void;
+  tone?: 'default' | 'danger' | 'success';
+  disabled?: boolean;
+}) {
+  const toneStyle =
+    tone === 'danger' ? styles.miniBtnDanger : tone === 'success' ? styles.miniBtnSuccess : styles.miniBtnDefault;
+  const toneTextStyle =
+    tone === 'danger' ? styles.miniBtnTextDanger : tone === 'success' ? styles.miniBtnTextSuccess : styles.miniBtnTextDefault;
+  return (
+    <Pressable onPress={onPress} disabled={disabled} style={[styles.miniBtn, toneStyle, disabled && { opacity: 0.5 }]}>
+      <Text style={[styles.miniBtnText, toneTextStyle]}>{label}</Text>
+    </Pressable>
+  );
+}
+
 export function AdminDashboard() {
   const { state, setWords } = useGameStore();
   const { message, showToast } = useToast();
-  const { colors } = useTheme();
-  const styles = makeStyles(colors);
 
   const [draft, setDraft] = useState<WordsData>(state.words);
   const [dirty, setDirty] = useState(false);
@@ -296,14 +316,14 @@ export function AdminDashboard() {
           {selectMode && selected.size > 0 && (
             <View style={styles.bulkBar}>
               <Text style={styles.bulkBarText}>{selected.size} selected</Text>
-              <Button label="Delete" variant="danger" small onPress={bulkDelete} />
+              <MiniButton label="Delete" tone="danger" onPress={bulkDelete} />
             </View>
           )}
 
           <TextInput
             style={styles.search}
             placeholder="Search words..."
-            placeholderTextColor={colors.muted}
+            placeholderTextColor="#8b86ad"
             value={search}
             onChangeText={setSearch}
           />
@@ -315,11 +335,11 @@ export function AdminDashboard() {
               style={styles.addTextarea}
               multiline
               placeholder={'Jollof rice\nOwambe\nDanfo driver...'}
-              placeholderTextColor={colors.muted}
+              placeholderTextColor="#8b86ad"
               value={addText}
               onChangeText={setAddText}
             />
-            <Button label="+ Add Words" variant="success" small onPress={addWords} />
+            <MiniButton label="+ Add Words" tone="success" onPress={addWords} />
           </View>
 
           <View style={styles.wordList}>
@@ -384,22 +404,31 @@ export function AdminDashboard() {
             <TextInput
               style={styles.search}
               placeholder="ghp_... or github_pat_..."
-              placeholderTextColor={colors.muted}
+              placeholderTextColor="#8b86ad"
               value={tokenInput}
               onChangeText={setTokenInput}
               secureTextEntry
               autoCapitalize="none"
             />
-            <Button label="Save Token" variant="secondary" small onPress={saveTokenAndVerify} />
+            <MiniButton label="Save Token" onPress={saveTokenAndVerify} />
           </View>
         ) : (
-          <Button label="Remove Token" variant="danger" small onPress={removeToken} />
+          <MiniButton label="Remove Token" tone="danger" onPress={removeToken} />
         )}
         <Text style={styles.pushStatus}>{pushStatus}</Text>
-        <Button label={dirty ? '⬆ Push Changes' : 'Nothing to push'} onPress={push} disabled={!dirty || !token} loading={pushing} />
+        <GradientButton
+          label={dirty ? '⬆ Push Changes' : 'Nothing to push'}
+          onPress={push}
+          disabled={!dirty || !token || pushing}
+          small
+        />
       </View>
 
-      <Toast message={message} />
+      {message && (
+        <View style={styles.toast} pointerEvents="none">
+          <Text style={styles.toastText}>{message}</Text>
+        </View>
+      )}
 
       <Modal visible={showNewCat} transparent animationType="slide" onRequestClose={() => setShowNewCat(false)}>
         <View style={styles.modalOverlay}>
@@ -408,7 +437,7 @@ export function AdminDashboard() {
             <TextInput
               style={styles.search}
               placeholder="Category name"
-              placeholderTextColor={colors.muted}
+              placeholderTextColor="#8b86ad"
               value={newCatName}
               onChangeText={setNewCatName}
               maxLength={30}
@@ -416,7 +445,7 @@ export function AdminDashboard() {
             <TextInput
               style={styles.search}
               placeholder="Emoji icon"
-              placeholderTextColor={colors.muted}
+              placeholderTextColor="#8b86ad"
               value={newCatIcon}
               onChangeText={setNewCatIcon}
               maxLength={4}
@@ -437,8 +466,8 @@ export function AdminDashboard() {
               </Pressable>
             </View>
             <View style={{ flexDirection: 'row', gap: 10, marginTop: 8 }}>
-              <Button label="Create" onPress={createCategory} style={{ flex: 1 }} />
-              <Button label="Cancel" variant="danger" onPress={() => setShowNewCat(false)} style={{ flex: 1 }} />
+              <GradientButton label="Create" onPress={createCategory} small style={{ flex: 1 }} />
+              <OutlineButton label="Cancel" accent="rgba(255,82,82,0.5)" onPress={() => setShowNewCat(false)} small style={{ flex: 1 }} />
             </View>
           </View>
         </View>
@@ -447,55 +476,55 @@ export function AdminDashboard() {
   );
 }
 
-const makeStyles = (colors: Palette) => StyleSheet.create({
-  wrap: { flex: 1, padding: 16, gap: 14 },
+const styles = StyleSheet.create({
+  wrap: { flex: 1, padding: 16, paddingTop: 20, gap: 14 },
   tabs: { gap: 8, paddingBottom: 4 },
-  tab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border },
+  tab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: 'rgba(8,10,26,0.72)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)' },
   tabActive: { backgroundColor: colors.accent, borderColor: colors.accent },
   tabOff: { opacity: 0.5 },
-  tabText: { fontFamily: fonts.displaySemi, fontSize: 13, color: colors.text },
+  tabText: { fontFamily: fonts.displaySemi, fontSize: 13, color: '#f5f2ea' },
   tabTextActive: { color: colors.bg },
   addTab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: '#0a2a1e', borderWidth: 1.5, borderColor: '#0e3a28' },
   addTabText: { fontFamily: fonts.displaySemi, fontSize: 13, color: colors.accent3 },
 
-  banner: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16, gap: 14 },
+  banner: { backgroundColor: 'rgba(8,10,26,0.72)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.xl, padding: 16, gap: 14 },
   bannerTop: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   bannerIcon: { fontSize: 32 },
-  bannerName: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.text },
-  bannerMeta: { fontFamily: fonts.mono, fontSize: 12, color: colors.muted, marginTop: 2 },
+  bannerName: { fontFamily: fonts.displayBold, fontSize: 16, color: '#f5f2ea' },
+  bannerMeta: { fontFamily: fonts.mono, fontSize: 12, color: '#8b86ad', marginTop: 2 },
   bannerControls: { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
-  smallToggle: { backgroundColor: colors.card2, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.md, paddingVertical: 8, paddingHorizontal: 12 },
-  smallToggleText: { fontFamily: fonts.displaySemi, fontSize: 12, color: colors.text },
+  smallToggle: { backgroundColor: 'rgba(255,255,255,0.08)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.md, paddingVertical: 8, paddingHorizontal: 12 },
+  smallToggleText: { fontFamily: fonts.displaySemi, fontSize: 12, color: '#f5f2ea' },
   deleteChip: { backgroundColor: '#2a1015', borderWidth: 1.5, borderColor: '#3a1520', borderRadius: radius.md, paddingVertical: 8, paddingHorizontal: 12 },
   deleteChipText: { fontFamily: fonts.displaySemi, fontSize: 12, color: colors.accent2 },
 
   editorHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  editorMeta: { fontFamily: fonts.mono, fontSize: 12, color: colors.muted },
+  editorMeta: { fontFamily: fonts.mono, fontSize: 12, color: '#8b86ad' },
   selectToggle: { fontFamily: fonts.displaySemi, fontSize: 13, color: colors.accent2 },
 
   bulkBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#2a1015', borderWidth: 1.5, borderColor: '#3a1520', borderRadius: radius.lg, padding: 12 },
   bulkBarText: { fontFamily: fonts.mono, fontSize: 13, color: colors.accent2 },
 
   search: {
-    backgroundColor: colors.card,
+    backgroundColor: 'rgba(8,10,26,0.72)',
     borderWidth: 1.5,
-    borderColor: colors.border,
-    color: colors.text,
+    borderColor: 'rgba(255,255,255,0.15)',
+    color: '#f5f2ea',
     padding: 12,
     borderRadius: radius.lg,
     fontFamily: fonts.mono,
     fontSize: 13,
   },
 
-  addSection: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16, gap: 10 },
-  addSectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-  addSectionHint: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, lineHeight: 16 },
+  addSection: { backgroundColor: 'rgba(8,10,26,0.72)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.xl, padding: 16, gap: 10 },
+  addSectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: '#f5f2ea' },
+  addSectionHint: { fontFamily: fonts.mono, fontSize: 11, color: '#8b86ad', lineHeight: 16 },
   addTextarea: {
     minHeight: 80,
-    backgroundColor: colors.bg,
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderWidth: 1.5,
-    borderColor: colors.border,
-    color: colors.text,
+    borderColor: 'rgba(255,255,255,0.15)',
+    color: '#f5f2ea',
     padding: 12,
     borderRadius: radius.md,
     fontFamily: fonts.mono,
@@ -503,27 +532,49 @@ const makeStyles = (colors: Palette) => StyleSheet.create({
     textAlignVertical: 'top',
   },
 
-  wordList: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, overflow: 'hidden' },
-  emptyState: { padding: 24, textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
-  wordItem: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10, paddingHorizontal: 14, borderBottomWidth: 1, borderColor: colors.border },
+  wordList: { backgroundColor: 'rgba(8,10,26,0.72)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.xl, overflow: 'hidden' },
+  emptyState: { padding: 24, textAlign: 'center', color: '#8b86ad', fontFamily: fonts.mono, fontSize: 13 },
+  wordItem: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10, paddingHorizontal: 14, borderBottomWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
   wordItemSelected: { backgroundColor: '#2a1015' },
-  wordText: { flex: 1, fontFamily: fonts.body, fontSize: 14, color: colors.text },
-  wordEditInput: { flex: 1, backgroundColor: colors.bg, borderWidth: 1.5, borderColor: colors.accent, color: colors.text, padding: 8, borderRadius: 8, fontFamily: fonts.body, fontSize: 14 },
+  wordText: { flex: 1, fontFamily: fonts.body, fontSize: 14, color: '#f5f2ea' },
+  wordEditInput: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', borderWidth: 1.5, borderColor: colors.accent, color: '#f5f2ea', padding: 8, borderRadius: 8, fontFamily: fonts.body, fontSize: 14 },
   wordActions: { flexDirection: 'row', gap: 6 },
   iconBtnEdit: { width: 30, height: 30, borderRadius: 7, backgroundColor: '#1a1800', alignItems: 'center', justifyContent: 'center' },
   iconBtnDel: { width: 30, height: 30, borderRadius: 7, backgroundColor: '#2a1015', alignItems: 'center', justifyContent: 'center' },
   iconBtnSave: { width: 30, height: 30, borderRadius: 7, backgroundColor: '#0a2a1e', alignItems: 'center', justifyContent: 'center' },
-  iconBtnCancel: { width: 30, height: 30, borderRadius: 7, backgroundColor: colors.card2, alignItems: 'center', justifyContent: 'center' },
+  iconBtnCancel: { width: 30, height: 30, borderRadius: 7, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' },
   iconBtnText: { fontSize: 13 },
 
-  githubSection: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16, gap: 10, marginBottom: 20 },
+  githubSection: { backgroundColor: 'rgba(8,10,26,0.72)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.xl, padding: 16, gap: 10, marginBottom: 20 },
   pushStatus: { fontFamily: fonts.mono, fontSize: 12, color: colors.accent },
 
+  toast: { padding: 12, alignItems: 'center' },
+  toastText: {
+    backgroundColor: 'rgba(20,15,45,0.92)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    color: '#f5f2ea',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    fontFamily: fonts.mono,
+    fontSize: 12,
+  },
+
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', padding: 20 },
-  modal: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xxl, padding: 22, gap: 12 },
-  modalTitle: { fontFamily: fonts.displayBold, fontSize: 18, color: colors.text, marginBottom: 4 },
+  modal: { backgroundColor: '#151030', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)', borderRadius: radius.xxl, padding: 22, gap: 12 },
+  modalTitle: { fontFamily: fonts.displayBold, fontSize: 18, color: '#f5f2ea', marginBottom: 4 },
   diffRow: { flexDirection: 'row', gap: 8 },
-  diffChip: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.card2, borderWidth: 1.5, borderColor: colors.border },
+  diffChip: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: radius.md, backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)' },
   diffChipActive: { borderColor: colors.accent },
   diffChipText: { fontFamily: fonts.displaySemi, fontSize: 12 },
+
+  miniBtn: { paddingVertical: 9, paddingHorizontal: 14, borderRadius: 10, borderWidth: 1.5, alignSelf: 'flex-start' },
+  miniBtnDefault: { backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)' },
+  miniBtnDanger: { backgroundColor: '#2a1015', borderColor: '#3a1520' },
+  miniBtnSuccess: { backgroundColor: '#0a2a1e', borderColor: '#0e3a28' },
+  miniBtnText: { fontFamily: fonts.displaySemi, fontSize: 13 },
+  miniBtnTextDefault: { color: '#f5f2ea' },
+  miniBtnTextDanger: { color: colors.accent2 },
+  miniBtnTextSuccess: { color: colors.accent3 },
 });
