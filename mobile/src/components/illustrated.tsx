@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, ViewStyle, StyleProp } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { HomeBackground } from './HomeBackground';
@@ -13,8 +14,12 @@ import { darkColors as colors, fonts, radius } from '../constants/theme';
 // background art itself not flipping with light/dark mode).
 
 export function IllustratedScreen({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle> }) {
+  // Reserves notch/status-bar clearance centrally (same reasoning as ui.tsx's
+  // Screen) — without it, screens with no header content (e.g. Results)
+  // render their top content straight under the notch on some devices.
+  const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.screen, style]}>
+    <View style={[styles.screen, { paddingTop: insets.top }, style]}>
       <HomeBackground />
       {children}
     </View>
