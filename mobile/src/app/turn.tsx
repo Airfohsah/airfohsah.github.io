@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { activateKeepAwakeAsync } from 'expo-keep-awake';
 import { Button, Screen } from '../components/ui';
-import { colors, fonts, radius } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { useGameStore } from '../store/GameStore';
 import { useGameSounds } from '../lib/sound';
 
@@ -16,6 +17,8 @@ export default function TurnScreen() {
   const sounds = useGameSounds(state.settings.soundEnabled);
   const [countdown, setCountdown] = useState<number | 'GO' | null>(null);
   const scale = useRef(new Animated.Value(1)).current;
+  const { colors, scheme } = useTheme();
+  const styles = makeStyles(colors, scheme);
 
   const player = state.versusPlayers[state.versusCurrentIdx];
   const emoji = TURN_EMOJIS[state.versusCurrentIdx % TURN_EMOJIS.length];
@@ -95,30 +98,31 @@ export default function TurnScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, gap: 20 },
-  emoji: { fontSize: 48 },
-  name: { fontFamily: fonts.display, fontSize: 28, color: colors.text },
-  subtitle: { color: colors.muted, fontFamily: fonts.body, fontSize: 15, textAlign: 'center' },
-  metaBadge: {
-    backgroundColor: colors.card,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-  },
-  metaText: { fontFamily: fonts.mono, fontSize: 13, color: colors.accent },
-  ruleCard: {
-    backgroundColor: '#1a1800',
-    borderWidth: 1.5,
-    borderColor: 'rgba(245,197,24,0.3)',
-    borderRadius: radius.xl,
-    padding: 20,
-    maxWidth: 300,
-  },
-  ruleLabel: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 },
-  ruleText: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent, lineHeight: 22 },
-  countdown: { fontSize: 96, fontFamily: fonts.display, color: colors.accent3 },
-  footer: { padding: 24 },
-});
+const makeStyles = (colors: Palette, scheme: 'light' | 'dark') =>
+  StyleSheet.create({
+    body: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, gap: 20 },
+    emoji: { fontSize: 48 },
+    name: { fontFamily: fonts.display, fontSize: 28, color: colors.text },
+    subtitle: { color: colors.muted, fontFamily: fonts.body, fontSize: 15, textAlign: 'center' },
+    metaBadge: {
+      backgroundColor: colors.card,
+      borderWidth: 1.5,
+      borderColor: colors.border,
+      borderRadius: radius.lg,
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+    },
+    metaText: { fontFamily: fonts.mono, fontSize: 13, color: colors.accent },
+    ruleCard: {
+      backgroundColor: scheme === 'light' ? '#fff6d9' : '#1a1800',
+      borderWidth: 1.5,
+      borderColor: 'rgba(245,197,24,0.35)',
+      borderRadius: radius.xl,
+      padding: 20,
+      maxWidth: 300,
+    },
+    ruleLabel: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 },
+    ruleText: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent, lineHeight: 22 },
+    countdown: { fontSize: 96, fontFamily: fonts.display, color: colors.accent3 },
+    footer: { padding: 24 },
+  });

@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ScreenHeader, Screen } from '../components/ui';
-import { colors, fonts, radius, spacing } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 
 const ITEMS: { icon: string; title: string; body: string }[] = [
   { icon: '📱', title: 'Landscape Mode', body: "When the game starts it rotates to landscape. Hold the phone up so the crowd can see the word." },
@@ -13,6 +14,8 @@ const ITEMS: { icon: string; title: string; body: string }[] = [
 ];
 
 export default function HowToPlayScreen() {
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
   return (
     <Screen>
       <ScreenHeader title="How to Play" />
@@ -31,20 +34,21 @@ export default function HowToPlayScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  list: { padding: 20, paddingTop: 0, gap: 16, paddingBottom: 40 },
-  card: {
-    flexDirection: 'row',
-    gap: 16,
-    alignItems: 'flex-start',
-    backgroundColor: colors.card,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    borderRadius: radius.xl,
-    padding: 16,
-  },
-  icon: { fontSize: 28 },
-  cardBody: { flex: 1, gap: 4 },
-  cardTitle: { fontFamily: fonts.displaySemi, fontSize: 15, color: colors.text },
-  cardText: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
-});
+const makeStyles = (colors: Palette) =>
+  StyleSheet.create({
+    list: { padding: 20, paddingTop: 0, gap: 16, paddingBottom: 40 },
+    card: {
+      flexDirection: 'row',
+      gap: 16,
+      alignItems: 'flex-start',
+      backgroundColor: colors.card,
+      borderWidth: 1.5,
+      borderColor: colors.border,
+      borderRadius: radius.xl,
+      padding: 16,
+    },
+    icon: { fontSize: 28 },
+    cardBody: { flex: 1, gap: 4 },
+    cardTitle: { fontFamily: fonts.displaySemi, fontSize: 15, color: colors.text },
+    cardText: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
+  });

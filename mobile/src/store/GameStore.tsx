@@ -248,75 +248,78 @@ export function GameStoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const endActiveGame = useCallback(async () => {
-    let snapshot: GameStoreState | null = null;
-    setState((s) => {
-      if (!s.active) return s;
-      const total = s.roundMode === 'words' ? s.wordCount : s.active.index;
-      const lastRoundSummary = {
-        got: s.active.got,
-        total,
-        playerName: s.versusPlayers[s.versusCurrentIdx]?.name,
+    // Compute the next state ourselves (from the current closure's `state`,
+    // kept fresh via the dependency array below) instead of trying to read
+    // it back out of the setState updater — that updater isn't guaranteed
+    // to run synchronously, so capturing its result into an outer variable
+    // and checking it right after (the previous approach here) silently
+    // never fired, and history never got saved.
+    const s = state;
+    if (!s.active) return;
+
+    const total = s.roundMode === 'words' ? s.wordCount : s.active.index;
+    const lastRoundSummary = {
+      got: s.active.got,
+      total,
+      playerName: s.versusPlayers[s.versusCurrentIdx]?.name,
+    };
+
+    let players = s.versusPlayers;
+    if (players.length > 0) {
+      players = players.map((p, i) =>
+        i === s.versusCurrentIdx
+          ? { ...p, totalScore: p.totalScore + s.active!.got, rounds: [...p.rounds, s.active!.got] }
+          : p
+      );
+    }
+
+    const nextIdx = s.versusCurrentIdx + 1;
+    const lastLog = s.active.log;
+    let next: GameStoreState;
+    if (nextIdx < players.length) {
+      next = {
+        ...s,
+        versusPlayers: players,
+        versusCurrentIdx: nextIdx,
+        active: null,
+        resultsMode: 'mid',
+        lastRoundSummary,
+        lastLog,
       };
+    } else if (s.currentRound < s.totalRounds) {
+      next = {
+        ...s,
+        versusPlayers: players,
+        versusCurrentIdx: 0,
+        currentRound: s.currentRound + 1,
+        active: null,
+        resultsMode: 'round-complete',
+        lastRoundSummary,
+        lastLog,
+      };
+    } else {
+      const finalStandings = [...players].sort((a, b) => b.totalScore - a.totalScore);
+      next = {
+        ...s,
+        versusPlayers: players,
+        active: null,
+        resultsMode: 'final',
+        lastRoundSummary,
+        lastLog,
+        finalStandings,
+      };
+    }
 
-      let players = s.versusPlayers;
-      if (players.length > 0) {
-        players = players.map((p, i) =>
-          i === s.versusCurrentIdx
-            ? { ...p, totalScore: p.totalScore + s.active!.got, rounds: [...p.rounds, s.active!.got] }
-            : p
-        );
-      }
+    setState(next);
 
-      const nextIdx = s.versusCurrentIdx + 1;
-      const lastLog = s.active.log;
-      let next: GameStoreState;
-      if (nextIdx < players.length) {
-        next = {
-          ...s,
-          versusPlayers: players,
-          versusCurrentIdx: nextIdx,
-          active: null,
-          resultsMode: 'mid',
-          lastRoundSummary,
-          lastLog,
-        };
-      } else if (s.currentRound < s.totalRounds) {
-        next = {
-          ...s,
-          versusPlayers: players,
-          versusCurrentIdx: 0,
-          currentRound: s.currentRound + 1,
-          active: null,
-          resultsMode: 'round-complete',
-          lastRoundSummary,
-          lastLog,
-        };
-      } else {
-        const finalStandings = [...players].sort((a, b) => b.totalScore - a.totalScore);
-        next = {
-          ...s,
-          versusPlayers: players,
-          active: null,
-          resultsMode: 'final',
-          lastRoundSummary,
-          lastLog,
-          finalStandings,
-        };
-      }
-      snapshot = next;
-      return next;
-    });
-
-    // Fire-and-forget: persist to history once the match actually ends.
-    if (snapshot && (snapshot as GameStoreState).resultsMode === 'final') {
-      const s = snapshot as GameStoreState;
+    if (next.resultsMode === 'final') {
       await addHistoryEntry({
         date: new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }),
-        categories: s.selectedCats.map((k) => s.words[k]?.name).filter(Boolean) as string[],
-        players: (s.finalStandings ?? []).map((p) => ({ name: p.name, score: p.totalScore })),
+        categories: next.selectedCats.map((k) => next.words[k]?.name).filter(Boolean) as string[],
+        players: (next.finalStandings ?? []).map((p) => ({ name: p.name, score: p.totalScore })),
       });
     }
-  }, []);
+  }, [state]);
 
   const playAgain = useCallback(() => {
     setState((s) => ({

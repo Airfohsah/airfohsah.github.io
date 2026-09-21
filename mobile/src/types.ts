@@ -48,11 +48,14 @@ export interface HistoryEntry {
   players: HistoryPlayerResult[];
 }
 
+export type ThemePreference = 'system' | 'light' | 'dark';
+
 export interface AppSettings {
   tiltEnabled: boolean;
   soundEnabled: boolean;
   defaultWordCount: number;
   defaultTimerSeconds: number;
+  themePreference: ThemePreference;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -60,6 +63,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   soundEnabled: true,
   defaultWordCount: 20,
   defaultTimerSeconds: 60,
+  themePreference: 'system',
 };
 
 // ===== Backup file shape (Milestone 6) =====

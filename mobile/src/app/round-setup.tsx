@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Button, ScreenHeader, Screen, Stepper } from '../components/ui';
-import { colors, fonts, radius } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { useGameStore } from '../store/GameStore';
 
 function formatTimer(seconds: number) {
@@ -22,6 +23,8 @@ export default function RoundSetupScreen() {
     startSolo,
     startVersus,
   } = useGameStore();
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
 
   const start = () => {
     if (state.playMode === 'solo') startSolo();
@@ -85,20 +88,21 @@ export default function RoundSetupScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  body: { flex: 1, padding: 20, gap: 20, justifyContent: 'center' },
-  hint: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
-  toggleRow: { flexDirection: 'row', gap: 10 },
-  toggleBtn: {
-    flex: 1,
-    paddingVertical: 14,
-    alignItems: 'center',
-    backgroundColor: colors.card,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-  },
-  toggleBtnActive: { borderColor: colors.accent, backgroundColor: 'rgba(245,197,24,0.08)' },
-  toggleText: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-  toggleTextActive: { color: colors.accent },
-});
+const makeStyles = (colors: Palette) =>
+  StyleSheet.create({
+    body: { flex: 1, padding: 20, gap: 20, justifyContent: 'center' },
+    hint: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
+    toggleRow: { flexDirection: 'row', gap: 10 },
+    toggleBtn: {
+      flex: 1,
+      paddingVertical: 14,
+      alignItems: 'center',
+      backgroundColor: colors.card,
+      borderWidth: 1.5,
+      borderColor: colors.border,
+      borderRadius: radius.lg,
+    },
+    toggleBtnActive: { borderColor: colors.accent, backgroundColor: 'rgba(245,197,24,0.08)' },
+    toggleText: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
+    toggleTextActive: { color: colors.accent },
+  });

@@ -47,3 +47,9 @@ example
 *.apk
 *.aab
 mapping.txt
+
+# release signing — local-only, never committed. Losing these means you can
+# never publish an update under the same app identity again; back them up
+# somewhere safe outside git (see README).
+*.keystore
+keystore.properties

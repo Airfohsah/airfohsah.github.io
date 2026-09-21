@@ -39,7 +39,8 @@
           "initialOrientation": "PORTRAIT_UP"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "./plugins/withReleaseSigning.js"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Button, ScreenHeader, Screen, Stepper } from '../components/ui';
-import { colors, fonts, radius } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { useGameStore } from '../store/GameStore';
 import { getHistory, setHistory } from '../lib/storage';
 import { writeAndShareBackup, pickAndReadBackup, BackupError } from '../lib/backup';
+import { ThemePreference } from '../types';
 
 function ToggleRow({
   label,
@@ -16,6 +18,8 @@ function ToggleRow({
   value: boolean;
   onToggle: () => void;
 }) {
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
   return (
     <Pressable style={styles.toggleRow} onPress={onToggle}>
       <Text style={styles.toggleLabel}>{label}</Text>
@@ -26,10 +30,18 @@ function ToggleRow({
   );
 }
 
+const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
+  { value: 'system', label: 'System' },
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+];
+
 export default function SettingsScreen() {
   const router = useRouter();
   const { state, updateSettings, setWords } = useGameStore();
   const [busy, setBusy] = useState<'export' | 'import' | null>(null);
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
 
   const onExport = async () => {
     setBusy('export');
@@ -78,6 +90,26 @@ export default function SettingsScreen() {
     <Screen>
       <ScreenHeader title="Settings" onBack={() => router.push('/')} />
       <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.sectionTitle}>Appearance</Text>
+        <View style={styles.segmentRow}>
+          {THEME_OPTIONS.map((opt) => (
+            <Pressable
+              key={opt.value}
+              style={[styles.segment, state.settings.themePreference === opt.value && styles.segmentActive]}
+              onPress={() => updateSettings({ themePreference: opt.value })}
+            >
+              <Text
+                style={[
+                  styles.segmentText,
+                  state.settings.themePreference === opt.value && styles.segmentTextActive,
+                ]}
+              >
+                {opt.label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
         <Text style={styles.sectionTitle}>Game</Text>
         <View style={styles.card}>
           <ToggleRow
@@ -126,15 +158,29 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  content: { padding: 20, gap: 14, paddingBottom: 40 },
-  sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.muted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 },
-  sectionHint: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
-  card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, overflow: 'hidden' },
-  toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderColor: colors.border },
-  toggleLabel: { fontFamily: fonts.body, fontSize: 14, color: colors.text },
-  pill: { width: 44, height: 24, borderRadius: 12, backgroundColor: colors.border, justifyContent: 'center' },
-  pillOn: { backgroundColor: '#1a5c3a' },
-  pillKnob: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.muted, marginLeft: 3 },
-  pillKnobOn: { backgroundColor: colors.accent3, marginLeft: 23 },
-});
+const makeStyles = (colors: Palette) =>
+  StyleSheet.create({
+    content: { padding: 20, gap: 14, paddingBottom: 40 },
+    sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.muted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 8 },
+    sectionHint: { fontFamily: fonts.body, fontSize: 13, color: colors.muted, lineHeight: 19 },
+    card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, overflow: 'hidden' },
+    toggleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderColor: colors.border },
+    toggleLabel: { fontFamily: fonts.body, fontSize: 14, color: colors.text },
+    pill: { width: 44, height: 24, borderRadius: 12, backgroundColor: colors.border, justifyContent: 'center' },
+    pillOn: { backgroundColor: '#1a5c3a' },
+    pillKnob: { width: 18, height: 18, borderRadius: 9, backgroundColor: colors.muted, marginLeft: 3 },
+    pillKnobOn: { backgroundColor: colors.accent3, marginLeft: 23 },
+    segmentRow: {
+      flexDirection: 'row',
+      backgroundColor: colors.card,
+      borderWidth: 1.5,
+      borderColor: colors.border,
+      borderRadius: radius.lg,
+      padding: 4,
+      gap: 4,
+    },
+    segment: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: radius.md },
+    segmentActive: { backgroundColor: colors.accent },
+    segmentText: { fontFamily: fonts.displaySemi, fontSize: 13, color: colors.muted },
+    segmentTextActive: { color: colors.bg },
+  });

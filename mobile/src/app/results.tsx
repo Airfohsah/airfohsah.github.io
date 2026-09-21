@@ -2,13 +2,16 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Screen } from '../components/ui';
-import { colors, fonts, radius } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { useGameStore } from '../store/GameStore';
 
 export default function ResultsScreen() {
   const router = useRouter();
   const { state, playAgain } = useGameStore();
   const { resultsMode, lastRoundSummary, lastLog, finalStandings, versusPlayers, currentRound } = state;
+  const { colors, scheme } = useTheme();
+  const styles = makeStyles(colors);
 
   const isFinal = resultsMode === 'final';
   const winner = finalStandings?.[0];
@@ -39,7 +42,7 @@ export default function ResultsScreen() {
   return (
     <Screen>
       <LinearGradient
-        colors={['#1a2010', colors.bg]}
+        colors={scheme === 'light' ? ['#fff3d6', colors.bg] : ['#1a2010', colors.bg]}
         start={{ x: 0.8, y: 0.1 }}
         end={{ x: 0.2, y: 0.9 }}
         style={StyleSheet.absoluteFill}
@@ -95,38 +98,39 @@ export default function ResultsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  content: { padding: 20, paddingTop: 16, paddingBottom: 40 },
-  header: { alignItems: 'center', marginBottom: 28 },
-  headerTitle: { fontFamily: fonts.display, fontSize: 30, color: colors.text },
-  headerSubtitle: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13, marginTop: 6, textAlign: 'center' },
-  scoreBig: { alignItems: 'center', marginVertical: 20, marginBottom: 28 },
-  scoreNum: { fontFamily: fonts.display, fontSize: 72, color: colors.accent3, lineHeight: 78 },
-  scoreLabel: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13, marginTop: 4 },
-  logCard: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xxl, overflow: 'hidden', marginBottom: 20 },
-  logHeader: {
-    padding: 14,
-    borderBottomWidth: 1.5,
-    borderColor: colors.border,
-    fontFamily: fonts.mono,
-    fontSize: 13,
-    fontWeight: '700',
-    color: colors.muted,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  logList: { maxHeight: 300 },
-  logItem: {
-    padding: 14,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  logItemWord: { fontFamily: fonts.body, fontSize: 14, color: colors.text, flexShrink: 1 },
-  logItemGot: { fontFamily: fonts.body, fontSize: 14, color: colors.accent3 },
-  logItemSkip: { fontFamily: fonts.body, fontSize: 14, color: colors.accent2 },
-  emptyLog: { padding: 20, textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
-  btns: { gap: 12 },
-});
+const makeStyles = (colors: Palette) =>
+  StyleSheet.create({
+    content: { padding: 20, paddingTop: 16, paddingBottom: 40 },
+    header: { alignItems: 'center', marginBottom: 28 },
+    headerTitle: { fontFamily: fonts.display, fontSize: 30, color: colors.text },
+    headerSubtitle: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13, marginTop: 6, textAlign: 'center' },
+    scoreBig: { alignItems: 'center', marginVertical: 20, marginBottom: 28 },
+    scoreNum: { fontFamily: fonts.display, fontSize: 72, color: colors.accent3, lineHeight: 78 },
+    scoreLabel: { color: colors.muted, fontFamily: fonts.mono, fontSize: 13, marginTop: 4 },
+    logCard: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xxl, overflow: 'hidden', marginBottom: 20 },
+    logHeader: {
+      padding: 14,
+      borderBottomWidth: 1.5,
+      borderColor: colors.border,
+      fontFamily: fonts.mono,
+      fontSize: 13,
+      fontWeight: '700',
+      color: colors.muted,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    logList: { maxHeight: 300 },
+    logItem: {
+      padding: 14,
+      borderBottomWidth: 1,
+      borderColor: colors.border,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    logItemWord: { fontFamily: fonts.body, fontSize: 14, color: colors.text, flexShrink: 1 },
+    logItemGot: { fontFamily: fonts.body, fontSize: 14, color: colors.accent3 },
+    logItemSkip: { fontFamily: fonts.body, fontSize: 14, color: colors.accent2 },
+    emptyLog: { padding: 20, textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13 },
+    btns: { gap: 12 },
+  });

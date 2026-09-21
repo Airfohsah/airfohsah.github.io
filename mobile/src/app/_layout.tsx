@@ -4,9 +4,11 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Syne_400Regular, Syne_700Bold, Syne_800ExtraBold } from '@expo-google-fonts/syne';
 import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
+import { PermanentMarker_400Regular } from '@expo-google-fonts/permanent-marker';
 import { View } from 'react-native';
-import { colors } from '../constants/theme';
+import { darkColors } from '../constants/theme';
 import { GameStoreProvider, useGameStore } from '../store/GameStore';
+import { ThemeProvider, useTheme } from '../store/ThemeContext';
 import { loadWordsFast, refreshWordsFromRemote } from '../lib/words';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -31,6 +33,31 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function ThemedStack() {
+  const { colors, scheme } = useTheme();
+  return (
+    <>
+      <StatusBar style={scheme === 'light' ? 'dark' : 'light'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+          contentStyle: { backgroundColor: colors.bg },
+        }}
+      />
+    </>
+  );
+}
+
+function ThemedApp() {
+  const { state } = useGameStore();
+  return (
+    <ThemeProvider preference={state.settings.themePreference}>
+      <ThemedStack />
+    </ThemeProvider>
+  );
+}
+
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     Syne_400Regular,
@@ -38,6 +65,7 @@ export default function RootLayout() {
     Syne_800ExtraBold,
     DMMono_400Regular,
     DMMono_500Medium,
+    PermanentMarker_400Regular,
   });
 
   useEffect(() => {
@@ -47,20 +75,13 @@ export default function RootLayout() {
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded && !fontError) {
-    return <View style={{ flex: 1, backgroundColor: colors.bg }} />;
+    return <View style={{ flex: 1, backgroundColor: darkColors.bg }} />;
   }
 
   return (
     <GameStoreProvider>
       <AppBootstrap>
-        <StatusBar style="light" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: 'fade',
-            contentStyle: { backgroundColor: colors.bg },
-          }}
-        />
+        <ThemedApp />
       </AppBootstrap>
     </GameStoreProvider>
   );

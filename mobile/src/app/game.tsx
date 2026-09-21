@@ -5,7 +5,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { deactivateKeepAwake } from 'expo-keep-awake';
 import { DeviceMotion } from 'expo-sensors';
 import { Screen } from '../components/ui';
-import { colors, fonts } from '../constants/theme';
+import { fonts, Palette } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { useGameStore } from '../store/GameStore';
 import { useGameSounds } from '../lib/sound';
 
@@ -20,6 +21,8 @@ export default function GameScreen() {
   const opacity = useRef(new Animated.Value(1)).current;
   const [timerRemaining, setTimerRemaining] = useState(state.timerSeconds);
   const endedRef = useRef(false);
+  const { colors, scheme } = useTheme();
+  const styles = makeStyles(colors, scheme);
 
   const active = state.active;
   const catLabel = state.selectedCats.map((k) => state.words[k]?.name).filter(Boolean).join(' + ');
@@ -28,7 +31,11 @@ export default function GameScreen() {
     if (endedRef.current) return;
     endedRef.current = true;
     try {
-      await ScreenOrientation.unlockAsync();
+      // unlockAsync() sets policy to DEFAULT, which in Expo Go doesn't
+      // reliably fall back to the app.json "portrait" setting (that's baked
+      // into AndroidManifest.xml only in a real prebuilt/standalone build).
+      // Lock back to portrait explicitly so this is deterministic everywhere.
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     } catch {}
     try {
       deactivateKeepAwake('watin-be-this-game');
@@ -122,7 +129,7 @@ export default function GameScreen() {
         onPress: async () => {
           endedRef.current = true;
           try {
-            await ScreenOrientation.unlockAsync();
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
           } catch {}
           try {
             deactivateKeepAwake('watin-be-this-game');
@@ -180,44 +187,54 @@ export default function GameScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  layout: { flex: 1, flexDirection: 'row' },
-  tapZone: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  tapSkip: { backgroundColor: '#1e0a10', borderRightWidth: 2, borderColor: '#3a1520' },
-  tapGot: { backgroundColor: '#0a2018', borderLeftWidth: 2, borderColor: '#0e3a28' },
-  tapLabelSkip: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent2, textAlign: 'center', opacity: 0.7, lineHeight: 24 },
-  tapLabelGot: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent3, textAlign: 'center', opacity: 0.7, lineHeight: 24 },
-  wordStage: {
-    flex: 2.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-    borderLeftWidth: 1.5,
-    borderRightWidth: 1.5,
-    borderColor: colors.border,
-  },
-  meta: { position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', justifyContent: 'space-between' },
-  catLabel: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, maxWidth: '60%' },
-  score: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted },
-  exitBtn: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  exitBtnText: { color: colors.muted, fontSize: 14 },
-  timer: { fontFamily: fonts.mono, fontSize: 24, fontWeight: '900', color: colors.accent, marginBottom: 8, textAlign: 'center' },
-  timerUrgent: { color: colors.accent2 },
-  kicker: { fontFamily: fonts.mono, fontSize: 11, color: colors.accent, letterSpacing: 3, textTransform: 'uppercase', opacity: 0.7, textAlign: 'center', marginBottom: 10 },
-  wordText: { fontFamily: fonts.display, fontSize: 40, color: colors.text, textAlign: 'center', letterSpacing: -1 },
-  wordCat: { fontFamily: fonts.mono, fontSize: 12, color: colors.muted, textTransform: 'uppercase', letterSpacing: 2, textAlign: 'center', marginTop: 10 },
-  feedbackOverlay: { alignItems: 'center', justifyContent: 'center' },
-  feedbackEmoji: { fontSize: 80 },
-});
+const makeStyles = (colors: Palette, scheme: 'light' | 'dark') =>
+  StyleSheet.create({
+    layout: { flex: 1, flexDirection: 'row' },
+    tapZone: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    tapSkip: {
+      backgroundColor: scheme === 'light' ? '#ffe4e6' : '#1e0a10',
+      borderRightWidth: 2,
+      borderColor: scheme === 'light' ? '#ffc2c7' : '#3a1520',
+    },
+    tapGot: {
+      backgroundColor: scheme === 'light' ? '#dcfbee' : '#0a2018',
+      borderLeftWidth: 2,
+      borderColor: scheme === 'light' ? '#a9f0d1' : '#0e3a28',
+    },
+    tapLabelSkip: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent2, textAlign: 'center', opacity: 0.8, lineHeight: 24 },
+    tapLabelGot: { fontFamily: fonts.displayBold, fontSize: 16, color: colors.accent3, textAlign: 'center', opacity: 0.8, lineHeight: 24 },
+    wordStage: {
+      flex: 2.5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 12,
+      borderLeftWidth: 1.5,
+      borderRightWidth: 1.5,
+      borderColor: colors.border,
+      backgroundColor: colors.bg,
+    },
+    meta: { position: 'absolute', top: 12, left: 14, right: 14, flexDirection: 'row', justifyContent: 'space-between' },
+    catLabel: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, maxWidth: '60%' },
+    score: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted },
+    exitBtn: {
+      position: 'absolute',
+      bottom: 10,
+      right: 10,
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      backgroundColor: scheme === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)',
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    exitBtnText: { color: colors.muted, fontSize: 14 },
+    timer: { fontFamily: fonts.mono, fontSize: 24, fontWeight: '900', color: colors.accent, marginBottom: 8, textAlign: 'center' },
+    timerUrgent: { color: colors.accent2 },
+    kicker: { fontFamily: fonts.mono, fontSize: 11, color: colors.accent, letterSpacing: 3, textTransform: 'uppercase', opacity: 0.8, textAlign: 'center', marginBottom: 10 },
+    wordText: { fontFamily: fonts.display, fontSize: 40, color: colors.text, textAlign: 'center', letterSpacing: -1 },
+    wordCat: { fontFamily: fonts.mono, fontSize: 12, color: colors.muted, textTransform: 'uppercase', letterSpacing: 2, textAlign: 'center', marginTop: 10 },
+    feedbackOverlay: { alignItems: 'center', justifyContent: 'center' },
+    feedbackEmoji: { fontSize: 80 },
+  });

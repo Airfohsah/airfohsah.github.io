@@ -2,12 +2,15 @@ import { useCallback, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { Button, ScreenHeader, Screen } from '../components/ui';
-import { colors, fonts, radius } from '../constants/theme';
+import { fonts, Palette, radius } from '../constants/theme';
+import { useTheme } from '../store/ThemeContext';
 import { clearHistory, getHistory } from '../lib/storage';
 import { HistoryEntry } from '../types';
 
 export default function HistoryScreen() {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
 
   useFocusEffect(
     useCallback(() => {
@@ -69,16 +72,17 @@ export default function HistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  content: { padding: 16, gap: 16, paddingBottom: 20 },
-  empty: { textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13, padding: 40 },
-  card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16 },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  cardTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-  cardDate: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted },
-  cardCats: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, marginBottom: 10 },
-  playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderColor: colors.border },
-  playerName: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
-  playerScore: { fontFamily: fonts.mono, fontSize: 14, color: colors.accent },
-  footer: { padding: 20, paddingTop: 4 },
-});
+const makeStyles = (colors: Palette) =>
+  StyleSheet.create({
+    content: { padding: 16, gap: 16, paddingBottom: 20 },
+    empty: { textAlign: 'center', color: colors.muted, fontFamily: fonts.mono, fontSize: 13, padding: 40 },
+    card: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border, borderRadius: radius.xl, padding: 16 },
+    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+    cardTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
+    cardDate: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted },
+    cardCats: { fontFamily: fonts.mono, fontSize: 11, color: colors.muted, marginBottom: 10 },
+    playerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderColor: colors.border },
+    playerName: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
+    playerScore: { fontFamily: fonts.mono, fontSize: 14, color: colors.accent },
+    footer: { padding: 20, paddingTop: 4 },
+  });

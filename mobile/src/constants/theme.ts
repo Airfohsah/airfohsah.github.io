@@ -1,6 +1,20 @@
-// Ports index.html's :root CSS custom properties 1:1 — this is a fixed
-// dark theme (the web app has no light mode), so no adaptive scheme here.
-export const colors = {
+// Two palettes (dark = the original design, light = its counterpart), swapped
+// at runtime by ThemeContext based on system preference or an explicit
+// user override (Settings). Every screen reads colors via useTheme()
+// instead of importing a static palette, so switching is instant everywhere.
+export interface Palette {
+  bg: string;
+  card: string;
+  card2: string;
+  accent: string;
+  accent2: string;
+  accent3: string;
+  text: string;
+  muted: string;
+  border: string;
+}
+
+export const darkColors: Palette = {
   bg: '#080b14',
   card: '#0f1420',
   card2: '#151c2e',
@@ -10,11 +24,20 @@ export const colors = {
   text: '#f0f0f0',
   muted: '#6b7a99',
   border: '#1e2a40',
-} as const;
+};
 
-// Note: @expo-google-fonts/syne only ships up to 800 (ExtraBold) — the web
-// version's CSS also requested a 900 weight, but no such static font file
-// exists for Syne, so 800 is the heaviest available.
+export const lightColors: Palette = {
+  bg: '#f5f6fa',
+  card: '#ffffff',
+  card2: '#eef0f6',
+  accent: '#c98f00',
+  accent2: '#d63f3f',
+  accent3: '#00a870',
+  text: '#12151f',
+  muted: '#5b6478',
+  border: '#dde1ec',
+};
+
 export const fonts = {
   display: 'Syne_800ExtraBold',
   displayBold: 'Syne_800ExtraBold',
@@ -22,6 +45,7 @@ export const fonts = {
   body: 'Syne_400Regular',
   mono: 'DMMono_400Regular',
   monoMedium: 'DMMono_500Medium',
+  brush: 'PermanentMarker_400Regular',
 } as const;
 
 export const radius = {
@@ -42,7 +66,7 @@ export const spacing = {
   xxl: 24,
 } as const;
 
-export const difficultyColor = (difficulty?: string) => {
+export const difficultyColor = (difficulty?: string, colors: Palette = darkColors) => {
   if (difficulty === 'EASY') return colors.accent3;
   if (difficulty === 'MEDIUM') return colors.accent;
   if (difficulty === 'HARD') return colors.accent2;

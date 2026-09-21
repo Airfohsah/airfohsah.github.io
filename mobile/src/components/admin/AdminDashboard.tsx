@@ -10,7 +10,8 @@ import {
   View,
 } from 'react-native';
 import { Button, Toast, useToast } from '../ui';
-import { colors, difficultyColor, fonts, radius } from '../../constants/theme';
+import { difficultyColor, fonts, Palette, radius } from '../../constants/theme';
+import { useTheme } from '../../store/ThemeContext';
 import { useGameStore } from '../../store/GameStore';
 import { Difficulty, WordCategory, WordsData } from '../../types';
 import { getGithubConfig, getWordsSha, saveGithubConfig, setCachedWords, setWordsSha, GithubConfig } from '../../lib/storage';
@@ -28,6 +29,8 @@ function slugify(name: string, existing: WordsData): string {
 export function AdminDashboard() {
   const { state, setWords } = useGameStore();
   const { message, showToast } = useToast();
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
 
   const [draft, setDraft] = useState<WordsData>(state.words);
   const [dirty, setDirty] = useState(false);
@@ -263,7 +266,7 @@ export function AdminDashboard() {
             <View style={{ flex: 1 }}>
               <Text style={styles.bannerName}>{cat.name}</Text>
               <Text style={styles.bannerMeta}>
-                {cat.words.length} words {'·'} <Text style={{ color: difficultyColor(cat.difficulty) }}>{cat.difficulty}</Text>
+                {cat.words.length} words {'·'} <Text style={{ color: difficultyColor(cat.difficulty, colors) }}>{cat.difficulty}</Text>
               </Text>
             </View>
           </View>
@@ -421,7 +424,7 @@ export function AdminDashboard() {
             <View style={styles.diffRow}>
               {(['EASY', 'MEDIUM', 'HARD'] as Difficulty[]).map((d) => (
                 <Pressable key={d} onPress={() => setNewCatDiff(d)} style={[styles.diffChip, newCatDiff === d && styles.diffChipActive]}>
-                  <Text style={[styles.diffChipText, { color: difficultyColor(d) }]}>{d}</Text>
+                  <Text style={[styles.diffChipText, { color: difficultyColor(d, colors) }]}>{d}</Text>
                 </Pressable>
               ))}
             </View>
@@ -444,7 +447,7 @@ export function AdminDashboard() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: Palette) => StyleSheet.create({
   wrap: { flex: 1, padding: 16, gap: 14 },
   tabs: { gap: 8, paddingBottom: 4 },
   tab: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.border },
