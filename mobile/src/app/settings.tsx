@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { IllustratedScreen, IllustratedHeader, GlowCard, GradientButton, OutlineButton } from '../components/illustrated';
@@ -6,6 +6,10 @@ import { fonts, darkColors as colors } from '../constants/theme';
 import { useGameStore } from '../store/GameStore';
 import { getHistory, setHistory } from '../lib/storage';
 import { writeAndShareBackup, pickAndReadBackup, BackupError } from '../lib/backup';
+import { hasAdminPin } from '../lib/secure';
+
+const SECRET_TAP_COUNT = 5;
+const SECRET_TAP_WINDOW_MS = 1500;
 
 function ToggleRow({
   label,
@@ -30,6 +34,30 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { state, updateSettings, setWords } = useGameStore();
   const [busy, setBusy] = useState<'export' | 'import' | null>(null);
+
+  // Admin Panel stays hidden until setup has been completed once on this
+  // device (checked via the PIN that only exists after that flow finishes —
+  // see AdminGate) — after that it's always visible, no gesture needed. Until
+  // then, tapping anywhere on the screen 5 times in a row reveals it for
+  // that first-time setup.
+  const [adminVisible, setAdminVisible] = useState(false);
+  const tapCountRef = useRef(0);
+  const lastTapRef = useRef(0);
+
+  useEffect(() => {
+    hasAdminPin().then((done) => {
+      if (done) setAdminVisible(true);
+    });
+  }, []);
+
+  const handleSecretTap = () => {
+    if (adminVisible) return;
+    const now = Date.now();
+    if (now - lastTapRef.current > SECRET_TAP_WINDOW_MS) tapCountRef.current = 0;
+    lastTapRef.current = now;
+    tapCountRef.current += 1;
+    if (tapCountRef.current >= SECRET_TAP_COUNT) setAdminVisible(true);
+  };
 
   const onExport = async () => {
     setBusy('export');
@@ -77,7 +105,13 @@ export default function SettingsScreen() {
   return (
     <IllustratedScreen>
       <IllustratedHeader title="Settings" onBack={() => router.push('/')} />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        onStartShouldSetResponderCapture={() => {
+          handleSecretTap();
+          return false;
+        }}
+      >
         <Text style={styles.sectionTitle}>Game</Text>
         <GlowCard accent="rgba(255,255,255,0.15)" style={{ overflow: 'hidden' }}>
           <ToggleRow
@@ -141,10 +175,14 @@ export default function SettingsScreen() {
           <OutlineButton label="Restore from Backup" onPress={onImport} disabled={busy === 'import'} />
         </View>
 
-        <Text style={styles.sectionTitle}>Content</Text>
-        <View style={{ gap: 12 }}>
-          <OutlineButton label="Admin Panel" onPress={() => router.push('/admin')} />
-        </View>
+        {adminVisible && (
+          <>
+            <Text style={styles.sectionTitle}>Content</Text>
+            <View style={{ gap: 12 }}>
+              <OutlineButton label="Admin Panel" onPress={() => router.push('/admin')} />
+            </View>
+          </>
+        )}
       </ScrollView>
     </IllustratedScreen>
   );
