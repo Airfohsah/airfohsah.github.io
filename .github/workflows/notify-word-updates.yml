@@ -1,0 +1,55 @@
+name: Notify word list update
+
+# Fires whenever words.json changes on main and pushes a Firebase Cloud
+# Messaging notification to the "wbt-naijacharades-word-updates" topic.
+# Every install that has subscribed itself to that topic (see
+# mobile/src/lib/push.ts) gets notified — no server of our own, Firebase
+# owns the subscriber list.
+#
+# The topic name is namespaced to this app on purpose: the Firebase project
+# is shared with other apps, and FCM topics are project-wide — a generic
+# name could collide with another app's topic in the same project. Keep
+# this in sync with WORD_UPDATES_TOPIC in mobile/src/lib/push.ts.
+#
+# Requires a repo secret FIREBASE_SERVICE_ACCOUNT holding the JSON key of a
+# Firebase service account with the "Firebase Cloud Messaging API Admin"
+# role on this project. Never commit that key to the repo.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - words.json
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Firebase project id from the app's google-services.json
+        id: project
+        run: echo "id=$(jq -r '.project_info.project_id' mobile/google-services.json)" >> "$GITHUB_OUTPUT"
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Send FCM topic notification
+        run: |
+          TOKEN=$(gcloud auth print-access-token)
+          curl -sS -X POST \
+            "https://fcm.googleapis.com/v1/projects/${{ steps.project.outputs.id }}/messages:send" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "message": {
+                "topic": "wbt-naijacharades-word-updates",
+                "notification": {
+                  "title": "Watin Be This?",
+                  "body": "New words just dropped — open the app to get them."
+                }
+              }
+            }'

@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import { darkColors } from '../constants/theme';
 import { GameStoreProvider, useGameStore } from '../store/GameStore';
 import { loadWordsFast, refreshWordsFromRemote } from '../lib/words';
+import { ensurePushSubscription } from '../lib/push';
 import { HomeBackground } from '../components/HomeBackground';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -27,6 +28,7 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
       } catch {
         // offline or content host unreachable — keep using cached/bundled words
       }
+      ensurePushSubscription(); // fire-and-forget, never blocks startup
     })();
   }, [loadSettings, setWords]);
 

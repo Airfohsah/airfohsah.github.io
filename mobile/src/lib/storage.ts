@@ -8,6 +8,7 @@ const KEYS = {
   wordsCacheUpdatedAt: '@wbt/words-cache-updated-at',
   githubConfig: '@wbt/github-config',
   wordsSha: '@wbt/words-sha',
+  pushSubscribed: '@wbt/push-subscribed',
 } as const;
 
 async function readJson<T>(key: string, fallback: T): Promise<T> {
@@ -94,6 +95,15 @@ export async function getWordsSha(): Promise<string | null> {
 
 export async function setWordsSha(sha: string): Promise<void> {
   await AsyncStorage.setItem(KEYS.wordsSha, sha);
+}
+
+// ---- Push notification subscription (word-list update alerts) ----
+export async function getPushSubscribed(): Promise<boolean> {
+  return (await AsyncStorage.getItem(KEYS.pushSubscribed)) === 'true';
+}
+
+export async function setPushSubscribed(): Promise<void> {
+  await AsyncStorage.setItem(KEYS.pushSubscribed, 'true');
 }
 
 export async function wipeAllLocalData(): Promise<void> {

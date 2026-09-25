@@ -9,7 +9,8 @@
     "userInterfaceStyle": "dark",
     "backgroundColor": "#080b14",
     "android": {
-      "package": "com.watinbethis.charades",
+      "package": "com.watinbethis.naijacharades",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#080b14",
         "foregroundImage": "./assets/images/android-icon-foreground.png"
@@ -40,7 +41,9 @@
         }
       ],
       "expo-asset",
-      "./plugins/withReleaseSigning.js"
+      "./plugins/withReleaseSigning.js",
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "492257764862",
+    "project_id": "verified-844f4",
+    "storage_bucket": "verified-844f4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492257764862:android:f949278d38ed39f8e1ccaf",
+        "android_client_info": {
+          "package_name": "com.watinbethis.naijacharades"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEFr56Ho-4KLFlhrApQhY6rgNBhJHtjXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
